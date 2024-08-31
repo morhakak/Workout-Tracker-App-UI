@@ -1,0 +1,152 @@
+<template>
+  <v-card
+    width="450"
+    rounded="xl"
+    color="rgba(255, 255,255, 0.8)"
+    class="d-flex flex-col items-center pb-8 pt-4 mt-6 relative border-2 border-white"
+  >
+    <transition name="fade">
+      <v-btn
+        v-if="isEditMode"
+        @click="$emit(`deleteExercise`)"
+        icon="mdi-trash-can"
+        variant="text"
+        class="absolute right-2"
+      ></v-btn>
+    </transition>
+    <v-card-title class="text-center text-2xl mb-2 tracking-widest">{{
+      exercise.name
+    }}</v-card-title>
+    <transition-group name="fade" tag="div">
+      <v-card
+        v-for="(set, setIndex) in exercise.sets"
+        :key="set._id"
+        color="rgba(255, 255,255, 0.5)"
+        class="d-flex justify-between items-center px-4 mt-2 transition-all duration-300"
+        :class="{
+          '-translate-x-6 overflow-visible transition-all duration-300':
+            editId === `${exercise._id}-${set._id}`,
+        }"
+        width="370"
+        height="60"
+        rounded="lg"
+        @click="() => toggleEdit(exercise._id, set._id)"
+      >
+        <transition name="fade">
+          <v-btn
+            v-if="editId === `${exercise._id}-${set._id}`"
+            icon="mdi-delete"
+            size="small"
+            class="absolute -right-12"
+            @click.stop="() => $emit('deleteSet', exercise._id, set._id)"
+          >
+          </v-btn>
+        </transition>
+        <v-row align="center">
+          <v-col cols="2"
+            ><span
+              class="font-bold border text-center p-[2px] border-black rounded-full inline-block bg-white h-8 w-8"
+            >
+              {{ setIndex + 1 }}
+            </span></v-col
+          >
+          <v-col cols="3" class="pt-8">
+            <v-text-field
+              variant="solo"
+              type="number"
+              class="font-bold text-center"
+              min-width="75"
+              v-model.number="set.weight"
+              @click.stop
+              density="compact"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="2" class="font-bold">KG</v-col>
+          <v-col cols="3" class="pt-8"
+            ><v-text-field
+              variant="solo"
+              type="number"
+              class="font-bold"
+              min-width="75"
+              density="compact"
+              v-model.number="set.reps"
+              @click.stop
+            ></v-text-field
+          ></v-col>
+          <v-col cols="2" class="font-bold">Reps </v-col>
+        </v-row>
+      </v-card>
+
+      <v-btn
+        class="mt-4"
+        width="370"
+        height="45"
+        rounded="lg"
+        variant="elevated"
+        prepend-icon="mdi-plus"
+        @click="() => $emit('addSet', exercise)"
+      >
+        Add a set</v-btn
+      >
+    </transition-group>
+  </v-card>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+defineProps(["exercise", "isEditMode"]);
+defineEmits(["addSet", "deleteSet", "deleteExercise"]);
+const editId = ref(null);
+const toggleEdit = (exerciseId, setId) => {
+  const id = `${exerciseId}-${setId}`;
+  editId.value = editId.value === id ? null : id;
+};
+</script>
+
+<style scoped>
+/* .fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-move {
+  transition: all 0.4s ease;
+} */
+
+.fade-enter-active {
+  transition: all 0.3s ease;
+}
+
+.fade-leave-active {
+  transition: all 0.3s ease;
+  position: absolute;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-move {
+  transition: all 0.3s ease;
+}
+
+.slide-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(20px);
+}
+</style>
