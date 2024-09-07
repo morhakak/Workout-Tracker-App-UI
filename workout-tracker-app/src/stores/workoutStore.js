@@ -1,6 +1,6 @@
 import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
-import exercises from "../data/exercises.js";
+import exercises from "../data/index.js";
 import { useAuthStore } from "./authStore.js";
 import axios from "axios";
 import { useWorkoutDraftStore } from "./workoutDraftStore.js";
@@ -50,21 +50,24 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
     }
   };
 
-  const addNewWorkout = async () => {
+  const addNewWorkout = async (workout) => {
     apiErrorStore.resetMessages();
     setIsLoading(true);
-    workoutDraft.value.user = user.value._id;
 
-    removeDraftIds();
+    workout = { ...workout, user: user.value._id };
+    // workoutDraft.value.user = user.value._id;
+
+    // removeDraftIds();
 
     try {
-      const response = await axios.post(BASE_URL, workoutDraft.value, {
+      const response = await axios.post(BASE_URL, workout, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
       });
       workouts.value.push(response.data);
       workoutDraftStore.resetWorkoutDraft();
+      if (response.data.success) return response.data.data._id;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {

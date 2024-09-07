@@ -22,7 +22,7 @@
         </div>
       </v-app-bar>
 
-      <v-navigation-drawer v-model="drawer" color="black" temporary>
+      <v-navigation-drawer v-model="drawer" width="300" color="black" temporary>
         <v-list>
           <v-list-item
             class="text-lg"
@@ -49,8 +49,7 @@
               @click="() => (logoutDialog = true)"
               prepend-icon="mdi-logout"
               block
-              color="red"
-              variant="outlined"
+              color="orange"
               >Log out</v-btn
             >
           </div>

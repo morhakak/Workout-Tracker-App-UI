@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="bg-[url('/assets/man-working-out-2.jpg')] bg-cover min-h-screen w-full bg-fixed"
-  >
+  <div class="min-h-screen w-full">
     <div class="mt-20">
       <div class="mb-6 flex justify-center gap-4 h-full">
         <v-btn
@@ -33,7 +31,7 @@
             :disabled="!isEditMode"
             type="text"
             v-model="workoutDraft.name"
-            class="text-4xl overflow-hidden text-clip outline-none py-2 text-center rounded-lg tracking-widest border-2 border-white font-semibold bg-[rgba(255,255,255,0.5)] leading-normal"
+            class="text-2xl sm:text-3xl lg:text-4xl overflow-hidden text-clip outline-none py-2 text-center rounded-lg tracking-widest font-semibold bg-[rgba(189,154,154,0.5)] leading-normal"
           />
         </div>
 
@@ -63,55 +61,86 @@
       </div>
     </div>
   </div>
-  <v-dialog v-model="isAddDialogOpen" class="mx-auto">
-    <v-card rounded="xl" max-width="500" height="90%" class="py-4 relative">
-      <v-card-title class="text-center mb-4">Select An Exercise</v-card-title>
-      <div class="flex flex-col">
-        <v-text-field
-          v-model="searchTerm"
-          class="mx-auto mb-8"
-          append-inner-icon="mdi-magnify"
-          density="compact"
-          label="Search exercise"
-          variant="outlined"
-          hide-details
-          single-line
-          width="300"
-          autofocus
-        ></v-text-field>
-        <div class="flex justify-center">
-          <v-list height="600" width="400" v-model:selected="selectedItem">
-            <v-list-item
-              v-for="item in filteredExercises"
-              :key="item.name"
-              :value="item.name"
-              variant="plain"
-              @click="
-                () => {
-                  addSelectedExercise(item);
-                  isAddDialogOpen = false;
-                }
-              "
+
+  <v-dialog
+    v-model="isAddDialogOpen"
+    width="auto"
+    transition="dialog-bottom-transition"
+  >
+    <v-card rounded="xl" max-width="900">
+      <v-toolbar color="black">
+        <v-toolbar-title>Exercise Selector</v-toolbar-title>
+        <v-toolbar-items>
+          <v-btn icon="mdi-close" @click="isAddDialogOpen = false"></v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+      <v-divider inset></v-divider>
+      <v-tabs v-model="tab" bg-color="black" align-tabs="center" fixed-tabs>
+        <v-tab value="two">Body Part</v-tab>
+        <v-tab value="three">Exercises</v-tab>
+      </v-tabs>
+      <v-card-text>
+        <v-tabs-window v-model="tab">
+          <v-tabs-window-item
+            class="grid w-full overflow-scroll max-h-[600px] px-2 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 items-center gap-5 py-4"
+            value="two"
+          >
+            <v-btn
+              v-for="part in bodyParts"
+              :key="part"
+              rounded="xl"
+              class="max-w-32 min-w-32 min-h-32 sm:max-w-40 sm:min-w-40 sm:min-h-40"
+              @click="() => chooseBodyPart(part)"
             >
-              <template v-slot:append>
-                <v-icon size="large" class="font-semibold">mdi-plus</v-icon>
-              </template>
-              <v-list-item-title
-                class="font-semibold text-[1.2rem]"
-                v-text="item.name"
-              ></v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </div>
-      </div>
-      <v-card-actions>
-        <v-btn
-          text="Cancel"
-          variant="tonal"
-          class="mr-2 mt-2"
-          @click="isAddDialogOpen = false"
-        ></v-btn>
-      </v-card-actions>
+              {{ part }}
+            </v-btn>
+          </v-tabs-window-item>
+          <v-tabs-window-item value="three" class="py-4 max-h-[600px]">
+            <div class="flex flex-col items-center">
+              <v-text-field
+                v-model="searchTerm"
+                class="mb-8 w-[250px] sm:w-[300px]"
+                append-inner-icon="mdi-magnify"
+                density="compact"
+                label="Search exercise"
+                variant="outlined"
+                hide-details
+                single-line
+                autofocus
+              ></v-text-field>
+              <div class="flex justify-center">
+                <v-list
+                  class="w-[300px] sm:w-[380px] h-[500px] sm:h-[593px]"
+                  v-model:selected="selectedItem"
+                >
+                  <v-list-item
+                    v-for="item in filteredExercises"
+                    :key="item.name"
+                    :value="item.name"
+                    variant="plain"
+                    @click="
+                      () => {
+                        addSelectedExercise(item);
+                        isAddDialogOpen = false;
+                      }
+                    "
+                  >
+                    <template v-slot:append>
+                      <v-icon size="large" class="font-semibold"
+                        >mdi-plus</v-icon
+                      >
+                    </template>
+                    <v-list-item-title
+                      class="font-semibold text-[1.2rem]"
+                      v-text="item.name"
+                    ></v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </div>
+            </div>
+          </v-tabs-window-item>
+        </v-tabs-window>
+      </v-card-text>
     </v-card>
   </v-dialog>
   <v-dialog v-model="deleteExerciseDialog" width="auto">
@@ -185,8 +214,8 @@
         <div class="flex gap-2">
           <v-btn
             rounded="lg"
-            variant="outlined"
             class="ms-auto"
+            variant="outlined"
             text="Cancel"
             width="120"
             @click="handleCancelDelete"
@@ -194,7 +223,7 @@
           <v-btn
             color="red"
             rounded="lg"
-            variant="outlined"
+            variant="flat"
             class="ms-auto"
             text="Delete"
             width="120"
@@ -247,7 +276,7 @@
       </template>
     </v-card>
   </v-dialog>
-  <v-snackbar v-model="hasChanged" height="70" width="400" color="white">
+  <v-snackbar v-model="hasChanged" height="70" color="white">
     <template #text> <p class="text-xl">Save Changes?</p> </template>
     <template #actions>
       <div class="flex gap-2">
@@ -268,7 +297,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch, watchEffect } from "vue";
 import { useWorkoutStore } from "../stores/workoutStore";
 import { storeToRefs } from "pinia";
 import { useRouter, useRoute } from "vue-router";
@@ -315,32 +344,57 @@ onMounted(async () => {
     initialWorkoutDraft.value = cloneDeep(workoutDraft.value);
   }
 
-  if (workoutDraft.value && workoutDraft.value.type) {
-    exercisesToDisplay.value = workoutStore.filterExercises(
-      workoutDraft.value.type
-    );
-  }
+  // if (workoutDraft.value && workoutDraft.value.type) {
+  //   exercisesToDisplay.value = workoutStore.filterExercises(
+  //     workoutDraft.value.type
+  //   );
+  // }
 
   isWorkoutLoading.value = false;
 });
 
-onUnmounted(() => {
-  workoutDraft.value = {};
-  // window.removeEventListener("beforeunload", handleBeforeUnload);
-});
+const tab = ref(null);
 
-router.beforeEach((to, from, next) => {
-  if (
-    route.params.id &&
-    route.params.id.startsWith("_draft") &&
-    from.name == "workout"
-  ) {
-    saveBeforeExitDialog.value = true; // Show dialog
-    next(false); // Prevent navigation
-  } else {
-    next(); // Allow navigation
+const bodyParts = ref([
+  "chest",
+  "back",
+  "legs",
+  "shoulders",
+  "biceps",
+  "triceps",
+  "abs",
+  "neck",
+  "forearms",
+]);
+
+const chooseBodyPart = (part) => {
+  exercisesToDisplay.value = workoutStore.filterExercises(part);
+  tab.value = "three";
+};
+
+watchEffect(() => {
+  if ((tab.value = "two")) {
+    console.log("two");
   }
 });
+
+// onUnmounted(() => {
+//   workoutDraft.value = {};
+//   // window.removeEventListener("beforeunload", handleBeforeUnload);
+// });
+
+// router.beforeEach((to, from, next) => {
+//   if (
+//     route.params.id &&
+//     route.params.id.startsWith("_draft") &&
+//     from.name == "workout"
+//   ) {
+//     saveBeforeExitDialog.value = true; // Show dialog
+//     next(false); // Prevent navigation
+//   } else {
+//     next(); // Allow navigation
+//   }
+// });
 
 // const handleBeforeUnload = (event) => {
 //   console.log(event);
@@ -450,10 +504,10 @@ function cancelChanges() {
   }
 }
 
-function discardChanges() {
-  saveBeforeExitDialog.value = false;
-  router.push("/");
-}
+// function discardChanges() {
+//   saveBeforeExitDialog.value = false;
+//   router.push("/");
+// }
 
 const deleteWorkoutDialog = ref(false);
 
@@ -513,5 +567,11 @@ const deleteWorkout = async () => {
 
 .fade-move {
   transition: all 0.4s ease;
+}
+
+.dialog-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

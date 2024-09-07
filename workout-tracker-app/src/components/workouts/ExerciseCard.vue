@@ -1,9 +1,7 @@
 <template>
   <v-card
-    width="450"
     rounded="xl"
-    color="rgba(255, 255,255, 0.8)"
-    class="d-flex flex-col items-center pb-8 pt-4 mt-6 relative border-2 border-white"
+    class="flex flex-col w-[350px] sm:min-w-[550px] lg:min-w-[550px] bg-[rgba(199,181,181,0.5)] items-center pb-8 pt-4 mt-6 relative"
   >
     <transition name="fade">
       <v-btn
@@ -22,13 +20,11 @@
         v-for="(set, setIndex) in exercise.sets"
         :key="set._id"
         color="rgba(255, 255,255, 0.5)"
-        class="d-flex justify-between items-center px-4 mt-2 transition-all duration-300"
+        class="flex items-center px-4 mt-2 transition-all duration-300 w-[320px] h-[60px] sm:w-[400px] lg:[550px]"
         :class="{
           '-translate-x-6 overflow-visible transition-all duration-300':
             editId === `${exercise._id}-${set._id}`,
         }"
-        width="370"
-        height="60"
         rounded="lg"
         @click="() => toggleEdit(exercise._id, set._id)"
       >
@@ -42,7 +38,7 @@
           >
           </v-btn>
         </transition>
-        <v-row align="center">
+        <!-- <v-row align="center" class="self-center place-self-center">
           <v-col cols="2"
             ><span
               class="font-bold border text-center p-[2px] border-black rounded-full inline-block bg-white h-8 w-8"
@@ -74,12 +70,42 @@
             ></v-text-field
           ></v-col>
           <v-col cols="2" class="font-bold">Reps </v-col>
-        </v-row>
+        </v-row> -->
+        <div class="flex items-center justify-evenly w-full">
+          <span
+            class="font-bold border text-center p-[2px] border-black rounded-full inline-block bg-white h-8 w-8"
+          >
+            {{ setIndex + 1 }}
+          </span>
+          <v-text-field
+            variant="solo"
+            type="number"
+            class="font-bold text-center w-[80px] mt-5 ml-2"
+            v-model.number="set.weight"
+            @click.stop
+            density="compact"
+            suffix="Kg"
+          ></v-text-field>
+          <v-text-field
+            variant="solo"
+            type="number"
+            class="font-bold text-center w-[80px] mt-5 ml-2 mr-2"
+            v-model.number="set.reps"
+            @click.stop
+            density="compact"
+            suffix="reps"
+          ></v-text-field>
+          <v-btn
+            icon="mdi-delete"
+            size="small"
+            @click.stop="() => $emit('deleteSet', exercise._id, set._id)"
+          >
+          </v-btn>
+        </div>
       </v-card>
 
       <v-btn
-        class="mt-4"
-        width="370"
+        class="mt-4 w-full"
         height="45"
         rounded="lg"
         variant="elevated"

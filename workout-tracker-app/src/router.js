@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
 
-import HomeView from "./views/HomeView.vue";
+import WorkoutsView from "./views/WorkoutsView.vue";
 import ChooseWorkoutView from "./views/ChooseWorkoutView.vue";
 import WorkoutView from "./views/WorkoutView.vue";
 import NotFoundView from "./views/NotFoundView.vue";
@@ -10,14 +10,18 @@ import WelcomeView from "./views/WelcomeView.vue";
 import { useAuthStore } from "./stores/authStore";
 import AboutView from "./views/AboutView.vue";
 import { storeToRefs } from "pinia";
-import { useWorkoutStore } from "./stores/workoutStore";
-import { useWorkoutDraftStore } from "./stores/workoutDraftStore";
 
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    name: "workouts",
+    component: WorkoutsView,
+    meta: { requiresAuth: true, requiresLayout: false },
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: WorkoutsView,
     meta: { requiresAuth: true, requiresLayout: false },
   },
   {

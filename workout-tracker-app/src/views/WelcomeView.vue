@@ -10,18 +10,18 @@
     </h1>
     <div class="flex flex-col justify-self-end items-center mb-52 gap-4">
       <v-btn
-        @click="() => router.push(`/auth/login`)"
-        width="400"
-        variant="outlined"
-        color="white"
-        >LOGIN</v-btn
-      >
-      <v-btn
         @click="() => router.push(`/auth/register`)"
         width="400"
         variant="outlined"
         color="white"
-        >SIGN UP</v-btn
+        >Get Started</v-btn
+      >
+      <v-btn
+        @click="() => router.push(`/auth/login`)"
+        width="400"
+        variant="outlined"
+        color="white"
+        >I Already Have an Account</v-btn
       >
     </div>
   </div>

@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="bg-[url('/assets/man-working-out-2.jpg')] bg-cover min-h-screen w-full bg-fixed"
-  >
+  <div class="min-h-screen w-full">
     <div class="mt-16">
       <div class="d-flex flex-column align-center ga-5" v-if="user">
         <v-btn
@@ -25,30 +23,28 @@
           height="100"
         >
         </v-skeleton-loader>
-        <transition-group
-          name="fade"
-          tag="div"
-          mode="out-in"
-          class="flex flex-col items-center gap-2"
-        >
-          <WorkoutCard
-            v-if="!isLoading"
-            v-for="workout in filteredWorkouts"
-            :key="workout._id"
-            :workout="workout"
-            @deleteRequest="handleDeleteRequest"
-            @toggleIsFavorite="handleToggleIsFavorite"
-          />
-
-          <v-skeleton-loader
-            v-if="workouts.length > 0 && isLoading"
-            v-for="n in workouts.length"
-            :key="'skeleton-' + n"
-            class="rounded-xl"
-            width="300"
-            height="120"
+        <transition-group name="fade" tag="div" mode="out-in">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center gap-4"
           >
-          </v-skeleton-loader>
+            <WorkoutCard
+              v-if="!isLoading"
+              v-for="workout in filteredWorkouts"
+              :key="workout._id"
+              :workout="workout"
+              @deleteRequest="handleDeleteRequest"
+              @toggleIsFavorite="handleToggleIsFavorite"
+            />
+            <v-skeleton-loader
+              v-if="workouts.length > 0 && isLoading"
+              v-for="n in workouts.length"
+              :key="'skeleton-' + n"
+              class="rounded-xl"
+              width="300"
+              height="120"
+            >
+            </v-skeleton-loader>
+          </div>
         </transition-group>
       </div>
       <v-snackbar
