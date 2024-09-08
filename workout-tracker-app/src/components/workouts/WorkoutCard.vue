@@ -14,7 +14,7 @@
     </template>
 
     <v-card-actions>
-      <div class="flex justify-between items-center w-full px-1">
+      <div class="flex justify-between items-center w-full px-2">
         <p class="text-sm font-medium">
           {{ toLocalDate(workout.createdDate) }}
         </p>

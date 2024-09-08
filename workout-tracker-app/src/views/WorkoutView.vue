@@ -1,64 +1,58 @@
 <template>
-  <div class="min-h-screen w-full">
-    <div class="mt-20">
-      <div class="mb-6 flex justify-center gap-4 h-full">
-        <v-btn
-          @click="handleDeleteRequest"
-          color="rgba(255, 255,255, 0.5)"
-          icon="mdi-trash-can"
-        >
-        </v-btn>
-        <v-btn
-          @click="isEditMode = !isEditMode"
-          color="rgba(255, 255,255, 0.5)"
-          icon="mdi-pencil"
-          :class="{
-            'border-2 border-white': isEditMode,
-          }"
-        >
-        </v-btn>
-        <v-btn
-          color="rgba(255, 255,255, 0.5)"
-          rounded="xl"
-          icon="mdi-plus"
-          @click="isAddDialogOpen = true"
-        >
-        </v-btn>
-      </div>
-      <div>
-        <div class="w-full flex justify-center">
-          <input
-            :disabled="!isEditMode"
-            type="text"
-            v-model="workoutDraft.name"
-            class="text-2xl sm:text-3xl lg:text-4xl overflow-hidden text-clip outline-none py-2 text-center rounded-lg tracking-widest font-semibold bg-[rgba(189,154,154,0.5)] leading-normal"
-          />
-        </div>
-
-        <!-- list of workout draft exercises -->
-        <div
-          class="mt-8 relative flex flex-col justify-center items-center mb-8"
-        >
-          <transition-group name="fade" tag="div" mode="out-in">
-            <ExerciseCard
-              v-if="!isLoading"
-              v-for="exercise in workoutDraft?.exercises"
-              :key="exercise._id"
-              :exercise="exercise"
-              :isEditMode="isEditMode"
-              @add-set="addSet"
-              @delete-set="deleteSet"
-              @delete-exercise="() => handleDeleteExercise(exercise._id)"
-            />
-          </transition-group>
-          <ExerciseCardSkeletonLoader
-            v-if="isLoading"
-            v-for="(exercise, index) in workoutDraft?.exercises"
-            :key="'skeleton-' + index"
-            :numberOfSets="exercise.sets.length"
-          />
-        </div>
-      </div>
+  <div class="min-h-screen w-full mt-20 flex flex-col items-center">
+    <div class="mb-6 flex justify-center gap-4 w-full">
+      <v-btn
+        @click="handleDeleteRequest"
+        color="rgba(255, 255,255, 0.5)"
+        icon="mdi-trash-can"
+      >
+      </v-btn>
+      <v-btn
+        @click="isEditMode = !isEditMode"
+        color="rgba(255, 255,255, 0.5)"
+        icon="mdi-pencil"
+        :class="{
+          'border-2 border-white': isEditMode,
+        }"
+      >
+      </v-btn>
+      <v-btn
+        color="rgba(255, 255,255, 0.5)"
+        rounded="xl"
+        icon="mdi-plus"
+        @click="isAddDialogOpen = true"
+      >
+      </v-btn>
+    </div>
+    <div class="w-full flex justify-center">
+      <input
+        :disabled="!isEditMode"
+        type="text"
+        v-model="workoutDraft.name"
+        class="text-2xl sm:text-3xl lg:text-4xl overflow-hidden text-clip outline-none py-2 text-center rounded-lg tracking-widest font-semibold bg-[rgba(189,154,154,0.5)] leading-normal"
+        :class="{ 'border-4 border-black': isEditMode }"
+      />
+    </div>
+    <div class="relative w-full flex flex-col justify-center items-center mb-8">
+      <transition-group name="fade" tag="div" mode="out-in">
+        <ExerciseCard
+          class="mt-10"
+          v-if="!isLoading"
+          v-for="exercise in workoutDraft?.exercises"
+          :key="exercise._id"
+          :exercise="exercise"
+          :isEditMode="isEditMode"
+          @add-set="addSet"
+          @delete-set="deleteSet"
+          @delete-exercise="() => handleDeleteExercise(exercise._id)"
+        />
+      </transition-group>
+      <ExerciseCardSkeletonLoader
+        v-if="isLoading"
+        v-for="(exercise, index) in workoutDraft?.exercises"
+        :key="'skeleton-' + index"
+        :numberOfSets="exercise.sets.length"
+      />
     </div>
   </div>
 
@@ -145,10 +139,7 @@
   </v-dialog>
   <v-dialog v-model="deleteExerciseDialog" width="auto">
     <v-card
-      class="justify-center items-center pb-3 relative py-6 text-center"
-      max-width="400"
-      width="400"
-      height="240"
+      class="justify-center items-center w-[340px] sm:w-[400px] lg:w-[450px] pb-3 relative py-6 text-center"
       rounded="xl"
     >
       <v-btn
@@ -159,10 +150,7 @@
       ></v-btn>
       <template #title> Delete Confirmation</template>
       <template #text>
-        <p class="text-lg">
-          Are you sure you want to delete this exercise? This action cannot be
-          undone.
-        </p>
+        <p class="text-lg">Are you sure you want to delete this exercise?</p>
       </template>
       <template v-slot:actions>
         <div class="flex gap-2">
@@ -190,10 +178,7 @@
   </v-dialog>
   <v-dialog v-model="deleteWorkoutDialog" width="auto">
     <v-card
-      class="justify-center items-center pb-3 relative py-6 text-center"
-      max-width="400"
-      width="400"
-      height="260"
+      class="justify-center items-center w-[340px] sm:w-[400px] lg:w-[450px] pb-3 relative py-6 text-center"
       rounded="xl"
     >
       <v-btn

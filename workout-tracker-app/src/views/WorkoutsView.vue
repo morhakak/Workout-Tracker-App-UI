@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen w-full">
+  <div class="min-h-screen w-full pb-6">
     <div class="mt-16">
       <div class="d-flex flex-column align-center ga-5" v-if="user">
         <v-btn

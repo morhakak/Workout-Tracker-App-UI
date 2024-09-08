@@ -1,17 +1,9 @@
 <template>
   <v-card
-    width="450"
     rounded="xl"
     color="rgba(255, 255, 255, 0.8)"
-    class="d-flex flex-col items-center pb-8 pt-4 mt-6 border-2 relative"
+    class="d-flex flex-col items-center w-[350px] sm:min-w-[550px] lg:min-w-[550px] pb-8 pt-4 mt-6"
   >
-    <!-- Placeholder for edit button -->
-    <v-skeleton-loader
-      width="48"
-      height="48"
-      class="absolute right-2 rounded-full"
-    ></v-skeleton-loader>
-
     <!-- Placeholder for card title -->
     <v-skeleton-loader
       height="55"
@@ -23,11 +15,10 @@
     <v-skeleton-loader
       v-for="index in numberOfSets"
       :key="index"
-      width="370"
       height="60"
-      class="mt-2 rounded-lg"
+      class="mt-2 rounded-lg w-[320px] h-[60px] sm:w-[400px] lg:[550px]"
     ></v-skeleton-loader>
-    <v-skeleton-loader width="370" height="45" class="mt-4"></v-skeleton-loader>
+    <v-skeleton-loader height="45" class="mt-4 w-full"></v-skeleton-loader>
   </v-card>
 </template>
 

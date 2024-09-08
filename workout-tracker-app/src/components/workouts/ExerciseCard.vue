@@ -1,15 +1,14 @@
 <template>
   <v-card
     rounded="xl"
-    class="flex flex-col w-[350px] sm:min-w-[550px] lg:min-w-[550px] bg-[rgba(199,181,181,0.5)] items-center pb-8 pt-4 mt-6 relative"
+    class="flex flex-col overflow-visible w-[350px] sm:min-w-[550px] lg:min-w-[550px] bg-[rgba(199,181,181,0.5)] items-center pb-8 pt-4 mt-6 relative"
   >
     <transition name="fade">
       <v-btn
         v-if="isEditMode"
         @click="$emit(`deleteExercise`)"
         icon="mdi-trash-can"
-        variant="text"
-        class="absolute right-2"
+        class="absolute -top-6"
       ></v-btn>
     </transition>
     <v-card-title class="text-center text-2xl mb-2 tracking-widest">{{
@@ -33,7 +32,7 @@
             v-if="editId === `${exercise._id}-${set._id}`"
             icon="mdi-delete"
             size="small"
-            class="absolute -right-12"
+            class="absolute -right-10"
             @click.stop="() => $emit('deleteSet', exercise._id, set._id)"
           >
           </v-btn>
@@ -85,6 +84,7 @@
             @click.stop
             density="compact"
             suffix="Kg"
+            flat
           ></v-text-field>
           <v-text-field
             variant="solo"
@@ -94,6 +94,7 @@
             @click.stop
             density="compact"
             suffix="reps"
+            flat
           ></v-text-field>
           <v-btn
             icon="mdi-delete"
