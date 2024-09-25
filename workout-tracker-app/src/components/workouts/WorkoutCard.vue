@@ -26,7 +26,7 @@
             @click.stop="
               () => $emit(`deleteRequest`, workout._id, workout.name)
             "
-            ><v-icon size="large">mdi-delete</v-icon></v-btn
+            ><v-icon size="large">mdi-trash-can-outline</v-icon></v-btn
           >
           <v-btn
             rounded="xl"

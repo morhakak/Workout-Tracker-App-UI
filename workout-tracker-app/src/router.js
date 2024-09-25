@@ -10,6 +10,7 @@ import WelcomeView from "./views/WelcomeView.vue";
 import { useAuthStore } from "./stores/authStore";
 import AboutView from "./views/AboutView.vue";
 import { storeToRefs } from "pinia";
+import DashboardView from "./views/DashboardView.vue";
 
 const routes = [
   {
@@ -21,7 +22,7 @@ const routes = [
   {
     path: "/dashboard",
     name: "dashboard",
-    component: WorkoutsView,
+    component: DashboardView,
     meta: { requiresAuth: true, requiresLayout: false },
   },
   {

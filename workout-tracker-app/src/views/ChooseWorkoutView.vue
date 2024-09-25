@@ -2,7 +2,7 @@
   <div class="flex justify-center">
     <v-card
       rounded="lg"
-      class="flex flex-col p-6 justify-center w-[600px] min-w-[28rem] gap-4"
+      class="flex flex-col p-6 justify-center min-w-[350px] sm:w-[500px] mt-4 gap-4"
     >
       <div class="flex flex-col gap-10">
         <h1 class="text-xl self-center font-semibold">Enter workout name</h1>
@@ -10,6 +10,10 @@
           variant="underlined"
           label="Workout Name"
           v-model="workoutName"
+          :loading="isLoading"
+          clearable
+          :rules="[rules.nameLength]"
+          :hint="`Max of ${nameLength} characters`"
         ></v-text-field>
       </div>
 
@@ -18,7 +22,7 @@
         class="mb-4 py-6 text-center flex"
         append-icon="mdi-plus"
         :loading="isLoading"
-        :disabled="workoutName == ``"
+        :disabled="workoutName == `` || workoutName.length > nameLength"
         @click="createWorkoutNameAndNavigate"
         >Create Workout</v-btn
       >
@@ -32,14 +36,22 @@ import { useWorkoutDraftStore } from "../stores/workoutDraftStore";
 import { useWorkoutStore } from "../stores/workoutStore";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
+
+const router = useRouter();
 const workoutDraftStore = useWorkoutDraftStore();
 const workoutStore = useWorkoutStore();
+
 const { isLoading } = storeToRefs(workoutStore);
 const { workoutDraft } = storeToRefs(workoutDraftStore);
-const router = useRouter();
+
 const selectedType = ref("");
 const tab = ref(null);
 const workoutName = ref("");
+const nameLength = 25;
+const rules = {
+  nameLength: (value) =>
+    value.length <= nameLength || `Max ${nameLength} characters`,
+};
 
 const createWorkoutNameAndNavigate = async () => {
   const workout = {

@@ -7,9 +7,10 @@
           color="rgba(255, 255,255, 0.5)"
           width="300"
           height="100"
-          class="mt-6 border-2 border-white"
+          class="mt-6 border-dashed border-2 border-black"
           rounded="xl"
           to="/create-Workout"
+          flat
         >
           <div class="flex flex-col items-center gap-2">
             <span>Create a workout</span>
@@ -67,10 +68,7 @@
   </div>
   <v-dialog v-model="deleteDialog" width="auto">
     <v-card
-      class="justify-center items-center pb-3 relative py-6 text-center"
-      max-width="400"
-      width="400"
-      height="260"
+      class="justify-center items-center w-[340px] sm:w-[400px] lg:w-[450px] pb-3 relative py-6 text-center"
       rounded="xl"
     >
       <v-btn
@@ -100,7 +98,7 @@
           <v-btn
             color="red"
             rounded="lg"
-            variant="outlined"
+            variant="flat"
             class="ms-auto"
             text="Delete"
             width="120"

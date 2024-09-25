@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex flex-col items-center justify-center min-h-screen bg-[url('/assets/man-working-out.jpg')] bg-cover w-full"
-  >
+  <div class="flex flex-col items-center justify-center min-h-screen w-full">
     <v-card
       class="w-[400px] h-[450px] flex flex-col justify-between bg-[rgba(0,0,0,0.8)] px-4 py-6"
       rounded="lg"

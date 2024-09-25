@@ -1,7 +1,7 @@
 <template>
   <v-card
     rounded="xl"
-    class="flex flex-col overflow-visible w-[350px] sm:min-w-[550px] lg:min-w-[550px] bg-[rgba(199,181,181,0.5)] items-center pb-8 pt-4 mt-6 relative"
+    class="flex flex-col overflow-visible w-[350px] sm:min-w-[550px] lg:min-w-[550px] bg-[rgba(255,255,255,0.5)] items-center pb-8 pt-4 mt-6 relative"
   >
     <transition name="fade">
       <v-btn
@@ -104,9 +104,9 @@
           </v-btn>
         </div>
       </v-card>
-
       <v-btn
         class="mt-4 w-full"
+        color="black"
         height="45"
         rounded="lg"
         variant="elevated"

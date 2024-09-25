@@ -141,11 +141,6 @@ const updateMenuItems = computed(() => {
   if (!token.value) {
     return [
       {
-        title: "About",
-        link: "/about",
-        icon: "mdi-information",
-      },
-      {
         title: "Register",
         link: "/auth/register",
         icon: "mdi-account-plus",
@@ -167,21 +162,6 @@ const updateMenuItems = computed(() => {
         title: "Workouts",
         link: "/",
         icon: "mdi-dumbbell",
-      },
-      {
-        title: "Favorite",
-        link: "/favorite",
-        icon: "mdi-heart",
-      },
-      {
-        title: "About",
-        link: "/about",
-        icon: "mdi-information",
-      },
-      {
-        title: "Settings",
-        link: "/settings",
-        icon: "mdi-cog",
       },
     ];
   }

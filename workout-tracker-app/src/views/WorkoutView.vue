@@ -24,35 +24,44 @@
       >
       </v-btn>
     </div>
-    <div class="w-full flex justify-center">
+    <div class="w-full flex flex-col justify-center">
       <input
         :disabled="!isEditMode"
         type="text"
         v-model="workoutDraft.name"
-        class="text-2xl sm:text-3xl lg:text-4xl overflow-hidden text-clip outline-none py-2 text-center rounded-lg tracking-widest font-semibold bg-[rgba(189,154,154,0.5)] leading-normal"
-        :class="{ 'border-4 border-black': isEditMode }"
+        class="text-2xl sm:text-3xl lg:text-4xl text-clip py-2 text-center rounded-lg font-semibold bg-[#ffffff] leading-normal"
+        :class="{ 'outline-1 outline-gray-950': isEditMode }"
       />
+      <v-divider
+        :thickness="4"
+        color="warning"
+        class="border-opacity-50 mt-4"
+      ></v-divider>
     </div>
+
     <div class="relative w-full flex flex-col justify-center items-center mb-8">
-      <transition-group name="fade" tag="div" mode="out-in">
-        <ExerciseCard
-          class="mt-10"
-          v-if="!isLoading"
-          v-for="exercise in workoutDraft?.exercises"
-          :key="exercise._id"
-          :exercise="exercise"
-          :isEditMode="isEditMode"
-          @add-set="addSet"
-          @delete-set="deleteSet"
-          @delete-exercise="() => handleDeleteExercise(exercise._id)"
+      <div v-if="workoutDraft.exercises.length > 0">
+        <transition-group name="fade" tag="div" mode="out-in">
+          <ExerciseCard
+            class="mt-10"
+            v-if="!isLoading"
+            v-for="exercise in workoutDraft?.exercises"
+            :key="exercise._id"
+            :exercise="exercise"
+            :isEditMode="isEditMode"
+            @add-set="addSet"
+            @delete-set="deleteSet"
+            @delete-exercise="() => handleDeleteExercise(exercise._id)"
+          />
+        </transition-group>
+        <ExerciseCardSkeletonLoader
+          v-if="isLoading"
+          v-for="(exercise, index) in workoutDraft?.exercises"
+          :key="'skeleton-' + index"
+          :numberOfSets="exercise.sets.length"
         />
-      </transition-group>
-      <ExerciseCardSkeletonLoader
-        v-if="isLoading"
-        v-for="(exercise, index) in workoutDraft?.exercises"
-        :key="'skeleton-' + index"
-        :numberOfSets="exercise.sets.length"
-      />
+      </div>
+      <div v-else class="mt-20">Add exercies... :)</div>
     </div>
   </div>
 
@@ -61,7 +70,7 @@
     width="auto"
     transition="dialog-bottom-transition"
   >
-    <v-card rounded="xl" max-width="900">
+    <v-card rounded="xl" max-width="900" class="overflow-hidden">
       <v-toolbar color="black">
         <v-toolbar-title>Exercise Selector</v-toolbar-title>
         <v-toolbar-items>
@@ -76,7 +85,7 @@
       <v-card-text>
         <v-tabs-window v-model="tab">
           <v-tabs-window-item
-            class="grid w-full overflow-scroll max-h-[600px] px-2 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 items-center gap-5 py-4"
+            class="grid w-full overflow-y-scroll max-h-[500px] sm:max-h-[600px] px-2 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 items-center gap-5 pb-6"
             value="two"
           >
             <v-btn
@@ -89,7 +98,10 @@
               {{ part }}
             </v-btn>
           </v-tabs-window-item>
-          <v-tabs-window-item value="three" class="py-4 max-h-[600px]">
+          <v-tabs-window-item
+            value="three"
+            class="py-4 max-h-[500px] sm:max-h-[600px]"
+          >
             <div class="flex flex-col items-center">
               <v-text-field
                 v-model="searchTerm"

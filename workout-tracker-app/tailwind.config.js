@@ -4,6 +4,9 @@ export default {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"], // Set Roboto as the default sans font
+      },
       keyframes: {
         bgAnimate: {
           "0%": { backgroundPosition: "50% 0" },
