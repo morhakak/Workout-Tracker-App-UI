@@ -1,63 +1,61 @@
 <template>
-  <div>
-    <v-layout>
-      <v-app-bar
-        :color="isScrolled ? 'rgba(0,0,0,0.8)' : 'black'"
-        prominent
-        class="transition-colors duration-300 ease-in"
+  <v-layout>
+    <v-app-bar
+      :color="isScrolled ? 'rgba(0,0,0,0.8)' : 'black'"
+      prominent
+      class="transition-colors duration-300 ease-in"
+    >
+      <v-app-bar-nav-icon
+        variant="text"
+        color="white"
+        @click.stop="drawer = !drawer"
+      ></v-app-bar-nav-icon>
+
+      <v-spacer></v-spacer>
+      <div
+        class="flex gap-2 mr-2 justify-center items-center hover:cursor-pointer"
+        @click="router.push(`/`)"
       >
-        <v-app-bar-nav-icon
-          variant="text"
-          color="white"
-          @click.stop="drawer = !drawer"
-        ></v-app-bar-nav-icon>
+        <p class="text-white text-xl">Workout Tracker</p>
+        <v-icon class="text-white text-xl">mdi-dumbbell</v-icon>
+      </div>
+    </v-app-bar>
 
-        <v-spacer></v-spacer>
-        <div
-          class="flex gap-2 mr-2 justify-center items-center hover:cursor-pointer"
-          @click="router.push(`/`)"
+    <v-navigation-drawer v-model="drawer" width="300" color="black" temporary>
+      <v-list>
+        <v-list-item
+          class="text-lg"
+          v-for="item in updateMenuItems"
+          :key="item.title"
+          :prepend-icon="item.icon"
+          :to="item.link"
+          @click="item.action"
         >
-          <p class="text-white text-xl">Workout Tracker</p>
-          <v-icon class="text-white text-xl">mdi-dumbbell</v-icon>
-        </div>
-      </v-app-bar>
-
-      <v-navigation-drawer v-model="drawer" width="300" color="black" temporary>
-        <v-list>
-          <v-list-item
-            class="text-lg"
-            v-for="item in updateMenuItems"
-            :key="item.title"
-            :prepend-icon="item.icon"
-            :to="item.link"
-            @click="item.action"
-          >
-            <template #title>
-              <p
-                class="text-lg"
-                :class="{ 'font-semibold': item.name == 'user' }"
-              >
-                {{ item.title }}
-              </p>
-            </template></v-list-item
-          >
-        </v-list>
-        <template #append>
-          <div class="p-2">
-            <v-btn
-              v-if="token"
-              @click="() => (logoutDialog = true)"
-              prepend-icon="mdi-logout"
-              block
-              color="orange"
-              >Log out</v-btn
+          <template #title>
+            <p
+              class="text-lg"
+              :class="{ 'font-semibold': item.name == 'user' }"
             >
-          </div>
-        </template>
-      </v-navigation-drawer>
-      <MainView />
-    </v-layout>
-  </div>
+              {{ item.title }}
+            </p>
+          </template></v-list-item
+        >
+      </v-list>
+      <template #append>
+        <div class="p-2">
+          <v-btn
+            v-if="token"
+            @click="() => (logoutDialog = true)"
+            prepend-icon="mdi-logout"
+            block
+            color="orange"
+            >Log out</v-btn
+          >
+        </div>
+      </template>
+    </v-navigation-drawer>
+    <v-main> <router-view></router-view> </v-main>
+  </v-layout>
   <v-dialog v-model="logoutDialog" width="auto">
     <v-card
       class="justify-center items-center pb-3 relative py-6 text-center"
@@ -112,7 +110,6 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useAuthStore } from "../../stores/authStore";
 import { storeToRefs } from "pinia";
-import MainView from "../../views/MainView.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
