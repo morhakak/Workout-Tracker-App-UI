@@ -1,6 +1,7 @@
 <template>
   <v-layout>
     <v-app-bar
+      v-if="authStore.user"
       :color="isScrolled ? 'rgba(0,0,0,0.8)' : 'black'"
       prominent
       class="transition-colors duration-300 ease-in"
@@ -21,7 +22,15 @@
       </div>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" width="300" color="black" temporary>
+    <v-navigation-drawer
+      v-model="drawer"
+      width="300"
+      color="black"
+      temporary
+      :class="[
+        displayClasses, // 'app-drawer--mobile'
+      ]"
+    >
       <v-list>
         <v-list-item
           class="text-lg"
@@ -111,6 +120,9 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useAuthStore } from "../../stores/authStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import { useDisplay } from "vuetify";
+
+const { displayClasses } = useDisplay({ mobileBreakpoint: 600 });
 
 const router = useRouter();
 

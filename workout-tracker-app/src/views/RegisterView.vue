@@ -1,88 +1,66 @@
 <template>
-  <div
-    class="flex flex-col items-center justify-center min-h-screen bg-[url('/assets/man-working-out.jpg')] bg-cover w-full"
-  >
-    <v-card
-      class="w-[400px] h-[450px] flex flex-col justify-between bg-[rgba(0,0,0,0.8)] px-4 py-6"
-      rounded="lg"
-    >
-      <h1 class="text-center text-3xl text-white font-bold mt-4">
-        Create an account
-      </h1>
-      <form @submit.prevent="submitForm" class="mb-8">
-        <v-text-field
-          prepend-inner-icon="mdi-account"
-          class="text-white font-semibold"
-          variant="underlined"
-          color="white"
-          base-color="white"
-          v-model="state.name"
-          :counter="10"
-          :error-messages="v$.name.$errors.map((e) => e.$message)"
-          label="Name"
-          required
-          @blur="v$.name.$touch"
-          @input="v$.name.$touch"
-        ></v-text-field>
-        <v-text-field
-          prepend-inner-icon="mdi-email"
-          class="text-white font-semibold"
-          variant="underlined"
-          color="white"
-          base-color="white"
-          v-model="state.email"
-          :error-messages="v$.email.$errors.map((e) => e.$message)"
-          label="E-mail"
-          required
-          @blur="v$.email.$touch"
-          @input="v$.email.$touch"
-          style="font-size: 1.125rem; color: white"
-        >
-        </v-text-field>
-        <v-text-field
-          prepend-inner-icon="mdi-lock"
-          class="text-white font-semibold"
-          variant="underlined"
-          color="white"
-          type="password"
-          base-color="white"
-          v-model="state.password"
-          :error-messages="v$.password.$errors.map((e) => e.$message)"
-          label="Password"
-          required
-          @blur="v$.password.$touch"
-          @input="v$.password.$touch"
-        ></v-text-field>
-        <v-btn
-          variant="outlined"
-          color="white"
-          class="me-4 w-full text-lg mt-4"
-          height="45"
-          type="submit"
-          :loading="isLoading"
-        >
-          Register
-        </v-btn>
-      </form>
-      <p class="text-center text-white font-semibold">
-        Already registered?
-        <v-btn variant="plain" to="/auth/login"> login</v-btn>
-      </p>
-    </v-card>
-  </div>
-  <v-snackbar color="red" v-model="snackbarError">
-    <template #text>
-      <div class="flex items-center gap-4">
-        <v-icon>mdi-alert-circle</v-icon>
-        <p class="text-lg">{{ messages[0].message }}</p>
-      </div>
-    </template>
-    <template v-slot:actions>
-      <v-btn color="black" variant="text" @click="snackbarError = false">
-        Close
+  <AuthLayout>
+    <h2 class="text-center text-3xl text-black font-bold mt-4">
+      Welcome To Workout Tracker!
+    </h2>
+    <h2 class="text-center text-xl text-neutral-400 font-semibold mt-4">
+      Create an account and track your workouts
+    </h2>
+    <form @submit.prevent="submitForm" class="mb-8 mt-8">
+      <v-text-field
+        prepend-inner-icon="mdi-account"
+        class="text-black font-semibold"
+        variant="outlined"
+        color="black"
+        base-color="black"
+        v-model="state.name"
+        :counter="10"
+        :error-messages="v$.name.$errors.map((e) => e.$message)"
+        label="Name"
+        required
+        @blur="v$.name.$touch"
+        @input="v$.name.$touch"
+      ></v-text-field>
+      <v-text-field
+        prepend-inner-icon="mdi-email"
+        class="text-black font-semibold"
+        variant="outlined"
+        color="black"
+        base-color="black"
+        v-model="state.email"
+        :error-messages="v$.email.$errors.map((e) => e.$message)"
+        label="E-mail"
+        required
+        @blur="v$.email.$touch"
+        @input="v$.email.$touch"
+        style="font-size: 1.125rem; color: black"
+      >
+      </v-text-field>
+      <v-text-field
+        prepend-inner-icon="mdi-lock"
+        class="text-black font-semibold"
+        variant="outlined"
+        color="white"
+        type="password"
+        base-color="black"
+        v-model="state.password"
+        :error-messages="v$.password.$errors.map((e) => e.$message)"
+        label="Password"
+        required
+        @blur="v$.password.$touch"
+        @input="v$.password.$touch"
+      ></v-text-field>
+      <v-btn
+        color="black"
+        class="me-4 w-full text-lg mt-4"
+        height="45"
+        type="submit"
+        :loading="isLoading"
+      >
+        Register
       </v-btn>
-    </template>
-  </v-snackbar>
+    </form>
+  </AuthLayout>
 </template>
 
 <script setup>
@@ -93,6 +71,7 @@ import { useAuthStore } from "../stores/authStore";
 import { useApiErrorStore } from "../stores/apiErrorStore";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
+import AuthLayout from "../components/layout/AuthLayout.vue";
 
 const authStore = useAuthStore();
 const { isLoading } = storeToRefs(authStore);
