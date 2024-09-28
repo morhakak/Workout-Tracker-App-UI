@@ -99,6 +99,7 @@
 
 <script setup>
 import { reactive, watchEffect, ref, onBeforeMount, onMounted } from "vue";
+import { reactive, watchEffect, ref, onBeforeMount, onMounted } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
 import { useAuthStore } from "../stores/authStore";
