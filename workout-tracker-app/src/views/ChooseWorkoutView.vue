@@ -1,8 +1,8 @@
 <template>
-  <div class="flex justify-center">
+  <div class="flex justify-center mt-6">
     <v-card
       rounded="lg"
-      class="flex flex-col p-6 justify-center min-w-[350px] sm:w-[500px] mt-4 gap-4"
+      class="flex flex-col p-6 justify-center min-w-[350px] sm:w-[500px] gap-4"
     >
       <div class="flex flex-col gap-10">
         <h1 class="text-xl self-center font-semibold">Enter workout name</h1>

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen w-full pb-6">
+  <div class="w-full pb-6">
     <div class="mt-16">
       <div class="d-flex flex-column align-center ga-5" v-if="user">
         <v-btn
@@ -7,7 +7,7 @@
           color="rgba(255, 255,255, 0.5)"
           width="300"
           height="100"
-          class="mt-6 border-dashed border-2 border-black"
+          class="border-dashed border-2 border-black"
           rounded="xl"
           to="/create-Workout"
           flat

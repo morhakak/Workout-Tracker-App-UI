@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen w-full mt-20 flex flex-col items-center">
+  <div class="w-full mt-20 flex flex-col items-center">
     <div class="mb-6 flex justify-center gap-4 w-full">
       <v-btn
         @click="handleDeleteRequest"
@@ -29,7 +29,7 @@
         :disabled="!isEditMode"
         type="text"
         v-model="workoutDraft.name"
-        class="text-2xl sm:text-3xl lg:text-4xl text-clip py-2 text-center rounded-lg font-semibold bg-[#ffffff] leading-normal"
+        class="text-2xl sm:text-3xl lg:text-4xl w-[75%] sm:w-[600px] mx-auto text-clip py-2 text-center rounded-lg font-semibold bg-[#ffffff] leading-normal"
         :class="{ 'outline-1 outline-gray-950': isEditMode }"
       />
       <v-divider
