@@ -1,5 +1,5 @@
 <template>
-  <AuthLayout>
+  <AuthLayout :isLoginView="false">
     <h2 class="text-center text-3xl text-black font-bold mt-4">
       Welcome To Workout Tracker!
     </h2>

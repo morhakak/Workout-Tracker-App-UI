@@ -8,8 +8,8 @@
          <slot></slot>
         </div>
         <p class="text-center text-neutral-400 font-semibold">
-         {{isLogin ?  `Don't have an account yet?` : `Already registered?`}}
-          <v-btn variant="plain" color="black" :to="isLogin ? `/auth/register` : `/auth/login`"> {{isLogin ?  `Register` : `Login`}}</v-btn>
+         {{isLoginView ?  `Don't have an account yet?` : `Already registered?`}}
+          <v-btn variant="plain" color="black" :to="to"> {{isLoginView ?  `Register` : `Login`}}</v-btn>
         </p>
       </div>
       <img
@@ -32,6 +32,27 @@
     </v-snackbar>
   </template>
 
-  <script setup>
-defineProps(["isLogin"]);
+<script setup>
+import { computed, onBeforeMount, ref, watchEffect } from 'vue';
+import { storeToRefs } from "pinia";
+import { useApiErrorStore } from '../../stores/apiErrorStore';
+const props = defineProps(["isLoginView"]);
+const snackbarError = ref(false);
+const apiErrorStore = useApiErrorStore();
+const { messages } = storeToRefs(apiErrorStore);
+watchEffect(() => {
+  if (messages.value.length > 0) {
+    snackbarError.value = true;
+  }
+});
+
+onBeforeMount(() => {
+  apiErrorStore.resetMessages();
+});
+
+
+
+const to = computed(()=> {
+  return props.isLoginView ? `/auth/register` : `/auth/login`
+})
 </script>

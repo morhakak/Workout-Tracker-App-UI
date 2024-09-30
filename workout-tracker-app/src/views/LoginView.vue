@@ -1,10 +1,10 @@
 <template>
-  <AuthLayout :isLogin="true">
+  <AuthLayout :isLoginView="true">
     <h1 class="text-center text-3xl text-black font-bold mt-8 uppercase">
-      Weolcome Back!
+      Welcome Back!
     </h1>
     <h2 class="text-center text-xl text-neutral-500 font-semibold mt-2">
-      Login and track your workouts
+      Log in and track your workouts
     </h2>
     <form @submit.prevent="submitForm" class="mb-8">
       <v-text-field
@@ -98,8 +98,7 @@
 </template>
 
 <script setup>
-import { reactive, watchEffect, ref, onBeforeMount, onMounted } from "vue";
-import { reactive, watchEffect, ref, onBeforeMount, onMounted } from "vue";
+import { reactive, watchEffect, ref, onBeforeMount } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
 import { useAuthStore } from "../stores/authStore";
@@ -123,11 +122,6 @@ watchEffect(() => {
 
 onBeforeMount(() => {
   apiErrorStore.resetMessages();
-});
-
-onMounted(() => {
-  console.log(width.value); // 960
-  console.log(mobile.value); // true
 });
 
 const initialState = {
