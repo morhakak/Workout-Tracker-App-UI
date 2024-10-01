@@ -10,6 +10,7 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
   const workouts = ref([]);
   const { token, user } = storeToRefs(useAuthStore());
   const isLoading = ref(false);
+  const isLoadingWorkouts = ref(false);
   const workoutDraftStore = useWorkoutDraftStore();
   const { workoutDraft } = storeToRefs(workoutDraftStore);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -21,8 +22,6 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
 
   const toggleIsFavorite = async (id) => {
     apiErrorStore.resetMessages();
-    setIsLoading(true);
-
     workoutDraft.value.user = user.value._id;
 
     try {
@@ -37,16 +36,13 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
       );
 
       if (response.data.success) {
-        workouts.value = workouts.value.map((workout) =>
-          workout._id === response.data.data._id ? response.data.data : workout
-        );
+        const workout = workouts.value.find((w) => w._id == id);
+        workout.isFavorite = !workout.isFavorite;
       }
 
       workoutDraftStore.resetWorkoutDraft();
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -96,7 +92,7 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
 
   const loadWorkouts = async () => {
     apiErrorStore.resetMessages();
-    setIsLoading(true);
+    isLoadingWorkouts.value = true;
     try {
       const response = await axios.get(BASE_URL, {
         headers: {
@@ -108,7 +104,7 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
       apiErrorStore.handleErrorResponse(error);
     } finally {
       setTimeout(() => {
-        setIsLoading(false);
+        isLoadingWorkouts.value = false;
       }, 1000);
     }
   };
@@ -184,5 +180,6 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
     getWorkout,
     toggleIsFavorite,
     isLoading,
+    isLoadingWorkouts,
   };
 });

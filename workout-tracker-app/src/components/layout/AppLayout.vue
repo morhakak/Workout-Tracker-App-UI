@@ -1,10 +1,9 @@
 <template>
   <v-layout>
     <v-app-bar
-      v-if="authStore.user"
       :color="isScrolled ? 'rgba(0,0,0,0.8)' : 'black'"
       prominent
-      class="transition-colors duration-300 ease-in"
+      class="transition-colors duration-300 ease-in block xl:hidden"
     >
       <v-app-bar-nav-icon
         variant="text"
@@ -25,11 +24,9 @@
     <v-navigation-drawer
       v-model="drawer"
       width="300"
-      color="black"
-      temporary
-      :class="[
-        displayClasses, // 'app-drawer--mobile'
-      ]"
+      temporary="false"
+      scrim="true"
+      class="block xl:hidden"
     >
       <v-list>
         <v-list-item
@@ -39,6 +36,7 @@
           :prepend-icon="item.icon"
           :to="item.link"
           @click="item.action"
+          active-class="border-r-black border-r-2"
         >
           <template #title>
             <p
@@ -47,23 +45,72 @@
             >
               {{ item.title }}
             </p>
-          </template></v-list-item
-        >
+          </template>
+        </v-list-item>
       </v-list>
+
       <template #append>
+        <UserItem />
         <div class="p-2">
           <v-btn
             v-if="token"
             @click="() => (logoutDialog = true)"
             prepend-icon="mdi-logout"
             block
-            color="orange"
+            color="black"
             >Log out</v-btn
           >
         </div>
       </template>
     </v-navigation-drawer>
-    <v-main> <router-view></router-view> </v-main>
+
+    <v-navigation-drawer width="300" class="top-0 bottom-0 h-auto">
+      <div class="flex justify-start items-center p-4 gap-2 border-b">
+        <div
+          class="h-10 w-10 rounded-full bg-black flex justify-center items-center"
+        >
+          <v-icon>mdi-dumbbell</v-icon>
+        </div>
+        <h1 class="font-semibold text-xl">Workout Tracker</h1>
+      </div>
+      <v-list>
+        <v-list-item
+          class="text-lg"
+          v-for="item in updateMenuItems"
+          :key="item.title"
+          :prepend-icon="item.icon"
+          :to="item.link"
+          @click="item.action"
+          active-class="border-r-black border-r-2"
+        >
+          <template #title>
+            <p
+              class="text-lg"
+              :class="{ 'font-semibold': item.name == 'user' }"
+            >
+              {{ item.title }}
+            </p>
+          </template>
+        </v-list-item>
+      </v-list>
+
+      <template #append>
+        <UserItem />
+        <div class="p-2">
+          <v-btn
+            v-if="token"
+            @click="() => (logoutDialog = true)"
+            prepend-icon="mdi-logout"
+            block
+            color="black"
+            >Log out</v-btn
+          >
+        </div>
+      </template>
+    </v-navigation-drawer>
+    <v-main class="pt-0">
+      <router-view></router-view>
+    </v-main>
   </v-layout>
   <v-dialog v-model="logoutDialog" width="auto">
     <v-card
@@ -121,6 +168,7 @@ import { useAuthStore } from "../../stores/authStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
+import UserItem from "../UserItem.vue";
 
 const { displayClasses } = useDisplay({ mobileBreakpoint: 600 });
 
@@ -163,14 +211,14 @@ const updateMenuItems = computed(() => {
   } else {
     return [
       {
-        name: "user",
-        title: `Hi ${user.value?.name}`,
-        icon: "mdi-account-box",
+        title: "My Workouts",
+        link: "/",
+        icon: "mdi-weight-lifter",
       },
       {
-        title: "Workouts",
-        link: "/",
-        icon: "mdi-dumbbell",
+        title: "Settings",
+        link: "/settings",
+        icon: "mdi-cog",
       },
     ];
   }

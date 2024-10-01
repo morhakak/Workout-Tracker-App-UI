@@ -1,8 +1,8 @@
 <template>
   <v-card
     class="mx-auto relative"
-    max-width="300"
-    min-width="300"
+    max-width="350"
+    min-width="350"
     min-height="120"
     rounded="xl"
     hover
@@ -10,7 +10,13 @@
     @click="openWorkout"
   >
     <template #title>
-      <h2 class="text-center">{{ workout.name }}</h2>
+      <div class="flex items-center">
+        <v-icon
+          class="bg-black text-white rounded-full p-[20px] justify-self-center mr-2"
+          >mdi-dumbbell</v-icon
+        >
+        <h2 class="text-center">{{ workout.name }}</h2>
+      </div>
     </template>
 
     <v-card-actions>
@@ -28,11 +34,16 @@
             "
             ><v-icon size="large">mdi-trash-can-outline</v-icon></v-btn
           >
-          <v-btn
+          <!-- <v-btn
             rounded="xl"
             icon
             size="small"
             @click.stop="() => $emit(`toggleIsFavorite`, workout._id)"
+            ><v-icon v-if="workout.isFavorite" color="red" size="large"
+              >mdi-heart</v-icon
+            ><v-icon v-else size="large">mdi-heart-outline</v-icon></v-btn
+          > -->
+          <v-btn rounded="xl" icon size="small" @click.stop="handleEmitToggle"
             ><v-icon v-if="workout.isFavorite" color="red" size="large"
               >mdi-heart</v-icon
             ><v-icon v-else size="large">mdi-heart-outline</v-icon></v-btn
@@ -60,5 +71,9 @@ const openWorkout = () => {
   if (props.workout) {
     router.push(`/workout/${props.workout._id}`);
   }
+};
+
+const handleEmitToggle = () => {
+  emits("toggleIsFavorite", props.workout._id);
 };
 </script>

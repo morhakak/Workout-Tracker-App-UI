@@ -1,11 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  // purge: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      screens: {
+        tablet: "640px",
+        gridBpLaptop: "1362px",
+        gridBpMobile: "708px",
+        desktop: "1280px",
+      },
       fontFamily: {
-        poppins: ["Poppins", "sans-serif"], // Set Roboto as the default sans font
+        poppins: ["Poppins", "sans-serif"],
       },
       keyframes: {
         bgAnimate: {

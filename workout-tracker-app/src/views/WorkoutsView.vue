@@ -1,70 +1,70 @@
 <template>
-  <div class="w-full pb-6">
-    <div class="mt-16">
-      <div class="d-flex flex-column align-center ga-5" v-if="user">
-        <v-btn
-          v-if="!isLoading"
-          color="rgba(255, 255,255, 0.5)"
-          width="300"
-          height="100"
-          class="border-dashed border-2 border-black"
-          rounded="xl"
-          to="/create-Workout"
-          flat
+  <div class="w-full pb-6 pt-20 xl:pt-16">
+    <div class="d-flex flex-column align-center ga-5" v-if="user">
+      <v-btn
+        v-if="!isLoadingWorkouts"
+        color="rgba(255, 255,255, 0.5)"
+        width="350"
+        height="120"
+        class="border-dashed border-2 border-black"
+        rounded="xl"
+        to="/create-Workout"
+        flat
+      >
+        <div class="flex flex-col items-center gap-2">
+          <span>Create a workout</span>
+          <v-icon size="x-large">mdi-plus</v-icon>
+        </div>
+      </v-btn>
+      <v-skeleton-loader
+        v-if="isLoadingWorkouts"
+        class="rounded-xl mt-6 border-2"
+        width="350"
+        height="120"
+      >
+      </v-skeleton-loader>
+      <transition-group name="fade" tag="div" mode="out-in">
+        <div
+          key="key"
+          class="grid grid-cols-1 gridBpMobile:grid-cols-2 gridBpLaptop:grid-cols-3 items-center gap-4"
         >
-          <div class="flex flex-col items-center gap-2">
-            <span>Create a workout</span>
-            <v-icon size="x-large">mdi-plus</v-icon>
-          </div>
-        </v-btn>
-        <v-skeleton-loader
-          v-if="isLoading"
-          class="rounded-xl mt-6 border-2"
-          width="300"
-          height="100"
-        >
-        </v-skeleton-loader>
-        <transition-group name="fade" tag="div" mode="out-in">
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center gap-4"
+          <WorkoutCard
+            v-if="!isLoadingWorkouts"
+            v-for="workout in filteredWorkouts"
+            :isLoading="isLoadingWorkouts"
+            :key="workout._id"
+            :workout="workout"
+            @deleteRequest="handleDeleteRequest"
+            @toggleIsFavorite="handleToggleIsFavorite"
+          />
+          <v-skeleton-loader
+            v-if="workouts.length > 0 && isLoadingWorkouts"
+            v-for="n in workouts.length"
+            :key="'skeleton-' + n"
+            class="rounded-xl"
+            width="350"
+            height="120"
           >
-            <WorkoutCard
-              v-if="!isLoading"
-              v-for="workout in filteredWorkouts"
-              :key="workout._id"
-              :workout="workout"
-              @deleteRequest="handleDeleteRequest"
-              @toggleIsFavorite="handleToggleIsFavorite"
-            />
-            <v-skeleton-loader
-              v-if="workouts.length > 0 && isLoading"
-              v-for="n in workouts.length"
-              :key="'skeleton-' + n"
-              class="rounded-xl"
-              width="300"
-              height="120"
-            >
-            </v-skeleton-loader>
-          </div>
-        </transition-group>
-      </div>
-      <v-snackbar
-        :color="snackbarColor"
-        rounded="lg"
-        :modelValue="messages.length > 0"
-      >
-        <p>{{ messages[0]?.message }}</p>
-      </v-snackbar>
-      <v-alert
-        v-if="messages.length > 0"
-        icon="mdi-alert-circle"
-        rounded="lg"
-        type="error"
-        variant="elevated"
-      >
-        <p class="text-center">{{ messages[0].message }}</p>
-      </v-alert>
+          </v-skeleton-loader>
+        </div>
+      </transition-group>
     </div>
+    <v-snackbar
+      :color="snackbarColor"
+      rounded="lg"
+      :modelValue="messages.length > 0"
+    >
+      <p>{{ messages[0]?.message }}</p>
+    </v-snackbar>
+    <v-alert
+      v-if="messages.length > 0"
+      icon="mdi-alert-circle"
+      rounded="lg"
+      type="error"
+      variant="elevated"
+    >
+      <p class="text-center">{{ messages[0].message }}</p>
+    </v-alert>
   </div>
   <v-dialog v-model="deleteDialog" width="auto">
     <v-card
@@ -121,7 +121,7 @@ import { useApiErrorStore } from "../stores/apiErrorStore";
 
 const { user } = storeToRefs(useAuthStore());
 const workoutStore = useWorkoutStore();
-const { workouts, isLoading } = storeToRefs(workoutStore);
+const { workouts, isLoading, isLoadingWorkouts } = storeToRefs(workoutStore);
 const { messages } = storeToRefs(useApiErrorStore());
 const deleteDialog = ref(false);
 const workoutToDelete = ref({
