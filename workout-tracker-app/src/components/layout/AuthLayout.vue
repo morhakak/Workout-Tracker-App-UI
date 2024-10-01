@@ -50,8 +50,6 @@ onBeforeMount(() => {
   apiErrorStore.resetMessages();
 });
 
-
-
 const to = computed(()=> {
   return props.isLoginView ? `/auth/register` : `/auth/login`
 })
