@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full pb-6 pt-20 xl:pt-16">
+  <div class="w-full pb-6 pt-6">
     <div class="d-flex flex-column align-center ga-5" v-if="user">
       <v-btn
         v-if="!isLoadingWorkouts"
@@ -8,7 +8,7 @@
         height="120"
         class="border-dashed border-2 border-black"
         rounded="xl"
-        to="/create-Workout"
+        to="/create-workout"
         flat
       >
         <div class="flex flex-col items-center gap-2">

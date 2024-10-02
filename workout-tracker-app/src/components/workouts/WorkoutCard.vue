@@ -12,7 +12,8 @@
     <template #title>
       <div class="flex items-center">
         <v-icon
-          class="bg-black text-white rounded-full p-[20px] justify-self-center mr-2"
+          size="small"
+          class="bg-black text-white rounded-full p-[16px] justify-self-center mr-2"
           >mdi-dumbbell</v-icon
         >
         <h2 class="text-center">{{ workout.name }}</h2>
@@ -24,31 +25,59 @@
         <p class="text-sm font-medium">
           {{ toLocalDate(workout.createdDate) }}
         </p>
-        <div>
+        <v-menu transition="slide-x-transition" location="start">
+          <template v-slot:activator="{ props }">
+            <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
+          </template>
+
+          <v-list
+            density="compact"
+            slim
+            class="flex items-center justify-center overflow-y-hidden py-6 px-2 mr-2"
+            height="40"
+          >
+            <v-btn
+              rounded="xl"
+              icon
+              size="small"
+              variant="plain"
+              @click.stop="emitToggle"
+              ><v-icon v-if="workout.isFavorite" color="yellow" size="large"
+                >mdi-star</v-icon
+              ><v-icon v-else size="large">mdi-star-outline</v-icon></v-btn
+            >
+            <v-btn
+              rounded="xl"
+              icon
+              size="small"
+              variant="plain"
+              @click.stop="emitDelete"
+              ><v-icon size="large">mdi-trash-can-outline</v-icon></v-btn
+            >
+          </v-list>
+        </v-menu>
+        <!-- <div>
           <v-btn
             rounded="xl"
             icon
+            active="false"
             size="small"
-            @click.stop="
-              () => $emit(`deleteRequest`, workout._id, workout.name)
-            "
+            variant="text"
+            @click.stop="emitDelete"
             ><v-icon size="large">mdi-trash-can-outline</v-icon></v-btn
           >
-          <!-- <v-btn
+          <v-btn
             rounded="xl"
             icon
+            active="false"
             size="small"
-            @click.stop="() => $emit(`toggleIsFavorite`, workout._id)"
-            ><v-icon v-if="workout.isFavorite" color="red" size="large"
-              >mdi-heart</v-icon
-            ><v-icon v-else size="large">mdi-heart-outline</v-icon></v-btn
-          > -->
-          <v-btn rounded="xl" icon size="small" @click.stop="handleEmitToggle"
-            ><v-icon v-if="workout.isFavorite" color="red" size="large"
-              >mdi-heart</v-icon
-            ><v-icon v-else size="large">mdi-heart-outline</v-icon></v-btn
+            variant="text"
+            @click.stop="emitToggle"
+            ><v-icon v-if="workout.isFavorite" color="yellow" size="large"
+              >mdi-star</v-icon
+            ><v-icon v-else size="large">mdi-star-outline</v-icon></v-btn
           >
-        </div>
+        </div> -->
       </div>
     </v-card-actions>
   </v-card>
@@ -73,7 +102,11 @@ const openWorkout = () => {
   }
 };
 
-const handleEmitToggle = () => {
+const emitToggle = () => {
   emits("toggleIsFavorite", props.workout._id);
+};
+
+const emitDelete = () => {
+  emits("deleteRequest", props.workout._id, props.workout.name);
 };
 </script>

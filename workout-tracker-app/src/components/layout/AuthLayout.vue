@@ -13,7 +13,7 @@
         </p>
       </div>
       <img
-        class="hidden lg:block w-[50%] h-20 min-h-screen flex-1 rounded-tl-[40px] rounded-bl-[40px]"
+        class="hidden xl:block w-[50%] h-20 min-h-screen flex-1 rounded-tl-[40px] rounded-bl-[40px] aspect-auto"
         src="../../../public/assets/bench-press.png"
       ></img>
     </div>

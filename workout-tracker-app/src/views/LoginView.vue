@@ -1,58 +1,10 @@
 <template>
   <AuthLayout :isLoginView="true">
     <h1 class="text-center text-3xl text-black font-bold mt-8 uppercase">
-      Welcome Back!
+      Welcome Back To Workout Tracker!
     </h1>
     <h2 class="text-center text-xl text-neutral-500 font-semibold mt-2">
       Log in and track your workouts
-    </h2>
-    <form @submit.prevent="submitForm" class="mb-8">
-      <v-text-field
-        prepend-inner-icon="mdi-email"
-        class="text-black font-semibold mt-8"
-        variant="outlined"
-        color="black"
-        base-color="black"
-        v-model="state.email"
-        :error-messages="v$.email.$errors.map((e) => e.$message)"
-        label="E-mail"
-        required
-        @blur="v$.email.$touch"
-        @input="v$.email.$touch"
-        style="font-size: 1.125rem; color: white"
-      >
-      </v-text-field>
-      <v-text-field
-        type="password"
-        prepend-inner-icon="mdi-lock"
-        class="text-black font-semibold"
-        variant="outlined"
-        color="black"
-        base-color="black"
-        v-model="state.password"
-        :error-messages="v$.password.$errors.map((e) => e.$message)"
-        label="Password"
-        required
-        @blur="v$.password.$touch"
-        @input="v$.password.$touch"
-      ></v-text-field>
-      <v-btn
-        color="black"
-        class="me-4 w-full text-lg mt-4"
-        height="45"
-        type="submit"
-        :loading="isLoading"
-      >
-        Login
-      </v-btn>
-    </form>
-  </AuthLayout>
-  <AuthLayout :isLogin="true">
-    <h1 class="text-center text-3xl text-black font-bold mt-8 uppercase">
-      Weolcome Back!
-    </h1>
-    <h2 class="text-center text-xl text-neutral-500 font-semibold mt-2">
-      Login and track your workouts
     </h2>
     <form @submit.prevent="submitForm" class="mb-8">
       <v-text-field
