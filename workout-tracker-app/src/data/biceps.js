@@ -38,6 +38,81 @@ const bicepsExercises = [
     name: "Cable Hammer Curl",
     types: ["pull", "arms", "biceps"],
   },
+  {
+    id: "biceps-012",
+    name: "Preacher Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  { id: "biceps-013", name: "EZ Bar Curl", types: ["pull", "arms", "biceps"] },
+  { id: "biceps-014", name: "Barbell Curl", types: ["pull", "arms", "biceps"] },
+  { id: "biceps-015", name: "Drag Curl", types: ["pull", "arms", "biceps"] },
+  { id: "biceps-016", name: "Reverse Curl", types: ["pull", "arms", "biceps"] },
+  { id: "biceps-017", name: "21s Curl", types: ["pull", "arms", "biceps"] },
+  {
+    id: "biceps-018",
+    name: "Resistance Band Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-019",
+    name: "Cross Body Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-020",
+    name: "Lying Cable Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-021",
+    name: "Machine Bicep Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-022",
+    name: "Overhead Cable Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-023",
+    name: "Kettlebell Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-024",
+    name: "TRX Bicep Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-025",
+    name: "One-Arm Dumbbell Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-026",
+    name: "Single-Arm Cable Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-027",
+    name: "Close-Grip Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-028",
+    name: "Wide-Grip Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-029",
+    name: "Isometric Curl",
+    types: ["pull", "arms", "biceps"],
+  },
+  {
+    id: "biceps-030",
+    name: "Resistance Band Hammer Curl",
+    types: ["pull", "arms", "biceps"],
+  },
 ];
 
 export default bicepsExercises;

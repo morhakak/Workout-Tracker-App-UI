@@ -25,7 +25,7 @@
         <p class="text-sm font-medium">
           {{ toLocalDate(workout.createdDate) }}
         </p>
-        <v-menu transition="slide-x-transition" location="start">
+        <v-menu transition="slide-x-transition" location="start" offset="8">
           <template v-slot:activator="{ props }">
             <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
           </template>
@@ -33,7 +33,7 @@
           <v-list
             density="compact"
             slim
-            class="flex items-center justify-center overflow-y-hidden py-6 px-2 mr-2"
+            class="flex items-center justify-center overflow-y-hidden py-6 px-2"
             height="40"
           >
             <v-btn

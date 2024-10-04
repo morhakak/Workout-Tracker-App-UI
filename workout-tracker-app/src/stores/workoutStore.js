@@ -121,7 +121,6 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
     } finally {
       setTimeout(() => {
         setIsLoading(false);
-        console.log("Loading finished");
       }, 1000);
     }
   };

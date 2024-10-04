@@ -16,6 +16,42 @@ const backExercises = [
   { id: "back-015", name: "Cable Row", types: ["pull", "back"] },
   { id: "back-016", name: "Lat Machine Pulldown", types: ["pull", "back"] },
   { id: "back-017", name: "One-Arm Cable Row", types: ["pull", "back"] },
+  { id: "back-018", name: "Inverted Row", types: ["pull", "back"] },
+  { id: "back-019", name: "Renegade Row", types: ["pull", "back", "core"] },
+  { id: "back-020", name: "Rack Pull", types: ["pull", "back", "legs"] },
+  { id: "back-021", name: "Good Morning", types: ["pull", "back", "legs"] },
+  { id: "back-022", name: "Kroc Row", types: ["pull", "back"] },
+  { id: "back-023", name: "Spider Row", types: ["pull", "back"] },
+  { id: "back-024", name: "Meadows Row", types: ["pull", "back"] },
+  {
+    id: "back-025",
+    name: "Single-Arm Smith Machine Row",
+    types: ["pull", "back"],
+  },
+  { id: "back-026", name: "Landmine Row", types: ["pull", "back"] },
+  { id: "back-027", name: "Seal Row", types: ["pull", "back"] },
+  { id: "back-028", name: "Shrug", types: ["pull", "back", "traps"] },
+  { id: "back-029", name: "Reverse Fly", types: ["pull", "back", "shoulders"] },
+  {
+    id: "back-030",
+    name: "Trap Bar Deadlift",
+    types: ["pull", "back", "legs"],
+  },
+  {
+    id: "back-031",
+    name: "Farmer's Walk",
+    types: ["pull", "back", "core", "grip"],
+  },
+  { id: "back-032", name: "Band-Resisted Row", types: ["pull", "back"] },
+  { id: "back-033", name: "Hyperextension", types: ["pull", "back"] },
+  {
+    id: "back-034",
+    name: "Reverse Hyperextension",
+    types: ["pull", "back", "glutes"],
+  },
+  { id: "back-035", name: "Lawnmower Pull", types: ["pull", "back"] },
+  { id: "back-036", name: "Scapular Pull-Up", types: ["pull", "back"] },
+  { id: "back-037", name: "Deficit Deadlift", types: ["pull", "back", "legs"] },
 ];
 
 export default backExercises;

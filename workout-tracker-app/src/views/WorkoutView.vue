@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mt-20 flex flex-col items-center">
+  <div class="w-full flex flex-col items-center">
     <div class="mb-6 flex justify-center gap-4 w-full">
       <v-btn
         @click="handleDeleteRequest"
@@ -368,12 +368,6 @@ const chooseBodyPart = (part) => {
   exercisesToDisplay.value = workoutStore.filterExercises(part);
   tab.value = "three";
 };
-
-watchEffect(() => {
-  if ((tab.value = "two")) {
-    console.log("two");
-  }
-});
 
 // onUnmounted(() => {
 //   workoutDraft.value = {};

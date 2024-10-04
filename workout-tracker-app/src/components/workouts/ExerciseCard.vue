@@ -11,9 +11,10 @@
         class="absolute -top-6"
       ></v-btn>
     </transition>
-    <v-card-title class="text-center text-2xl mb-2 tracking-widest">{{
-      exercise.name
-    }}</v-card-title>
+    <v-card-title
+      class="text-center text-lg lg:text-2xl mb-2 tracking-widest"
+      >{{ exercise.name }}</v-card-title
+    >
     <transition-group name="fade" tag="div">
       <v-card
         v-for="(set, setIndex) in exercise.sets"
