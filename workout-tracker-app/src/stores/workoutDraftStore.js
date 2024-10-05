@@ -33,7 +33,7 @@ export const useWorkoutDraftStore = defineStore("workoutDraftStore", () => {
     const newExercise = {
       _id: `_draft-${v4()}`,
       name: exerciseName,
-      sets: [{ weight: 0, reps: 0 }],
+      sets: [{ weight: 20, reps: 10 }],
     };
     workoutDraft.value.exercises.push(newExercise);
   };

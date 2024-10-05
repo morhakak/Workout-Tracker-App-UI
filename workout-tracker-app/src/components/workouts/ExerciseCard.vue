@@ -20,24 +20,10 @@
         v-for="(set, setIndex) in exercise.sets"
         :key="set._id"
         color="rgba(255, 255,255, 0.5)"
-        class="flex items-center px-4 mt-2 transition-all duration-300 w-[320px] h-[60px] sm:w-[400px] lg:[550px]"
-        :class="{
-          '-translate-x-6 overflow-visible transition-all duration-300':
-            editId === `${exercise._id}-${set._id}`,
-        }"
+        class="flex items-center px-4 mt-2 w-[320px] h-[60px] sm:w-[400px] lg:[550px]"
         rounded="lg"
         @click="() => toggleEdit(exercise._id, set._id)"
       >
-        <transition name="fade">
-          <v-btn
-            v-if="editId === `${exercise._id}-${set._id}`"
-            icon="mdi-delete"
-            size="small"
-            class="absolute -right-10"
-            @click.stop="() => $emit('deleteSet', exercise._id, set._id)"
-          >
-          </v-btn>
-        </transition>
         <div class="flex items-center justify-evenly w-full">
           <span
             class="font-bold border p-[2px] border-black rounded-full flex items-center justify-center bg-white h-8 w-8"
@@ -68,12 +54,13 @@
             icon="mdi-delete"
             size="small"
             @click.stop="() => $emit('deleteSet', exercise._id, set._id)"
+            :disabled="exercise.sets.length == 1"
           >
           </v-btn>
         </div>
       </v-card>
       <v-btn
-        key="button"
+        :key="`button-${Date.now.toString}`"
         class="mt-4 w-full"
         color="black"
         height="45"
@@ -101,20 +88,6 @@ const toggleEdit = (exerciseId, setId) => {
 </script>
 
 <style scoped>
-/* .fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-move {
-  transition: all 0.4s ease;
-} */
-
 .fade-enter-active {
   transition: all 0.3s ease;
 }

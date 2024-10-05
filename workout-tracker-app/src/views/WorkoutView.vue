@@ -41,7 +41,12 @@
 
     <div class="relative w-full flex flex-col justify-center items-center mb-8">
       <div v-if="workoutDraft.exercises.length > 0">
-        <transition-group name="fade" tag="div" mode="out-in">
+        <transition-group
+          name="fade"
+          tag="div"
+          mode="out-in"
+          :class="paddingBottomClass"
+        >
           <ExerciseCard
             class="mt-10"
             v-if="!isLoading"
@@ -69,6 +74,7 @@
   <v-dialog
     v-model="isAddDialogOpen"
     width="auto"
+    class="xl:ml-[270px]"
     transition="dialog-bottom-transition"
   >
     <v-card rounded="xl" max-width="900" class="overflow-hidden">
@@ -81,7 +87,9 @@
       <v-divider inset></v-divider>
       <v-tabs v-model="tab" bg-color="black" align-tabs="center" fixed-tabs>
         <v-tab value="two">Body Part</v-tab>
-        <v-tab value="three">Exercises</v-tab>
+        <v-tab value="three" :disabled="exercisesToDisplay.length == 0"
+          >Exercises</v-tab
+        >
       </v-tabs>
       <v-card-text>
         <v-tabs-window v-model="tab">
@@ -95,6 +103,8 @@
               rounded="xl"
               class="max-w-32 min-w-32 min-h-32 sm:max-w-40 sm:min-w-40 sm:min-h-40"
               @click="() => chooseBodyPart(part)"
+              :active="part == selectedBodyPart"
+              active-color="black"
             >
               {{ part }}
             </v-btn>
@@ -274,19 +284,26 @@
       </template>
     </v-card>
   </v-dialog>
-  <v-snackbar v-model="hasChanged" height="70" color="white">
-    <template #text> <p class="text-xl">Save Changes?</p> </template>
+  <v-snackbar
+    v-model="hasChanged"
+    :height="snackbarHeight"
+    color="white"
+    rounded="xl"
+  >
+    <template #text>
+      <p class="text-xl pl-4">Save Changes?</p>
+    </template>
     <template #actions>
-      <div class="flex gap-2">
+      <div class="flex gap-2 pr-4">
         <v-btn
           color="green"
+          variant="flat"
           :loading="isLoading"
-          variant="tonal"
           @click="saveChanges"
         >
           Yes
         </v-btn>
-        <v-btn color="red" variant="tonal" @click="cancelChanges">
+        <v-btn color="red" variant="outlined" @click="cancelChanges">
           Discard
         </v-btn>
       </div>
@@ -295,7 +312,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch, watchEffect } from "vue";
+import { ref, computed, onMounted, watchEffect, watch } from "vue";
 import { useWorkoutStore } from "../stores/workoutStore";
 import { storeToRefs } from "pinia";
 import { useRouter, useRoute } from "vue-router";
@@ -313,40 +330,27 @@ const { workoutDraft } = storeToRefs(workoutDraftStore);
 const workoutStore = useWorkoutStore();
 const { isLoading } = storeToRefs(workoutStore);
 const isWorkoutLoading = ref(true);
-
+const snackbarHeight = ref(70);
 const exercisesToDisplay = ref([]);
 const workoutId = ref(null);
-
-const cachedWorkout = ref(null);
-
 const initialWorkoutDraft = ref(null);
 const isEditMode = ref(false);
 const isAddDialogOpen = ref(false);
 const saveBeforeExitDialog = ref(false);
 
-// const snackbarObj = ref({
-//   snackbar: false,
-//   text: "SAVE CHANGES",
-//   timeout: -1,
-// });
+const paddingBottomClass = computed(() => {
+  return hasChanged.value ? `pb-[${snackbarHeight.value}px]` : "";
+});
 
 onMounted(async () => {
   workoutId.value = route.params.id;
-  // window.addEventListener("beforeunload", (event) => handleBeforeUnload(event));
   if (workoutId.value && !workoutId.value.startsWith("_draft")) {
     const existingWorkout = await workoutStore.getWorkout(workoutId.value);
-    // cachedWorkout.value = cloneDeep(existingWorkout);
     workoutDraft.value = cloneDeep(existingWorkout);
     initialWorkoutDraft.value = cloneDeep(workoutDraft.value);
   } else {
     initialWorkoutDraft.value = cloneDeep(workoutDraft.value);
   }
-
-  // if (workoutDraft.value && workoutDraft.value.type) {
-  //   exercisesToDisplay.value = workoutStore.filterExercises(
-  //     workoutDraft.value.type
-  //   );
-  // }
 
   isWorkoutLoading.value = false;
 });
@@ -365,43 +369,22 @@ const bodyParts = ref([
   "forearms",
 ]);
 
+const selectedBodyPart = ref(null);
+
+watch(isAddDialogOpen, (newVal) => {
+  if (newVal == false) selectedBodyPart.value = null;
+});
+
 const chooseBodyPart = (part) => {
+  selectedBodyPart.value = part;
   exercisesToDisplay.value = workoutStore.filterExercises(part);
   tab.value = "three";
 };
-
-// onUnmounted(() => {
-//   workoutDraft.value = {};
-//   // window.removeEventListener("beforeunload", handleBeforeUnload);
-// });
-
-// router.beforeEach((to, from, next) => {
-//   if (
-//     route.params.id &&
-//     route.params.id.startsWith("_draft") &&
-//     from.name == "workout"
-//   ) {
-//     saveBeforeExitDialog.value = true; // Show dialog
-//     next(false); // Prevent navigation
-//   } else {
-//     next(); // Allow navigation
-//   }
-// });
-
-// const handleBeforeUnload = (event) => {
-//   console.log(event);
-//   // event.preventDefault();
-//   saveBeforeExitDialog.value = true;
-//   return (event.returnValue = "true");
-// };
-
-const editId = ref(null);
 
 const selectedItem = ref(null);
 const addSelectedExercise = (exercise) => {
   workoutDraftStore.addExercise(exercise.name);
   selectedItem.value = null;
-  // snackbarObj.value.snackbar = true;
 };
 
 const searchTerm = ref("");
@@ -460,12 +443,9 @@ const deleteSet = (exerciseId, setId) => {
 };
 
 const hasChanged = computed(() => {
-  if (isWorkoutLoading.value) return false; // Prevent snackbar from showing if loading
+  if (isWorkoutLoading.value) return false;
   if (!initialWorkoutDraft.value || !workoutDraft.value) return false;
   return !isEqual(workoutDraft.value, initialWorkoutDraft.value);
-
-  // const isEqualResult = isEqual(workoutDraft.value, initialWorkoutDraft.value);
-  // return !isEqualResult;
 });
 
 function resetInitialWorkoutDraft() {
@@ -480,26 +460,19 @@ async function saveChanges() {
       await workoutStore.updateWorkout(workoutId.value);
     }
     resetInitialWorkoutDraft();
-    router.push("/");
+    // router.push("/");
   } catch (error) {
     console.error("Error saving workout changes:", error);
   }
 }
 
 function cancelChanges() {
-  // workoutDraft.value = JSON.parse(JSON.stringify(cachedWorkout.value));
-  // workoutDraft.value = cloneDeep(cachedWorkout.value); // Deep clone here
   workoutDraft.value = cloneDeep(initialWorkoutDraft.value);
   resetInitialWorkoutDraft();
   if (!workoutId.value) {
     router.back();
   }
 }
-
-// function discardChanges() {
-//   saveBeforeExitDialog.value = false;
-//   router.push("/");
-// }
 
 const deleteWorkoutDialog = ref(false);
 
@@ -527,21 +500,6 @@ const deleteWorkout = async () => {
   min-width: 0;
   width: 100%;
 }
-
-/* .fade-move,
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-leave-active {
-  position: absolute;
-} */
 
 .fade-enter-active {
   transition: all 0.4s ease;

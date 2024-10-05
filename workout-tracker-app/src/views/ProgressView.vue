@@ -1,28 +1,7 @@
 <template>
   <div class="w-full pb-6 pt-6">
     <div class="d-flex flex-column align-center ga-5" v-if="user">
-      <v-btn
-        v-if="!isLoading"
-        color="rgba(255, 255,255, 0.5)"
-        width="350"
-        height="120"
-        class="border-dashed border-2 border-black"
-        rounded="xl"
-        to="/create-workout"
-        flat
-      >
-        <div class="flex flex-col items-center gap-2">
-          <span>Create a workout</span>
-          <v-icon size="x-large">mdi-plus</v-icon>
-        </div>
-      </v-btn>
-      <v-skeleton-loader
-        v-if="isLoading"
-        class="rounded-xl mt-6 border-2"
-        width="350"
-        height="120"
-      >
-      </v-skeleton-loader>
+      <h1 class="text-3xl font-semibold">Track Your Progress</h1>
       <transition-group name="fade" tag="div" mode="out-in">
         <div
           key="key"
@@ -30,14 +9,14 @@
         >
           <ExerciseProgressCard
             v-if="!isLoading"
-            v-for="exercise in exercisesHistory"
+            v-for="exercise in validExeHistory"
             :isLoading="isLoading"
             :key="exercise._id"
             :exerciseHistory="exercise"
           />
           <v-skeleton-loader
-            v-if="exercisesHistory.length > 0 && isLoading"
-            v-for="n in exercisesHistory.length"
+            v-if="validExeHistory.length > 0 && isLoading"
+            v-for="n in validExeHistory.length"
             :key="'skeleton-' + n"
             class="rounded-xl"
             width="350"
@@ -81,6 +60,10 @@ const { messages } = storeToRefs(useApiErrorStore());
 
 onMounted(async () => {
   await exercisesProgress.fetchExercisesHistory();
+});
+
+const validExeHistory = computed(() => {
+  return exercisesHistory.value.filter((exe) => exe.sessions.length > 0);
 });
 
 const snackbarColor = computed(() => {
