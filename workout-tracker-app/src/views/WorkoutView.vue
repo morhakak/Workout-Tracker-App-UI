@@ -55,6 +55,7 @@
           />
         </transition-group>
         <ExerciseCardSkeletonLoader
+          class="mt-10"
           v-if="isLoading"
           v-for="(exercise, index) in workoutDraft?.exercises"
           :key="'skeleton-' + index"

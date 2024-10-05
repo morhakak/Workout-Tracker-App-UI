@@ -38,42 +38,9 @@
           >
           </v-btn>
         </transition>
-        <!-- <v-row align="center" class="self-center place-self-center">
-          <v-col cols="2"
-            ><span
-              class="font-bold border text-center p-[2px] border-black rounded-full inline-block bg-white h-8 w-8"
-            >
-              {{ setIndex + 1 }}
-            </span></v-col
-          >
-          <v-col cols="3" class="pt-8">
-            <v-text-field
-              variant="solo"
-              type="number"
-              class="font-bold text-center"
-              min-width="75"
-              v-model.number="set.weight"
-              @click.stop
-              density="compact"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="2" class="font-bold">KG</v-col>
-          <v-col cols="3" class="pt-8"
-            ><v-text-field
-              variant="solo"
-              type="number"
-              class="font-bold"
-              min-width="75"
-              density="compact"
-              v-model.number="set.reps"
-              @click.stop
-            ></v-text-field
-          ></v-col>
-          <v-col cols="2" class="font-bold">Reps </v-col>
-        </v-row> -->
         <div class="flex items-center justify-evenly w-full">
           <span
-            class="font-bold border text-center p-[2px] border-black rounded-full inline-block bg-white h-8 w-8"
+            class="font-bold border p-[2px] border-black rounded-full flex items-center justify-center bg-white h-8 w-8"
           >
             {{ setIndex + 1 }}
           </span>

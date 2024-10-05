@@ -18,9 +18,10 @@
       height="60"
       class="px-4 mt-2 w-[320px] h-[60px] sm:w-[400px] lg:[550px]"
     ></v-skeleton-loader>
+    <!-- Placeholder for Add new set button -->
     <v-skeleton-loader
       height="45"
-      class="mt-4 w-full"
+      class="mt-4 w-[90%] sm:w-[70%]"
       rounded="lg"
       variant="elevated"
     ></v-skeleton-loader>
