@@ -74,6 +74,8 @@ const router = useRouter();
 const mobileNavWidth = ref(300);
 const isScrolled = ref(false);
 
+defineEmits(["logout"]);
+
 watchEffect(() => {
   if (width.value > 600 && width.value <= 1025) mobileNavWidth.value = 400;
   if (width.value < 600) mobileNavWidth.value = width.value;

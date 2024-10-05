@@ -51,8 +51,9 @@ import UserItem from "../UserItem.vue";
 
 const { width } = useDisplay();
 const { token } = storeToRefs(useAuthStore());
-const logoutDialog = ref(false);
 const mobileNavWidth = ref(300);
+
+defineEmits(["logout"]);
 
 watchEffect(() => {
   if (width.value > 600 && width.value <= 1025) mobileNavWidth.value = 400;
