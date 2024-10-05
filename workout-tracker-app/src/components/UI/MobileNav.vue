@@ -101,6 +101,11 @@ const updateMenuItems = computed(() => {
         icon: "mdi-weight-lifter",
       },
       {
+        title: "Progress",
+        link: "/progress",
+        icon: "mdi-chart-line",
+      },
+      {
         title: "Settings",
         link: "/settings",
         icon: "mdi-cog",

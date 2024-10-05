@@ -11,67 +11,78 @@ import { useAuthStore } from "./stores/authStore";
 import AboutView from "./views/AboutView.vue";
 import { storeToRefs } from "pinia";
 import DashboardView from "./views/DashboardView.vue";
+import ProgressView from "./views/ProgressView.vue";
+import ExerciseProgressView from "./views/ExerciseProgressView.vue";
 
 const routes = [
   {
     path: "/",
     name: "workouts",
     component: WorkoutsView,
-    meta: { requiresAuth: true, requiresLayout: false },
+    meta: { requiresAuth: true },
   },
   {
     path: "/dashboard",
     name: "dashboard",
     component: DashboardView,
-    meta: { requiresAuth: true, requiresLayout: false },
+    meta: { requiresAuth: true },
   },
   {
     path: "/welcome",
     name: "welcome",
     component: WelcomeView,
-    meta: { requiresAuth: false, requiresLayout: false },
+    meta: { requiresAuth: false },
   },
   {
     path: "/about",
     name: "about",
     component: AboutView,
-    meta: { requiresAuth: true, requiresLayout: false },
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/progress",
+    name: "progressView",
+    component: ProgressView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/progress/:id",
+    name: "exerciseProgressView",
+    component: ExerciseProgressView,
+    meta: { requiresAuth: true },
   },
   {
     path: "/create-workout",
     name: "create-workout",
     component: ChooseWorkoutView,
-    meta: { requiresAuth: true, requiresLayout: true },
+    meta: { requiresAuth: true },
   },
   {
     path: "/workout",
     name: "new-workout",
     component: WorkoutView,
-    meta: { requiresAuth: true, requiresLayout: false },
+    meta: { requiresAuth: true },
   },
   {
     path: "/workout/:id",
     name: "workout",
     component: WorkoutView,
-    meta: { requiresAuth: true, requiresLayout: false },
+    meta: { requiresAuth: true },
   },
   {
     path: "/auth/register",
     name: "register",
     component: RegisterView,
-    meta: { requiresLayout: false },
   },
   {
     path: "/auth/login",
     name: "login",
     component: LoginView,
-    meta: { requiresLayout: false },
   },
   {
     path: "/:catchAll(.*)",
     name: "NotFound",
     component: NotFoundView,
-    meta: { requiresLayout: true },
   },
 ];
 
