@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-center mb-4 text-2xl font-semibold">
+  <h1 class="text-center mb-4 text-3xl font-semibold">
     {{ existingExercise?.exerciseId }}
   </h1>
   <v-container class="flex gap-3">
@@ -45,19 +45,29 @@
       >
     </v-card>
   </v-container>
+  <h2 class="text-center font-semibold text-2xl">Exercise History</h2>
   <v-container>
     <v-timeline side="end" class="pb-20">
       <v-timeline-item
         v-for="session in existingExercise?.sessions"
         :key="existingExercise?._id"
+        dot-color="black"
+        size="large"
+        icon="mdi-weight-lifter"
       >
         <template v-slot:opposite>
+          <div
+            class="text-h5 mb-4 hover:cursor-pointer"
+            @click="() => navigateToWorkout(session?.workout.workoutId)"
+          >
+            {{ session?.workout?.workoutName }}
+          </div>
           <div class="text-md-body-1 font-semibold">
             {{ toLocalDate(session?.createdDate) }}
           </div>
         </template>
-        <div class="border-2 border-black p-4 rounded-xl">
-          <div>
+        <v-card class="p-4 rounded-xl">
+          <!-- <div>
             <div
               class="text-h5 mb-4 hover:cursor-pointer"
               @click="() => navigateToWorkout(session?.workout.workoutId)"
@@ -80,7 +90,7 @@
                   ]"
                 >
                   <p
-                    class="bg-black h-5 w-5 text-xs rounded-full flex justify-center items-center"
+                    class="bg-orange-400 h-5 w-5 text-xs rounded-full flex justify-center items-center"
                   >
                     {{ i + 1 }}
                   </p>
@@ -94,8 +104,31 @@
                 Total Volume: {{ session?.volume }}
               </h3>
             </div>
-          </div>
-        </div>
+          </div> -->
+
+          <v-table>
+            <thead>
+              <tr>
+                <th class="text-left">Set</th>
+                <th class="text-left">Weight</th>
+                <th class="text-left">Reps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(set, i) in session.sets" :key="set._id">
+                <td>
+                  <p
+                    class="bg-orange-400 h-5 w-5 text-xs rounded-full flex justify-center items-center"
+                  >
+                    {{ i + 1 }}
+                  </p>
+                </td>
+                <td class="text-center">{{ set.weight }}</td>
+                <td class="text-center">{{ set.reps }}</td>
+              </tr>
+            </tbody>
+          </v-table>
+        </v-card>
       </v-timeline-item>
     </v-timeline>
   </v-container>
