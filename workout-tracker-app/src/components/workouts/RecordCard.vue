@@ -1,5 +1,8 @@
 <template>
-  <v-card class="w-[330px] h-28 box-border p-4 rounded-xl">
+  <v-card
+    v-if="!isLoading"
+    class="w-[330px] h-[112px] box-border p-4 rounded-xl"
+  >
     <v-card-title class="flex gap-2 items-center">
       <v-icon>{{ icon }}</v-icon>
       <h2>{{ recordType }}: {{ value }}{{ kg ? "Kg" : "" }}</h2>
@@ -15,16 +18,24 @@
       workout</v-card-subtitle
     >
   </v-card>
+  <v-skeleton-loader
+    v-else
+    height="144"
+    class="w-[330px] box-border p-4 rounded-xl"
+  />
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 
-defineProps({
+const props = defineProps({
+  isLoading: {
+    type: Boolean,
+  },
   value: {
     type: Number,
     default: 0,
-    required: true,
   },
   icon: {
     type: String,
@@ -37,11 +48,9 @@ defineProps({
   },
   workoutId: {
     type: String,
-    required: true,
   },
   workoutName: {
     type: String,
-    required: true,
   },
   kg: {
     type: Boolean,
