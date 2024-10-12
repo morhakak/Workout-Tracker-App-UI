@@ -23,7 +23,6 @@ export const useExercisesProgress = defineStore(
           },
         });
         exercisesHistory.value = response.data.data;
-        console.log(exercisesHistory.value);
       } catch (error) {
         apiErrorStore.handleErrorResponse(error);
       } finally {
@@ -43,8 +42,6 @@ export const useExercisesProgress = defineStore(
           },
         });
         const existingExercise = response.data.data;
-        console.log(existingExercise);
-
         return existingExercise;
       } catch (error) {
         apiErrorStore.handleErrorResponse(error);
