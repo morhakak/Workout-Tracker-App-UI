@@ -1,5 +1,5 @@
 <template>
-    <div class="flex gap-10 items-center justify-center overflow-x-hidden">
+    <div class="flex gap-10 items-center justify-center overflow-x-hidden min-h-screen">
       <div
         class="w-[450px] sm:min-w-[700px] h-[550px] sm:h-[450px] flex flex-col justify-between px-4 py-6 ml-4 "
         rounded="lg"

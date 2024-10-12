@@ -2,7 +2,7 @@
   <v-layout>
     <MobileNav v-if="token" @logout="logoutDialog = true" />
     <DesktopNav v-if="token" @logout="logoutDialog = true" />
-    <v-main class="xl:pt-6 pt-20">
+    <v-main class="pt-20 xl:pt-6">
       <router-view></router-view>
     </v-main>
   </v-layout>
