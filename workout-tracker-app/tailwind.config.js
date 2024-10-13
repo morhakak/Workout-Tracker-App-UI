@@ -8,6 +8,8 @@ export default {
         gridBpLaptop: "1362px",
         gridBpMobile: "708px",
         desktop: "1280px",
+        px760: "760px",
+        px880: "880px",
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],

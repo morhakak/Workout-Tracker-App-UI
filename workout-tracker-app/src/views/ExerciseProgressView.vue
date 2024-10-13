@@ -2,56 +2,58 @@
   <h1 class="text-center mb-4 text-3xl font-semibold">
     {{ existingExercise?.exerciseId }}
   </h1>
-  <v-container fluid class="flex justify-center">
-    <v-card
-      icon="mdi-medal-outline"
-      class="flex flex-col items-center rounded-xl justify-center"
-    >
-      <v-card-title class="flex items-center justify-center">
-        <h2 class="font-semibold text-2xl pt-6 pb-2">
-          <v-icon>mdi-medal-outline</v-icon>Records
-        </h2>
-      </v-card-title>
-      <v-container
-        class="grid grid-cols-1 lg:grid-cols-2 items-center justify-center gap-3 mb-8"
+  <v-container class="flex flex-col-reverse xl:flex-row">
+    <v-container class="flex justify-center">
+      <v-card class="rounded-xl px-2 w-[600px]">
+        <v-card-title class="flex justify-center items-center">
+          <h2 class="text-center font-semibold text-2xl pt-6 pb-2">
+            <v-icon>mdi-clipboard-text-clock-outline</v-icon>
+            Exercise History
+          </h2>
+        </v-card-title>
+        <v-container class="flex justify-center">
+          <v-progress-circular
+            v-if="isLoading"
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
+          <v-timeline v-if="!isLoading" side="end" class="pb-4">
+            <ExerciseTimelineItem
+              v-for="session in existingExercise?.sessions"
+              :key="existingExercise?._id"
+              :session="session"
+            />
+          </v-timeline>
+        </v-container>
+      </v-card>
+    </v-container>
+    <v-container class="flex justify-center">
+      <v-card
+        icon="mdi-medal-outline"
+        class="flex flex-col items-center rounded-xl px-4 justify-start h-min w-max"
       >
-        <RecordCard
-          v-for="record in records"
-          :key="record"
-          :icon="record.icon"
-          :recordType="record.recordType"
-          :workoutId="record.workoutId"
-          :workoutName="record.workoutName"
-          :value="record.value"
-          :kg="record.kg"
-          :isLoading="isLoading || !existingExercise"
-        />
-      </v-container>
-    </v-card>
-  </v-container>
-  <v-container fluid class="flex justify-center">
-    <v-card class="rounded-xl px-2">
-      <v-card-title class="flex justify-center items-center">
-        <h2 class="text-center font-semibold text-2xl pt-6 pb-2">
-          <v-icon>mdi-clipboard-text-clock-outline</v-icon>
-          Exercise History
-        </h2>
-      </v-card-title>
-      <v-container class="flex justify-center">
-        <v-progress-circular
-          v-if="isLoading"
-          color="primary"
-          indeterminate
-        ></v-progress-circular>
-        <v-timeline v-if="!isLoading" side="end" class="pb-4">
-          <ExerciseTimelineItem
-            v-for="session in existingExercise?.sessions"
-            :key="existingExercise?._id"
-            :session="session"
+        <v-card-title class="flex items-center justify-center">
+          <h2 class="font-semibold text-2xl pt-6 pb-2">
+            <v-icon>mdi-medal-outline</v-icon>Records
+          </h2>
+        </v-card-title>
+        <v-container
+          class="grid grid-cols-1 px880:grid-cols-2 xl:grid-cols-1 items-center justify-center gap-3 mb-8"
+        >
+          <RecordCard
+            v-for="record in records"
+            :key="record"
+            :icon="record.icon"
+            :recordType="record.recordType"
+            :workoutId="record.workoutId"
+            :workoutName="record.workoutName"
+            :value="record.value"
+            :kg="record.kg"
+            :isLoading="isLoading || !existingExercise"
           />
-        </v-timeline>
-      </v-container>
-    </v-card>
+        </v-container>
+      </v-card>
+    </v-container>
   </v-container>
 </template>
 
