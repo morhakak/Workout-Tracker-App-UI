@@ -2,12 +2,12 @@
   <v-timeline-item dot-color="black" size="large" icon="mdi-weight-lifter">
     <template v-slot:opposite>
       <div
-        class="text-h5 mb-4 hover:cursor-pointer"
+        class="text-xl mb-4 hover:cursor-pointer"
         @click="() => navigateToWorkout(session?.workout.workoutId)"
       >
         {{ session?.workout?.workoutName }}
       </div>
-      <div class="text-md-body-1 font-semibold">
+      <div class="text-sm font-semibold">
         {{ toLocalDate(session?.createdDate) }}
       </div>
     </template>
@@ -43,16 +43,14 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import moment from "moment";
+import { useDateFormatter } from "../../composables/useDateFormatter";
 
 defineProps(["session"]);
+
 const router = useRouter();
 const navigateToWorkout = (id) => {
   router.push({ name: "workout", params: { id } });
 };
 
-const toLocalDate = (utcDate) => {
-  const dateLocal = moment(utcDate).local().format("YYYY-MM-DD HH:mm:ss");
-  return dateLocal;
-};
+const { toLocalDate } = useDateFormatter();
 </script>

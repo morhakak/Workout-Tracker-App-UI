@@ -59,28 +59,6 @@
             >
           </v-list>
         </v-menu>
-        <!-- <div>
-          <v-btn
-            rounded="xl"
-            icon
-            active="false"
-            size="small"
-            variant="text"
-            @click.stop="emitDelete"
-            ><v-icon size="large">mdi-trash-can-outline</v-icon></v-btn
-          >
-          <v-btn
-            rounded="xl"
-            icon
-            active="false"
-            size="small"
-            variant="text"
-            @click.stop="emitToggle"
-            ><v-icon v-if="workout.isFavorite" color="yellow" size="large"
-              >mdi-star</v-icon
-            ><v-icon v-else size="large">mdi-star-outline</v-icon></v-btn
-          >
-        </div> -->
       </div>
     </v-card-actions>
   </v-card>
@@ -88,13 +66,9 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import moment from "moment";
+import { useDateFormatter } from "../../composables/useDateFormatter";
 
-const toLocalDate = (utcDate) => {
-  const dateLocal = moment(utcDate).local().format("YYYY-MM-DD HH:mm:ss");
-  return dateLocal;
-};
-
+const { toLocalDate } = useDateFormatter();
 const router = useRouter();
 const props = defineProps(["workout"]);
 const emits = defineEmits(["deleteRequest", "toggleIsFavorite"]);
