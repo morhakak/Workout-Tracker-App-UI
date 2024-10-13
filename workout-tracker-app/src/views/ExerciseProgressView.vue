@@ -2,8 +2,8 @@
   <h1 class="text-center mb-4 text-3xl font-semibold">
     {{ existingExercise?.exerciseId }}
   </h1>
-  <v-container class="flex flex-col-reverse xl:flex-row">
-    <v-container class="flex justify-center">
+  <v-container class="flex flex-col-reverse xl:flex-row justify-center gap-10">
+    <div class="flex justify-center">
       <v-card class="rounded-xl px-2 w-[600px]">
         <v-card-title class="flex justify-center items-center">
           <h2 class="text-center font-semibold text-2xl pt-6 pb-2">
@@ -26,11 +26,11 @@
           </v-timeline>
         </v-container>
       </v-card>
-    </v-container>
-    <v-container class="flex justify-center">
+    </div>
+    <div class="flex justify-center">
       <v-card
         icon="mdi-medal-outline"
-        class="flex flex-col items-center rounded-xl px-4 justify-start h-min w-max"
+        class="flex flex-col items-center rounded-xl px-4 justify-start h-min"
       >
         <v-card-title class="flex items-center justify-center">
           <h2 class="font-semibold text-2xl pt-6 pb-2">
@@ -38,7 +38,7 @@
           </h2>
         </v-card-title>
         <v-container
-          class="grid grid-cols-1 px880:grid-cols-2 xl:grid-cols-1 items-center justify-center gap-3 mb-8"
+          class="grid grid-cols-1 px880:grid-cols-2 xl:grid-cols-1 items-center justify-center gap-4 mb-8"
         >
           <RecordCard
             v-for="record in records"
@@ -53,7 +53,7 @@
           />
         </v-container>
       </v-card>
-    </v-container>
+    </div>
   </v-container>
 </template>
 

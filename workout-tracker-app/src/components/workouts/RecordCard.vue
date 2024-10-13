@@ -8,15 +8,14 @@
       <h2>{{ recordType }}: {{ value }}{{ kg ? "Kg" : "" }}</h2>
     </v-card-title>
     <v-card-subtitle class="text-wrap"
-      >You did it in
+      ><v-icon>mdi-weight-lifter</v-icon> You did it in
       <span
         class="font-semibold hover:cursor-pointer"
         @click="() => navigateToWorkout(workoutId)"
       >
         {{ workoutName }}</span
       >
-      workout</v-card-subtitle
-    >
+    </v-card-subtitle>
   </v-card>
   <v-skeleton-loader
     v-else

@@ -1,17 +1,24 @@
 <template>
   <v-timeline-item dot-color="black" size="large" icon="mdi-weight-lifter">
     <template v-slot:opposite>
+      <!-- <div
+        class="text-xl mb-4 hover:cursor-pointer font-semibold"
+        @click="() => navigateToWorkout(session?.workout.workoutId)"
+      >
+        {{ session?.workout?.workoutName }}
+      </div> -->
+      <div class="text-sm text-wrap">
+        {{ toLocalDate(session?.createdDate) }}
+      </div>
+    </template>
+
+    <v-card class="p-4 rounded-xl">
       <div
-        class="text-xl mb-4 hover:cursor-pointer"
+        class="text-lg mb-4 hover:cursor-pointer text-wrap text-center"
         @click="() => navigateToWorkout(session?.workout.workoutId)"
       >
         {{ session?.workout?.workoutName }}
       </div>
-      <div class="text-sm font-semibold">
-        {{ toLocalDate(session?.createdDate) }}
-      </div>
-    </template>
-    <v-card class="p-4 rounded-xl">
       <v-table>
         <thead>
           <tr>
@@ -24,7 +31,7 @@
           <tr v-for="(set, i) in session.sets" :key="set._id">
             <td>
               <p
-                class="bg-orange-400 text-white h-5 w-5 text-xs rounded-full flex justify-center items-center"
+                class="bg-black text-white h-5 w-5 text-xs rounded-full flex justify-center items-center"
               >
                 {{ i + 1 }}
               </p>

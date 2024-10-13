@@ -13,11 +13,14 @@
       <div class="flex items-center">
         <v-icon
           size="small"
-          class="bg-black text-white rounded-full p-[16px] justify-self-center mr-2"
+          class="bg-black text-white rounded-full p-[16px] justify-self-center mr-4"
           >mdi-dumbbell</v-icon
         >
         <h2 class="text-center">{{ exerciseHistory.exerciseId }}</h2>
       </div>
+    </template>
+    <template #subtitle>
+      <span class="ml-12"> {{ exerciseHistory.sessions.length }} sessions</span>
     </template>
   </v-card>
 </template>
