@@ -35,7 +35,7 @@
 <script setup>
 import { computed, onBeforeMount, ref, watchEffect } from 'vue';
 import { storeToRefs } from "pinia";
-import { useApiErrorStore } from '../../stores/apiErrorStore';
+import { useApiErrorStore } from '../../../stores/apiErrorStore';
 const props = defineProps(["isLoginView"]);
 const snackbarError = ref(false);
 const apiErrorStore = useApiErrorStore();

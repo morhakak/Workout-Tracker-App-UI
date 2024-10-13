@@ -61,10 +61,10 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../../stores/authStore";
+import { useAuthStore } from "../../../stores/authStore";
 import { storeToRefs } from "pinia";
 import { useDisplay } from "vuetify";
-import UserItem from "../UserItem.vue";
+import UserItem from "../../UserItem.vue";
 
 const { width } = useDisplay();
 const authStore = useAuthStore();

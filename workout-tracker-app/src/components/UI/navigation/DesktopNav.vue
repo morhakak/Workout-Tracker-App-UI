@@ -44,10 +44,10 @@
 
 <script setup>
 import { ref, computed, watchEffect } from "vue";
-import { useAuthStore } from "../../stores/authStore";
+import { useAuthStore } from "../../../stores/authStore";
 import { storeToRefs } from "pinia";
 import { useDisplay } from "vuetify";
-import UserItem from "../UserItem.vue";
+import UserItem from "../../UserItem.vue";
 
 const { width } = useDisplay();
 const { token } = storeToRefs(useAuthStore());

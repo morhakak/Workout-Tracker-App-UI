@@ -71,7 +71,7 @@ import { useAuthStore } from "../stores/authStore";
 import { useApiErrorStore } from "../stores/apiErrorStore";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import AuthLayout from "../components/layout/AuthLayout.vue";
+import AuthLayout from "../components/UI/layout/AuthLayout.vue";
 
 const authStore = useAuthStore();
 const { isLoading } = storeToRefs(authStore);

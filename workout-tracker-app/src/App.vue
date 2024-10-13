@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import AppLayout from "./components/layout/AppLayout.vue";
+import AppLayout from "./components/UI/layout/AppLayout.vue";
 import { useAuthStore } from "./stores/authStore";
 import { onMounted } from "vue";
 
