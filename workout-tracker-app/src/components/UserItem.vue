@@ -6,8 +6,18 @@
       <v-icon>mdi-account</v-icon>
     </div>
     <div>
-      <p class="mb-0 font-bold text-black leading-1">Mor Hakak</p>
-      <p>Developer</p>
+      <p class="mb-0 font-bold text-black leading-1 capitalize">
+        {{ user?.name }}
+      </p>
+      <p>{{ user?.role == `user` ? "Traniee" : `Admin` }}</p>
     </div>
   </div>
 </template>
+
+<script setup>
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "../stores/authStore.js";
+
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
+</script>
