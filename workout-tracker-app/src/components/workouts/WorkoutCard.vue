@@ -14,7 +14,7 @@
         <v-icon
           size="small"
           class="bg-black text-white rounded-full p-[16px] justify-self-center mr-4"
-          >mdi-dumbbell</v-icon
+          >mdi-weight-lifter</v-icon
         >
         <h2 class="text-center">{{ workout.name }}</h2>
       </div>

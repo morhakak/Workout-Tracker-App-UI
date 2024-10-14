@@ -1,5 +1,5 @@
 import { defineStore, storeToRefs } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useAuthStore } from "./authStore.js";
 import axios from "axios";
 import { useApiErrorStore } from "./apiErrorStore.js";
@@ -8,7 +8,7 @@ export const useExercisesProgress = defineStore(
   "exercisesProgressStore",
   () => {
     const exercisesHistory = ref([]);
-    const { token, user } = storeToRefs(useAuthStore());
+    const { token } = storeToRefs(useAuthStore());
     const apiErrorStore = useApiErrorStore();
     const BASE_URL = import.meta.env.VITE_EXERCISE_HISTORY_BASE_URL;
     const isLoading = ref(false);
@@ -52,11 +52,27 @@ export const useExercisesProgress = defineStore(
       }
     };
 
+    const volumeDiff = (exerciseToFetch) => {
+      const exercise = exercisesHistory.value.find(
+        (ex) => ex._id === exerciseToFetch
+      );
+
+      if (!exercise || exercise.sessions.length < 2) return 0;
+
+      const { volume: lastVolume } =
+        exercise.sessions[exercise.sessions.length - 1];
+      const { volume: prevVolume } =
+        exercise.sessions[exercise.sessions.length - 2];
+
+      return lastVolume - prevVolume;
+    };
+
     return {
       fetchExercisesHistory,
       fetchExerciseHistory,
       exercisesHistory,
       isLoading,
+      volumeDiff,
     };
   }
 );
