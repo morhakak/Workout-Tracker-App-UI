@@ -13,6 +13,7 @@ import { storeToRefs } from "pinia";
 import DashboardView from "./views/DashboardView.vue";
 import ProgressView from "./views/ProgressView.vue";
 import ExerciseProgressView from "./views/ExerciseProgressView.vue";
+import MeasurementsView from "./views/MeasurementsView.vue";
 
 const routes = [
   {
@@ -43,6 +44,12 @@ const routes = [
     path: "/progress",
     name: "progressView",
     component: ProgressView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/measurements",
+    name: "measurements",
+    component: MeasurementsView,
     meta: { requiresAuth: true },
   },
   {

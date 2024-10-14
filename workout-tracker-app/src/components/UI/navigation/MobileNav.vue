@@ -59,13 +59,15 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watchEffect } from "vue";
+import { onBeforeUnmount, onMounted, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../../stores/authStore";
 import { storeToRefs } from "pinia";
 import { useDisplay } from "vuetify";
 import UserItem from "../../UserItem.vue";
+import { useMenuItems } from "../../../composables/useMenuItems";
 
+const { updateMenuItems } = useMenuItems();
 const { width } = useDisplay();
 const authStore = useAuthStore();
 const { token } = storeToRefs(authStore);
@@ -79,41 +81,6 @@ defineEmits(["logout"]);
 watchEffect(() => {
   if (width.value > 600 && width.value <= 1025) mobileNavWidth.value = 400;
   if (width.value < 600) mobileNavWidth.value = width.value;
-});
-
-const updateMenuItems = computed(() => {
-  if (!token.value) {
-    return [
-      {
-        title: "Register",
-        link: "/auth/register",
-        icon: "mdi-account-plus",
-      },
-      {
-        title: "Log in",
-        link: "/auth/login",
-        icon: "mdi-login",
-      },
-    ];
-  } else {
-    return [
-      {
-        title: "My Workouts",
-        link: "/",
-        icon: "mdi-weight-lifter",
-      },
-      {
-        title: "Progress",
-        link: "/progress",
-        icon: "mdi-chart-line",
-      },
-      {
-        title: "Settings",
-        link: "/settings",
-        icon: "mdi-cog",
-      },
-    ];
-  }
 });
 
 onMounted(() => {

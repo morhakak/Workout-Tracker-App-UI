@@ -43,12 +43,14 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import { useAuthStore } from "../../../stores/authStore";
 import { storeToRefs } from "pinia";
 import { useDisplay } from "vuetify";
 import UserItem from "../../UserItem.vue";
+import { useMenuItems } from "../../../composables/useMenuItems";
 
+const { updateMenuItems } = useMenuItems();
 const { width } = useDisplay();
 const { token } = storeToRefs(useAuthStore());
 const mobileNavWidth = ref(300);
@@ -58,40 +60,5 @@ defineEmits(["logout"]);
 watchEffect(() => {
   if (width.value > 600 && width.value <= 1025) mobileNavWidth.value = 400;
   if (width.value < 600) mobileNavWidth.value = width.value;
-});
-
-const updateMenuItems = computed(() => {
-  if (!token.value) {
-    return [
-      {
-        title: "Register",
-        link: "/auth/register",
-        icon: "mdi-account-plus",
-      },
-      {
-        title: "Log in",
-        link: "/auth/login",
-        icon: "mdi-login",
-      },
-    ];
-  } else {
-    return [
-      {
-        title: "My Workouts",
-        link: "/",
-        icon: "mdi-weight-lifter",
-      },
-      {
-        title: "Progress",
-        link: "/progress",
-        icon: "mdi-chart-line",
-      },
-      {
-        title: "Settings",
-        link: "/settings",
-        icon: "mdi-cog",
-      },
-    ];
-  }
 });
 </script>
