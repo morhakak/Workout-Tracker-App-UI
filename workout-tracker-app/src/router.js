@@ -14,6 +14,7 @@ import DashboardView from "./views/DashboardView.vue";
 import ProgressView from "./views/ProgressView.vue";
 import ExerciseProgressView from "./views/ExerciseProgressView.vue";
 import MeasurementsView from "./views/MeasurementsView.vue";
+import SettingsView from "./views/SettingsView.vue";
 
 const routes = [
   {
@@ -44,6 +45,12 @@ const routes = [
     path: "/progress",
     name: "progressView",
     component: ProgressView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/settings",
+    name: "settings",
+    component: SettingsView,
     meta: { requiresAuth: true },
   },
   {
