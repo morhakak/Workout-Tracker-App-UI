@@ -2,7 +2,7 @@
   <v-layout>
     <MobileNav v-if="token" @logout="logoutDialog = true" />
     <DesktopNav v-if="token" @logout="logoutDialog = true" />
-    <v-main class="pt-20 xl:pt-6">
+    <v-main :class="mainClass">
       <router-view></router-view>
     </v-main>
   </v-layout>
@@ -54,9 +54,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useAuthStore } from "../../../stores/authStore";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import MobileNav from "../../UI/navigation/MobileNav.vue";
 import DesktopNav from "../../UI/navigation/DesktopNav.vue";
 import { storeToRefs } from "pinia";
@@ -65,4 +65,11 @@ const router = useRouter();
 const authStore = useAuthStore();
 const { token } = storeToRefs(authStore);
 const logoutDialog = ref(false);
+const route = useRoute();
+
+const mainClass = computed(() => {
+  return route.path === "/auth/login" || route.path === "/auth/register"
+    ? "pt-0"
+    : "pt-20 xl:pt-6";
+});
 </script>

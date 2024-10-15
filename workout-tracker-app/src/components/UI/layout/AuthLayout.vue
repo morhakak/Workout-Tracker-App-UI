@@ -1,7 +1,7 @@
 <template>
     <div class="flex gap-10 items-center justify-center overflow-x-hidden min-h-screen">
       <div
-        class="w-[450px] sm:min-w-[700px] h-[550px] sm:h-[450px] flex flex-col justify-between px-4 py-6 ml-4 "
+        class="w-[450px] sm:min-w-[700px] h-[550px] sm:h-[450px] flex flex-col justify-between px-4 py-6 ml-4"
         rounded="lg"
       >
         <div class="w-[80%] mx-auto ">
@@ -14,7 +14,7 @@
       </div>
       <img
         class="hidden xl:block w-[50%] h-20 min-h-screen flex-1 rounded-tl-[40px] rounded-bl-[40px] aspect-auto"
-        src="../../../public/assets/bench-press.png"
+        src="../../../../public/assets/bench-press.png"
       ></img>
     </div>
     <v-snackbar color="red" v-model="snackbarError">

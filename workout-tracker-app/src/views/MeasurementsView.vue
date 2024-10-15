@@ -1,7 +1,7 @@
 <template>
   <v-container class="flex flex-col items-center">
     <v-card class="px-6 w-[600px] rounded-xl">
-      <h1 class="text-center text-3xl text-black font-bold mt-8 uppercase">
+      <h1 class="text-center text-3xl text-black font-bold mt-8">
         Body Measurements
       </h1>
       <h2 class="text-center text-xl text-neutral-500 font-semibold mt-6 mb-4">
