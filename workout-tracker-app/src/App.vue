@@ -4,13 +4,16 @@
 
 <script setup>
 import AppLayout from "./components/UI/layout/AppLayout.vue";
+import { useAppSettingsStore } from "./stores/AppSettingsStore";
 import { useAuthStore } from "./stores/authStore";
 import { onMounted } from "vue";
 
 const authStore = useAuthStore();
+const appSettingsStore = useAppSettingsStore();
 
 onMounted(async () => {
   authStore.setTokenFromLocalStorage();
+  appSettingsStore.setVuetifyTheme();
 
   if (authStore.token) {
     await authStore.getLoggedUser();

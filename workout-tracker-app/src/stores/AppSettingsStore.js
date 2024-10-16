@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, ref, watch } from "vue";
-import axios from "axios";
+import { ref, watch } from "vue";
 import { useTheme } from "vuetify";
 
 export const useAppSettingsStore = defineStore("appSettingsStore", () => {
@@ -11,26 +10,26 @@ export const useAppSettingsStore = defineStore("appSettingsStore", () => {
   const theme = ref(localStorage.getItem(THEME) || "light");
   const preferredUnit = ref(localStorage.getItem(PREFERRED_UNIT) || "metric");
 
-  const getThemeFromLocalStorage = () => {
-    theme.value(localStorage.getItem(THEME));
+  const updateLocalStorage = (key, value) => {
+    localStorage.setItem(key, value);
   };
 
-  const getPreferredUnitFromLocalStorage = () => {
-    preferredUnit.value(localStorage.getItem(PREFERRED_UNIT));
-  };
-
-  watch(theme, () => {
-    localStorage.setItem(THEME, theme.value);
+  const setVuetifyTheme = () => {
     usedTheme.global.name.value = theme.value;
+  };
+
+  watch(theme, (newTheme) => {
+    setVuetifyTheme();
+    updateLocalStorage(THEME, newTheme);
   });
-  watch(preferredUnit, () =>
-    localStorage.setItem(PREFERRED_UNIT, preferredUnit.value)
-  );
+
+  watch(preferredUnit, (newUnit) => {
+    updateLocalStorage(PREFERRED_UNIT, newUnit);
+  });
 
   return {
     theme,
     preferredUnit,
-    getThemeFromLocalStorage,
-    getPreferredUnitFromLocalStorage,
+    setVuetifyTheme,
   };
 });
