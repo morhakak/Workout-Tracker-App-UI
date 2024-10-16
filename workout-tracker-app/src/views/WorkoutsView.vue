@@ -1,11 +1,14 @@
 <template>
   <div class="w-full pb-6 pt-6">
-    <div class="d-flex flex-column align-center ga-5" v-if="user">
+    <div class="flex flex-col align-center gap-5" v-if="user">
       <v-btn
         v-if="!isLoadingWorkouts"
         width="350"
         height="120"
-        class="border-dashed border-2 border-black"
+        :class="[
+          theme.global.current.value.dark ? `border-white` : 'border-black',
+          `border-dashed border-2`,
+        ]"
         rounded="xl"
         to="/create-workout"
         flat
@@ -17,7 +20,7 @@
       </v-btn>
       <v-skeleton-loader
         v-if="isLoadingWorkouts"
-        class="rounded-xl mt-6 border-2"
+        class="rounded-xl"
         width="350"
         height="120"
       >
@@ -111,12 +114,13 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watchEffect } from "vue";
+import { computed, onMounted, ref } from "vue";
 import WorkoutCard from "../components/workouts/WorkoutCard.vue";
 import { useAuthStore } from "../stores/authStore";
 import { storeToRefs } from "pinia";
 import { useWorkoutStore } from "../stores/workoutStore";
 import { useApiErrorStore } from "../stores/apiErrorStore";
+import { useTheme } from "vuetify";
 
 const { user } = storeToRefs(useAuthStore());
 const workoutStore = useWorkoutStore();
@@ -127,6 +131,9 @@ const workoutToDelete = ref({
   name: "",
   _id: "",
 });
+
+const theme = useTheme();
+console.log(theme.global.current.value.dark);
 
 onMounted(async () => {
   await workoutStore.loadWorkouts();
@@ -165,5 +172,3 @@ const handleToggleIsFavorite = async (id) => {
   await workoutStore.toggleIsFavorite(id);
 };
 </script>
-
-<style scoped></style>

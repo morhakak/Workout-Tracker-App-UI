@@ -1,5 +1,5 @@
 import { defineStore, storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useAuthStore } from "./authStore.js";
 import axios from "axios";
 import { useApiErrorStore } from "./apiErrorStore.js";
