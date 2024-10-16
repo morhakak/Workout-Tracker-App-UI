@@ -17,7 +17,7 @@
           :error-messages="v$.height.$errors.map((e) => e.$message)"
           @blur="v$.height.$touch"
           @input="v$.height.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-end"
         />
         <MeasurementInput
@@ -26,7 +26,7 @@
           :error-messages="v$.weight.$errors.map((e) => e.$message)"
           @blur="v$.weight.$touch"
           @input="v$.weight.$touch"
-          suffix="kg"
+          :suffix="weightSuffix"
           class="justify-self-start"
         />
         <h2
@@ -40,7 +40,7 @@
           :error-messages="v$.neck.$errors.map((e) => e.$message)"
           @blur="v$.neck.$touch"
           @input="v$.neck.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-end"
         />
         <MeasurementInput
@@ -49,7 +49,7 @@
           :error-messages="v$.shoulders.$errors.map((e) => e.$message)"
           @blur="v$.shoulders.$touch"
           @input="v$.shoulders.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-start"
         />
         <MeasurementInput
@@ -58,7 +58,7 @@
           :error-messages="v$.chest.$errors.map((e) => e.$message)"
           @blur="v$.chest.$touch"
           @input="v$.chest.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-end"
         />
         <MeasurementInput
@@ -67,7 +67,7 @@
           :error-messages="v$.rightArm.$errors.map((e) => e.$message)"
           @blur="v$.rightArm.$touch"
           @input="v$.rightArm.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-start"
         />
         <MeasurementInput
@@ -76,7 +76,7 @@
           :error-messages="v$.leftArm.$errors.map((e) => e.$message)"
           @blur="v$.leftArm.$touch"
           @input="v$.leftArm.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-end"
         />
         <MeasurementInput
@@ -85,7 +85,7 @@
           :error-messages="v$.waist.$errors.map((e) => e.$message)"
           @blur="v$.waist.$touch"
           @input="v$.waist.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-start"
         />
         <MeasurementInput
@@ -94,7 +94,7 @@
           :error-messages="v$.rightThigh.$errors.map((e) => e.$message)"
           @blur="v$.rightThigh.$touch"
           @input="v$.rightThigh.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-end"
         />
         <MeasurementInput
@@ -103,7 +103,7 @@
           :error-messages="v$.leftThigh.$errors.map((e) => e.$message)"
           @blur="v$.leftThigh.$touch"
           @input="v$.leftThigh.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-start"
         />
         <MeasurementInput
@@ -112,7 +112,7 @@
           :error-messages="v$.rightCalf.$errors.map((e) => e.$message)"
           @blur="v$.rightCalf.$touch"
           @input="v$.rightCalf.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-end"
         />
         <MeasurementInput
@@ -121,7 +121,7 @@
           :error-messages="v$.leftCalf.$errors.map((e) => e.$message)"
           @blur="v$.leftCalf.$touch"
           @input="v$.leftCalf.$touch"
-          suffix="cm"
+          :suffix="lengthSuffix"
           class="justify-self-start"
         />
         <v-btn
@@ -140,8 +140,10 @@
 <script setup>
 import { useVuelidate } from "@vuelidate/core";
 import { numeric, required } from "@vuelidate/validators";
-import { reactive } from "vue";
+import { computed, reactive } from "vue";
 import MeasurementInput from "../components/measurements/MeasurementInput.vue";
+import { useAppSettingsStore } from "../stores/AppSettingsStore";
+import { storeToRefs } from "pinia";
 
 const initialState = {
   height: 0.0,
@@ -185,4 +187,8 @@ async function submitForm() {
   if (!v$.value.$invalid) {
   }
 }
+
+const appSettings = useAppSettingsStore();
+const lengthSuffix = computed(() => appSettings.getUnitSuffix("length"));
+const weightSuffix = computed(() => appSettings.getUnitSuffix("weight"));
 </script>
