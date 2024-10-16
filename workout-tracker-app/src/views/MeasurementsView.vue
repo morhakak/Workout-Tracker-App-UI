@@ -136,10 +136,11 @@
 <script setup>
 import { useVuelidate } from "@vuelidate/core";
 import { numeric, required } from "@vuelidate/validators";
-import { computed, reactive } from "vue";
+import { reactive } from "vue";
 import MeasurementInput from "../components/measurements/MeasurementInput.vue";
-import { useAppSettingsStore } from "../stores/AppSettingsStore";
 import { storeToRefs } from "pinia";
+import { useUnitUtils } from "../stores/unitUtilsStore";
+const { lengthSuffix, weightSuffix } = storeToRefs(useUnitUtils());
 
 const initialState = {
   height: 0.0,
@@ -183,8 +184,4 @@ async function submitForm() {
   if (!v$.value.$invalid) {
   }
 }
-
-const appSettings = useAppSettingsStore();
-const lengthSuffix = computed(() => appSettings.getUnitSuffix("length"));
-const weightSuffix = computed(() => appSettings.getUnitSuffix("weight"));
 </script>

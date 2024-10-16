@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { useAppSettingsStore } from "../stores/AppSettingsStore";
+import { useAppSettingsStore } from "../stores/appSettingsStore";
 import { storeToRefs } from "pinia";
 
 const appSettingsStore = useAppSettingsStore();

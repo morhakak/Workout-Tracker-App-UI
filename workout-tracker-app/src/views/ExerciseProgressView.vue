@@ -48,7 +48,7 @@
             :workoutId="record.workoutId"
             :workoutName="record.workoutName"
             :value="record.value"
-            :kg="record.kg"
+            :unit="record.unit"
             :isLoading="isLoading || !existingExercise"
           />
         </v-container>
@@ -88,7 +88,7 @@ const records = computed(() => [
     workoutId: existingExercise.value?.maxWeight.workout.workoutId,
     workoutName: existingExercise.value?.maxWeight.workout.workoutName,
     value: existingExercise.value?.maxWeight.value,
-    kg: true,
+    unit: true,
   },
   {
     icon: "mdi-counter",
@@ -97,7 +97,7 @@ const records = computed(() => [
     workoutId: existingExercise.value?.maxReps.workout.workoutId,
     workoutName: existingExercise.value?.maxReps.workout.workoutName,
     value: existingExercise.value?.maxReps.value,
-    kg: false,
+    unit: false,
   },
   {
     icon: "mdi-weight-kilogram",
@@ -106,7 +106,7 @@ const records = computed(() => [
     workoutId: existingExercise.value?.maxVolume.workout.workoutId,
     workoutName: existingExercise.value?.maxVolume.workout.workoutName,
     value: existingExercise.value?.maxVolume.value,
-    kg: true,
+    unit: true,
   },
   {
     icon: "mdi-numeric-1-box-outline",
@@ -115,7 +115,7 @@ const records = computed(() => [
     workoutId: existingExercise.value?.oneRepMax.workout.workoutId,
     workoutName: existingExercise.value?.oneRepMax.workout.workoutName,
     value: existingExercise.value?.oneRepMax.value,
-    kg: true,
+    unit: true,
   },
 ]);
 </script>

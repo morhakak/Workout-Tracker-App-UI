@@ -27,18 +27,9 @@ export const useAppSettingsStore = defineStore("appSettingsStore", () => {
     updateLocalStorage(PREFERRED_UNIT, newUnit);
   });
 
-  const getUnitSuffix = (type) => {
-    if (preferredUnit.value === "metric") {
-      return type === "weight" ? "kg" : "cm";
-    } else {
-      return type === "weight" ? "lbs" : "in";
-    }
-  };
-
   return {
     theme,
     preferredUnit,
     setVuetifyTheme,
-    getUnitSuffix,
   };
 });

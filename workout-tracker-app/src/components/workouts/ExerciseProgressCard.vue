@@ -40,21 +40,13 @@
 import { useRouter } from "vue-router";
 import { useExercisesProgress } from "../../stores/ExerciseProgressStore";
 import { computed } from "vue";
-import { useAppSettingsStore } from "../../stores/AppSettingsStore";
 import { storeToRefs } from "pinia";
+import { useUnitUtils } from "../../stores/unitUtilsStore";
 
 const router = useRouter();
 const props = defineProps(["exerciseHistory"]);
 const { volumeDiff } = useExercisesProgress();
-
-const settingsStore = useAppSettingsStore();
-const { preferredUnit } = storeToRefs(useAppSettingsStore());
-
-const weightIcon = computed(() => {
-  return preferredUnit.value == "metric"
-    ? "mdi-weight-kilogram"
-    : "mdi-weight-pound";
-});
+const { weightIcon } = storeToRefs(useUnitUtils());
 
 const openWorkout = () => {
   if (props.exerciseHistory) {

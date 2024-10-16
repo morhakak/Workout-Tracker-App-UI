@@ -1,14 +1,12 @@
 <template>
   <v-timeline-item dot-color="black" size="large" icon="mdi-weight-lifter">
     <template v-slot:opposite>
-      <!-- <div
-        class="text-xl mb-4 hover:cursor-pointer font-semibold"
-        @click="() => navigateToWorkout(session?.workout.workoutId)"
-      >
-        {{ session?.workout?.workoutName }}
-      </div> -->
       <div class="text-sm text-wrap">
-        {{ toLocalDate(session?.createdDate) }}
+        <span>{{ formattedDate.day }}</span
+        ><br />
+        <span>{{ formattedDate.weekday }}</span
+        ><br />
+        <span>{{ formattedDate.time }}</span>
       </div>
     </template>
 
@@ -41,8 +39,12 @@
           </tr>
         </tbody>
       </v-table>
-      <p class="text-center mt-4 font-semibold">
-        Total volume: {{ session.volume }}
+      <p class="text-center mt-4">
+        <v-icon class="mr-2 mb-1">{{ weightIcon }}</v-icon
+        >Total volume:&nbsp;
+        <span class="font-semibold"
+          >{{ session.volume }}{{ weightSuffix }}</span
+        >
       </p>
     </v-card>
   </v-timeline-item>
@@ -51,13 +53,26 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { useDateFormatter } from "../../composables/useDateFormatter";
+import { useUnitUtils } from "../../stores/unitUtilsStore";
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
+const { weightIcon, weightSuffix } = storeToRefs(useUnitUtils());
 
-defineProps(["session"]);
+const props = defineProps(["session"]);
 
 const router = useRouter();
 const navigateToWorkout = (id) => {
   router.push({ name: "workout", params: { id } });
 };
+
+const dateWrapper = (date) => {
+  const [day, weekday, time] = date.split(`,`);
+  return { day, weekday, time };
+};
+
+const formattedDate = computed(() =>
+  dateWrapper(toLocalDate(props.session?.createdDate))
+);
 
 const { toLocalDate } = useDateFormatter();
 </script>

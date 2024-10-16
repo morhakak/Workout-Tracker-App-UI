@@ -4,7 +4,7 @@
 
 <script setup>
 import AppLayout from "./components/UI/layout/AppLayout.vue";
-import { useAppSettingsStore } from "./stores/AppSettingsStore";
+import { useAppSettingsStore } from "./stores/appSettingsStore";
 import { useAuthStore } from "./stores/authStore";
 import { onMounted } from "vue";
 
