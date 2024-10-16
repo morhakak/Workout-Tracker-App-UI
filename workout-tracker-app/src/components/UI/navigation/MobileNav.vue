@@ -25,9 +25,9 @@
     :scrim="false"
     class="xl:hidden top-[64px] h-[calc(100vh-64px)] flex flex-col justify-between"
   >
-    <v-list>
+    <v-list class="px-2">
       <v-list-item
-        class="text-lg"
+        class="text-lg rounded-lg"
         v-for="item in updateMenuItems"
         :key="item.title"
         :prepend-icon="item.icon"

@@ -8,9 +8,9 @@
       </div>
       <h1 class="font-semibold text-xl">Workout Tracker</h1>
     </div>
-    <v-list>
+    <v-list class="px-2">
       <v-list-item
-        class="text-lg"
+        class="text-lg rounded-lg"
         v-for="item in updateMenuItems"
         :key="item.title"
         :prepend-icon="item.icon"
