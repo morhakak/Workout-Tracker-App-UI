@@ -6,12 +6,10 @@
     @blur="onBlur"
     @input="onInput"
     clearable
-    class="text-black font-semibold w-[150px]"
+    class="font-semibold w-[150px]"
     variant="outlined"
-    color="black"
-    base-color="black"
     :suffix="suffix"
-    style="font-size: 1.125rem; color: white"
+    style="font-size: 1.125rem"
     :hint="hint"
   />
 </template>

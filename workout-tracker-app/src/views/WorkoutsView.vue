@@ -3,7 +3,6 @@
     <div class="d-flex flex-column align-center ga-5" v-if="user">
       <v-btn
         v-if="!isLoadingWorkouts"
-        color="rgba(255, 255,255, 0.5)"
         width="350"
         height="120"
         class="border-dashed border-2 border-black"

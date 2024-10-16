@@ -6,7 +6,6 @@
     min-height="120"
     rounded="xl"
     hover
-    color="rgba(255, 255,255, 0.8)"
     @click="openWorkout"
   >
     <template #title>
@@ -24,15 +23,15 @@
         {{ exerciseHistory?.sessions.length }} sessions</span
       >
     </template>
-    <p v-if="diff" class="px-2 flex items-center justify-center">
-      <v-icon>mdi-weight-kilogram</v-icon> Volume diff from prev session:
-      <span class="font-semibold inline-block mx-1" :class="diffClass">{{
-        computedDiff
-      }}</span>
-      kg
+    <p v-if="diff" class="px-2">
+      <v-icon class="ml-3 mr-1 mb-1">{{ weightIcon }}</v-icon> Volume diff:
+      <span class="font-semibold inline-block mx-1" :class="diffClass">
+        {{ computedDiff }}
+      </span>
     </p>
-    <p v-else class="px-2 text-center">
-      Add more workouts to track volume diff
+    <p v-else class="px-2">
+      <v-icon class="ml-3 mr-1 mb-1">mdi-information</v-icon>
+      Add more workouts sessions
     </p>
   </v-card>
 </template>
@@ -41,10 +40,21 @@
 import { useRouter } from "vue-router";
 import { useExercisesProgress } from "../../stores/ExerciseProgressStore";
 import { computed } from "vue";
+import { useAppSettingsStore } from "../../stores/AppSettingsStore";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const props = defineProps(["exerciseHistory"]);
 const { volumeDiff } = useExercisesProgress();
+
+const settingsStore = useAppSettingsStore();
+const { preferredUnit } = storeToRefs(useAppSettingsStore());
+
+const weightIcon = computed(() => {
+  return preferredUnit.value == "metric"
+    ? "mdi-weight-kilogram"
+    : "mdi-weight-pound";
+});
 
 const openWorkout = () => {
   if (props.exerciseHistory) {

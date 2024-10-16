@@ -6,7 +6,6 @@
     min-height="120"
     rounded="xl"
     hover
-    color="rgba(255, 255,255, 0.8)"
     @click="openWorkout"
   >
     <template #title>

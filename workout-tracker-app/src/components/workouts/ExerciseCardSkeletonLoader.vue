@@ -1,8 +1,7 @@
 <template>
   <v-card
     rounded="xl"
-    color="rgba(255, 255, 255, 0.8)"
-    class="flex flex-col overflow-visible w-[350px] sm:min-w-[550px] lg:min-w-[550px] bg-[rgba(255,255,255,0.5)] items-center pb-8 pt-4 mt-6 relative"
+    class="flex flex-col overflow-visible w-[350px] sm:min-w-[550px] lg:min-w-[550px] items-center pb-8 pt-4 mt-6 relative"
   >
     <!-- Placeholder for card title -->
     <v-skeleton-loader

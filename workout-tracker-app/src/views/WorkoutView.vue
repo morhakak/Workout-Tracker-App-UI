@@ -1,27 +1,16 @@
 <template>
   <div class="w-full flex flex-col items-center">
     <div class="mb-6 flex justify-center gap-4 w-full">
-      <v-btn
-        @click="handleDeleteRequest"
-        color="rgba(255, 255,255, 0.5)"
-        icon="mdi-trash-can"
-      >
-      </v-btn>
+      <v-btn @click="handleDeleteRequest" icon="mdi-trash-can"> </v-btn>
       <v-btn
         @click="isEditMode = !isEditMode"
-        color="rgba(255, 255,255, 0.5)"
         icon="mdi-pencil"
         :class="{
           'border-2 border-white': isEditMode,
         }"
       >
       </v-btn>
-      <v-btn
-        color="rgba(255, 255,255, 0.5)"
-        rounded="xl"
-        icon="mdi-plus"
-        @click="isAddDialogOpen = true"
-      >
+      <v-btn rounded="xl" icon="mdi-plus" @click="isAddDialogOpen = true">
       </v-btn>
     </div>
     <div class="w-full flex flex-col justify-center">
@@ -29,14 +18,10 @@
         :disabled="!isEditMode"
         type="text"
         v-model="workoutDraft.name"
-        class="text-2xl sm:text-3xl lg:text-4xl w-[75%] sm:w-[600px] mx-auto text-clip py-2 text-center rounded-lg font-semibold bg-[#ffffff] leading-normal"
+        class="text-2xl sm:text-3xl lg:text-4xl w-[75%] sm:w-[600px] mx-auto text-clip py-2 text-center rounded-lg font-semibold leading-normal"
         :class="{ 'outline-1 outline-gray-950': isEditMode }"
       />
-      <v-divider
-        :thickness="4"
-        color="warning"
-        class="border-opacity-50 mt-4"
-      ></v-divider>
+      <v-divider :thickness="1" class="border-opacity-50 mt-4"></v-divider>
     </div>
 
     <div class="relative w-full flex flex-col justify-center items-center mb-8">
@@ -213,9 +198,8 @@
       <template #title> Delete Confirmation</template>
       <template #text>
         <p class="text-lg">
-          Are you sure you want to delete this
-          <span class="font-semibold">{{ workoutDraft?.name }}</span>
-          workout?
+          Are you sure you want to delete<br />
+          <span class="font-semibold">{{ workoutDraft?.name }}?</span>
         </p>
       </template>
       <template v-slot:actions>

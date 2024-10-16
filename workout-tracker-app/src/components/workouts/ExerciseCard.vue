@@ -1,7 +1,7 @@
 <template>
   <v-card
     rounded="xl"
-    class="flex flex-col overflow-visible w-[350px] sm:min-w-[550px] lg:min-w-[550px] bg-[rgba(255,255,255,0.5)] items-center pb-8 pt-4 mt-6 relative"
+    class="flex flex-col overflow-visible w-[350px] sm:min-w-[550px] lg:min-w-[550px] items-center pb-8 pt-4 mt-6 relative"
   >
     <transition name="fade">
       <v-btn
@@ -19,14 +19,13 @@
       <v-card
         v-for="(set, setIndex) in exercise.sets"
         :key="set._id"
-        color="rgba(255, 255,255, 0.5)"
         class="flex items-center px-4 mt-2 w-[320px] h-[60px] sm:w-[400px] lg:[550px]"
         rounded="lg"
         @click="() => toggleEdit(exercise._id, set._id)"
       >
         <div class="flex items-center justify-evenly w-full">
           <span
-            class="font-bold border p-[2px] border-black rounded-full flex items-center justify-center bg-white h-8 w-8"
+            class="font-bold border text-xs p-[2px] border-black rounded-full flex items-center justify-center bg-white h-6 w-6"
           >
             {{ setIndex + 1 }}
           </span>
