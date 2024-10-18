@@ -133,7 +133,6 @@ const workoutToDelete = ref({
 });
 
 const theme = useTheme();
-console.log(theme.global.current.value.dark);
 
 onMounted(async () => {
   await workoutStore.loadWorkouts();

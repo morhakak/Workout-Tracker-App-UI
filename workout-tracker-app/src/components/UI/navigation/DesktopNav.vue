@@ -16,7 +16,6 @@
         :prepend-icon="item.icon"
         :to="item.link"
         @click="item.action"
-        active-class="border-r-black border-r-2"
       >
         <template #title>
           <p class="text-lg" :class="{ 'font-semibold': item.name == 'user' }">
