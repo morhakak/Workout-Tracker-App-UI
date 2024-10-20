@@ -27,7 +27,7 @@
       class="text-lg normal-case w-min"
       height="56"
       type="submit"
-      :loading="isLoading"
+      :loading="isAddWeightLoading"
     >
       Add
     </v-btn>
@@ -44,7 +44,7 @@ import { useUnitUtils } from "../../stores/unitUtilsStore";
 import { useMeasurementsStore } from "../../stores/measurementsStore";
 
 const measurementsStore = useMeasurementsStore();
-const { isLoading } = storeToRefs(measurementsStore);
+const { isAddWeightLoading } = storeToRefs(measurementsStore);
 const { weightSuffix } = storeToRefs(useUnitUtils());
 
 const initialState = {
@@ -73,7 +73,8 @@ async function submitForm() {
   v$.value.$validate();
 
   if (!v$.value.$invalid) {
-    measurementsStore.addWeight(state);
+    await measurementsStore.addWeight(state);
+    await measurementsStore.fetchWeighings();
   }
 }
 </script>

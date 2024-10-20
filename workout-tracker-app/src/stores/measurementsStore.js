@@ -6,10 +6,12 @@ import { useApiErrorStore } from "./apiErrorStore.js";
 
 export const useMeasurementsStore = defineStore("measurementsStore", () => {
   const measurements = ref([]);
+  const weighings = ref([]);
   const { token } = storeToRefs(useAuthStore());
   const apiErrorStore = useApiErrorStore();
   const MEASUREMENTS_URL = import.meta.env.VITE_MEASUREMENTS_BASE_URL;
   const isLoading = ref(false);
+  const isAddWeightLoading = ref(false);
 
   const fetchMeasurements = async () => {
     apiErrorStore.resetMessages();
@@ -32,7 +34,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
 
   const addWeight = async ({ weight }) => {
     apiErrorStore.resetMessages();
-    isLoading.value = true;
+    isAddWeightLoading.value = true;
     try {
       const response = await axios.post(
         `${MEASUREMENTS_URL}/weight`,
@@ -44,6 +46,26 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
         }
       );
       measurements.value = response.data.data;
+    } catch (error) {
+      apiErrorStore.handleErrorResponse(error);
+    } finally {
+      setTimeout(() => {
+        isAddWeightLoading.value = false;
+      }, 1000);
+    }
+  };
+
+  const fetchWeighings = async () => {
+    apiErrorStore.resetMessages();
+    isLoading.value = true;
+    try {
+      const response = await axios.get(`${MEASUREMENTS_URL}/weight`, {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      });
+      weighings.value = response.data.data;
+      console.log(response.data.data);
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
@@ -101,10 +123,13 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
 
   return {
     fetchMeasurements,
+    fetchWeighings,
+    weighings,
     addWeight,
     addHeight,
     addMeasurement,
     measurements,
     isLoading,
+    isAddWeightLoading,
   };
 });
