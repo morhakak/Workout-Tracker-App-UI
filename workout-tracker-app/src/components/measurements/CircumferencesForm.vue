@@ -1,7 +1,10 @@
 <template>
-  <h2 class="text-center text-xl font-semibold col-span-2 mb-4">
-    Circumference Measurements
-  </h2>
+  <div class="flex justify-center mb-6 gap-2">
+    <v-icon class>mdi-tape-measure</v-icon>
+    <h2 class="text-center text-xl font-semibold col-span-2 mb-6">
+      Circumferences
+    </h2>
+  </div>
   <form
     @submit.prevent="submitForm"
     class="mb-8 grid grid-cols-2 justify-items-center gap-3"
@@ -97,7 +100,13 @@
       :onBlur="v$.leftCalf.$touch"
       :onInput="v$.leftCalf.$touch"
     />
-    <v-btn color="black" class="text-lg col-span-2" height="45" type="submit">
+    <v-btn
+      color="black"
+      class="text-lg col-span-2 normal-case"
+      height="45"
+      type="submit"
+      :loading="isLoading"
+    >
       Add Measuremnt
     </v-btn>
   </form>
@@ -106,12 +115,15 @@
 <script setup>
 import MeasurementInput from "./MeasurementInput.vue";
 import { useVuelidate } from "@vuelidate/core";
-import { numeric } from "@vuelidate/validators";
+import { numeric, helpers } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
 import { reactive } from "vue";
 import { useUnitUtils } from "../../stores/unitUtilsStore";
-const { lengthSuffix } = storeToRefs(useUnitUtils());
+import { useMeasurementsStore } from "../../stores/measurementsStore";
 
+const { lengthSuffix } = storeToRefs(useUnitUtils());
+const measurementsStore = useMeasurementsStore();
+const { isLoading } = storeToRefs(measurementsStore);
 const initialState = {
   neck: 0.0,
   shoulders: 0.0,
@@ -129,17 +141,79 @@ const state = reactive({
   ...initialState,
 });
 
+const greaterThanZero = (value) => parseInt(value) > 0;
+
 const rules = {
-  neck: { numeric },
-  shoulders: { numeric },
-  chest: { numeric },
-  rightArm: { numeric },
-  leftArm: { numeric },
-  waist: { numeric },
-  rightThigh: { numeric },
-  leftThigh: { numeric },
-  rightCalf: { numeric },
-  leftCalf: { numeric },
+  neck: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
+  shoulders: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
+  chest: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
+  rightArm: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
+  leftArm: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
+  waist: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
+  rightThigh: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
+  leftThigh: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
+  rightCalf: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
+  leftCalf: {
+    numeric,
+    greaterThanZero: helpers.withMessage(
+      "value must be greater than 0",
+      greaterThanZero
+    ),
+  },
 };
 
 const v$ = useVuelidate(rules, state);
@@ -148,6 +222,7 @@ async function submitForm() {
   v$.value.$validate();
 
   if (!v$.value.$invalid) {
+    await measurementsStore.addMeasurement(state);
   }
 }
 </script>

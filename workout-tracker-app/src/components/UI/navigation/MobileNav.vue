@@ -33,7 +33,6 @@
         :prepend-icon="item.icon"
         :to="item.link"
         @click="item.action"
-        active-class="border-r-black border-r-2"
       >
         <template #title>
           <p class="text-lg" :class="{ 'font-semibold': item.name == 'user' }">
@@ -41,6 +40,24 @@
           </p>
         </template>
       </v-list-item>
+      <v-list-group value="Measurements">
+        <template v-slot:activator="{ props }">
+          <v-list-item v-bind="props" prepend-icon="mdi-content-paste">
+            <template #title>
+              <p class="text-lg">Measurments</p>
+            </template>
+          </v-list-item>
+        </template>
+        <v-list-item prepend-icon="mdi-scale" to="/measurements/weighings">
+          Weighings
+        </v-list-item>
+        <v-list-item
+          prepend-icon="mdi-tape-measure"
+          to="/measurements/circumferences"
+        >
+          Circumferences
+        </v-list-item>
+      </v-list-group>
     </v-list>
     <template #append>
       <UserItem />

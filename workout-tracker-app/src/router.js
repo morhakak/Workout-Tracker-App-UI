@@ -15,6 +15,8 @@ import ProgressView from "./views/ProgressView.vue";
 import ExerciseProgressView from "./views/ExerciseProgressView.vue";
 import MeasurementsView from "./views/MeasurementsView.vue";
 import SettingsView from "./views/SettingsView.vue";
+import CircumferencesView from "./views/CircumferencesView.vue";
+import WeighingsView from "./views/WeighingsView.vue";
 
 const routes = [
   {
@@ -57,6 +59,18 @@ const routes = [
     path: "/measurements",
     name: "measurements",
     component: MeasurementsView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/measurements/circumferences",
+    name: "circumferences",
+    component: CircumferencesView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/measurements/weighings",
+    name: "weighings",
+    component: WeighingsView,
     meta: { requiresAuth: true },
   },
   {

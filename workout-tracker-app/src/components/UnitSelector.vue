@@ -2,7 +2,6 @@
   <div class="flex justify-center items-center gap-3">
     <p class="text-lg">Metric</p>
     <v-switch
-      inset
       class="flex"
       v-model="preferredUnit"
       false-value="metric"
