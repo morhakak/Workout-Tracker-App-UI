@@ -11,16 +11,21 @@
     <v-list class="px-2">
       <v-list-item
         class="text-lg rounded-lg"
-        v-for="item in updateMenuItems"
-        :key="item.title"
-        :prepend-icon="item.icon"
-        :to="item.link"
-        @click="item.action"
+        prepend-icon="mdi-weight-lifter"
+        to="/"
       >
         <template #title>
-          <p class="text-lg" :class="{ 'font-semibold': item.name == 'user' }">
-            {{ item.title }}
-          </p>
+          <p class="text-lg">My Workouts</p>
+        </template>
+      </v-list-item>
+
+      <v-list-item
+        class="text-lg rounded-lg"
+        prepend-icon="mdi-chart-line"
+        to="/progress"
+      >
+        <template #title>
+          <p class="text-lg">Progress</p>
         </template>
       </v-list-item>
       <v-list-group value="Measurements">
@@ -41,6 +46,15 @@
           Circumferences
         </v-list-item>
       </v-list-group>
+      <v-list-item
+        class="text-lg rounded-lg"
+        prepend-icon="mdi-cog"
+        to="/settings"
+      >
+        <template #title>
+          <p class="text-lg">Settings</p>
+        </template>
+      </v-list-item>
     </v-list>
 
     <template #append>

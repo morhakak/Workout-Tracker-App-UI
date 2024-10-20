@@ -18,8 +18,19 @@ export function useMenuItems() {
         { title: "Progress", link: "/progress", icon: "mdi-chart-line" },
         {
           title: "Measurements",
-          link: "/measurements",
-          icon: "mdi-tape-measure",
+          icon: "mdi-content-paste",
+          subLinks: [
+            {
+              title: "Weighings",
+              link: "measurements/weighings",
+              icon: "mdi-weight",
+            },
+            {
+              title: "Circumferences",
+              link: "measurements/circumferences",
+              icon: "mdi-tape-measure",
+            },
+          ],
         },
         { title: "Settings", link: "/settings", icon: "mdi-cog" },
       ];
