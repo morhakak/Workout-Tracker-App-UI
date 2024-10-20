@@ -10,7 +10,7 @@
       </div>
     </template>
 
-    <v-card class="p-4 rounded-xl">
+    <v-card class="p-4 rounded-xl border-[1px] border-white">
       <div
         class="text-lg mb-4 hover:cursor-pointer text-wrap text-center"
         @click="() => navigateToWorkout(session?.workout.workoutId)"

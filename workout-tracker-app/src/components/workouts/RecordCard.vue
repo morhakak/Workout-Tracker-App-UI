@@ -1,7 +1,7 @@
 <template>
   <v-card
     v-if="!isLoading"
-    class="w-[330px] h-[112px] box-border p-4 rounded-xl"
+    class="w-[330px] h-[112px] box-border p-4 rounded-xl border-[1px] border-white"
   >
     <v-card-title class="flex gap-2 items-center">
       <v-icon>{{ computedIcon }}</v-icon>
