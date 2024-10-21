@@ -1,19 +1,5 @@
 <template>
-  <!-- <div class="flex mt-6 mb-6 justify-center gap-2">
-    <v-icon class>mdi-scale</v-icon>
-    <h2 class="text-center text-xl font-semibold">Track Your Weight</h2>
-  </div> -->
-  <form @submit.prevent="submitForm" class="flex gap-3 px-12">
-    <!-- <MeasurementInput
-      label="Height"
-      v-model="state.height"
-      :errorMessages="v$.height.$errors.map((e) => e.$message)"
-      :onBlur="v$.height.$touch"
-      :onInput="v$.height.$touch"
-      :suffix="lengthSuffix"
-      class="justify-self-end"
-    /> -->
-
+  <form @submit.prevent="submitForm" class="flex gap-2 px-12">
     <MeasurementInput
       label="Weight"
       v-model="state.weight"
@@ -21,10 +7,11 @@
       :onBlur="v$.weight.$touch"
       :onInput="v$.weight.$touch"
       :suffix="weightSuffix"
+      class="pl-12"
     />
     <v-btn
       color="black"
-      class="text-lg normal-case w-min"
+      class="text-lg normal-case w-min rounded-xl mr-8"
       height="56"
       type="submit"
       :loading="isAdding"

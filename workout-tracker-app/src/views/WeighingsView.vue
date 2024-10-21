@@ -29,7 +29,9 @@
           icon="mdi-scale"
           dot-color="black"
         >
-          <v-card class="flex gap-6 items-center p-4 rounded-xl">
+          <v-card
+            class="flex gap-6 items-center p-4 rounded-xl border-[1px] border-white box-border w-[200px]"
+          >
             <div class="text-sm text-wrap">
               <span>{{ formattedDate(weighing.date).day }}</span
               ><br />
