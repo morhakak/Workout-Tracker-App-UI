@@ -1,15 +1,28 @@
 <template>
   <v-container class="flex flex-col items-center gap-8">
     <v-card class="px-12 w-[500px] rounded-xl pb-8 pt-8">
-      <h1 class="text-center text-3xl font-bold mb-2">Weighings</h1>
+      <div class="flex mt-6 mb-6 justify-center items-center gap-2">
+        <v-icon class="text-4xl">mdi-scale</v-icon>
+        <h1 class="text-center text-3xl font-semibold tracking-wide">
+          Track Your Weight
+        </h1>
+      </div>
       <UnitSelector />
-      <v-card class="px-6 rounded-xl mb-8 mt-8 pb-8 border-[1px] border-white">
-        <WeightForm />
-      </v-card>
+      <WeightForm @weightAdded="onWeightAdded" class="mt-8" />
     </v-card>
-    <v-card class="px-12 w-[500px] rounded-xl pb-8 pt-8">
-      <h2 class="text-center text-3xl font-bold mb-2">History</h2>
-      <v-timeline direction="vertical" side="end">
+    <v-card
+      class="flex flex-col justify-center items-center px-12 w-[500px] rounded-xl pb-8 pt-8"
+    >
+      <h2 class="text-center text-3xl font-semibold mb-2 tracking-wide">
+        History
+      </h2>
+      <v-timeline
+        v-if="!isFetching"
+        direction="vertical"
+        side="end"
+        truncate-line="both"
+        class="mt-8"
+      >
         <v-timeline-item
           v-for="weighing in weighings"
           :key="weighing._id"
@@ -24,27 +37,36 @@
               ><br />
               <span>{{ formattedDate(weighing.date).time }}</span>
             </div>
-            <span class="text-lg">{{ weighing.value }}kg</span>
+            <span
+              class="text-md font-semibold bg-black text-white py-1 px-2 rounded-lg"
+              >{{ weighing.value }}kg</span
+            >
           </v-card>
         </v-timeline-item>
       </v-timeline>
+      <v-progress-circular
+        v-if="isFetching"
+        size="50"
+        indeterminate
+        class="mt-8"
+      ></v-progress-circular>
     </v-card>
   </v-container>
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { onMounted } from "vue";
 import WeightForm from "../components/measurements/WeightForm.vue";
 import UnitSelector from "../components/UnitSelector.vue";
 import { useDateFormatter } from "../composables/useDateFormatter";
-import { useMeasurementsStore } from "../stores/measurementsStore";
+import { useWeighingsStore } from "../stores/weighingsStore";
 import { storeToRefs } from "pinia";
 
-const measurementsStore = useMeasurementsStore();
-const { weighings, isLoading } = storeToRefs(measurementsStore);
+const weighingsStore = useWeighingsStore();
+const { weighings, isFetching } = storeToRefs(weighingsStore);
 
 onMounted(async () => {
-  await measurementsStore.fetchWeighings();
+  await weighingsStore.fetchWeighings();
   console.log(weighings.value);
 });
 
@@ -56,4 +78,8 @@ const dateWrapper = (date) => {
 };
 
 const formattedDate = (date) => dateWrapper(toLocalDate(date));
+
+const onWeightAdded = async () => {
+  await weighingsStore.fetchWeighings();
+};
 </script>

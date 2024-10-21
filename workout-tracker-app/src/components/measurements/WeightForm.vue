@@ -1,8 +1,8 @@
 <template>
-  <div class="flex mt-6 mb-6 justify-center gap-2">
+  <!-- <div class="flex mt-6 mb-6 justify-center gap-2">
     <v-icon class>mdi-scale</v-icon>
     <h2 class="text-center text-xl font-semibold">Track Your Weight</h2>
-  </div>
+  </div> -->
   <form @submit.prevent="submitForm" class="flex gap-3 px-12">
     <!-- <MeasurementInput
       label="Height"
@@ -27,7 +27,7 @@
       class="text-lg normal-case w-min"
       height="56"
       type="submit"
-      :loading="isAddWeightLoading"
+      :loading="isAdding"
     >
       Add
     </v-btn>
@@ -41,10 +41,10 @@ import { numeric, helpers } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
 import { reactive } from "vue";
 import { useUnitUtils } from "../../stores/unitUtilsStore";
-import { useMeasurementsStore } from "../../stores/measurementsStore";
+import { useWeighingsStore } from "../../stores/weighingsStore";
 
-const measurementsStore = useMeasurementsStore();
-const { isAddWeightLoading } = storeToRefs(measurementsStore);
+const weighingsStore = useWeighingsStore();
+const { isAdding } = storeToRefs(weighingsStore);
 const { weightSuffix } = storeToRefs(useUnitUtils());
 
 const initialState = {
@@ -69,12 +69,14 @@ const rules = {
 
 const v$ = useVuelidate(rules, state);
 
+const emits = defineEmits(["weightAdded"]);
+
 async function submitForm() {
   v$.value.$validate();
 
   if (!v$.value.$invalid) {
-    await measurementsStore.addWeight(state);
-    await measurementsStore.fetchWeighings();
+    await weighingsStore.addWeight(state);
+    emits("weightAdded");
   }
 }
 </script>
