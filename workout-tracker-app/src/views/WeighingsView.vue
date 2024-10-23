@@ -24,7 +24,7 @@
         class="mt-8"
       >
         <v-timeline-item
-          v-for="weighing in normalizedWeighing"
+          v-for="weighing in normalizedWeighings"
           :key="weighing._id"
           icon="mdi-scale"
           dot-color="black"
@@ -56,34 +56,22 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { onMounted } from "vue";
 import WeightForm from "../components/measurements/WeightForm.vue";
 import UnitSelector from "../components/UnitSelector.vue";
 import { useDateFormatter } from "../composables/useDateFormatter";
 import { useWeighingsStore } from "../stores/weighingsStore";
 import { storeToRefs } from "pinia";
 import { useUnitUtils } from "../stores/unitUtilsStore";
-import { convertKgToLbs } from "../utils/conversions";
-import { useAppSettingsStore } from "../stores/appSettingsStore";
 const { weightSuffix } = storeToRefs(useUnitUtils());
-const { preferredUnit } = storeToRefs(useAppSettingsStore());
 
 const weighingsStore = useWeighingsStore();
-const { weighings, isFetching } = storeToRefs(weighingsStore);
+const { normalizedWeighings, isFetching } = storeToRefs(weighingsStore);
 
 onMounted(async () => {
   await weighingsStore.fetchWeighings();
 });
 
-const normalizedWeighing = computed(() => {
-  if (preferredUnit.value === "imperial") {
-    return weighings.value.map((w) => ({
-      ...w,
-      value: convertKgToLbs(w.value).toFixed(1),
-    }));
-  }
-  return weighings.value.map((w) => ({ ...w, value: w.value.toFixed(1) }));
-});
 const { toLocalDate } = useDateFormatter();
 
 const dateWrapper = (date) => {

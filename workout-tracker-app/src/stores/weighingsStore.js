@@ -1,10 +1,10 @@
 import { defineStore, storeToRefs } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useAuthStore } from "./authStore.js";
 import axios from "axios";
 import { useApiErrorStore } from "./apiErrorStore.js";
-import { useUnitUtils } from "./unitUtilsStore.js";
 import { useAppSettingsStore } from "./appSettingsStore.js";
+import { convertKgToLbs } from "../utils/conversions.js";
 
 export const useWeighingsStore = defineStore("weighingsStore", () => {
   const weighings = ref([]);
@@ -19,7 +19,6 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     apiErrorStore.resetMessages();
     isAdding.value = true;
     const unit = preferredUnit.value;
-    console.log("pref******", unit);
 
     try {
       const response = await axios.post(
@@ -60,9 +59,19 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     }
   };
 
+  const normalizedWeighings = computed(() => {
+    if (preferredUnit.value === "imperial") {
+      return weighings.value.map((w) => ({
+        ...w,
+        value: convertKgToLbs(w.value).toFixed(1),
+      }));
+    }
+    return weighings.value.map((w) => ({ ...w, value: w.value.toFixed(1) }));
+  });
+
   return {
     fetchWeighings,
-    weighings,
+    normalizedWeighings,
     addWeight,
     isFetching,
     isAdding,
