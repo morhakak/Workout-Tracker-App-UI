@@ -5,8 +5,8 @@ export default {
     extend: {
       screens: {
         tablet: "640px",
-        gridBpLaptop: "1362px",
-        gridBpMobile: "708px",
+        px1362: "1362px",
+        px708: "708px",
         desktop: "1280px",
         px760: "760px",
         px880: "880px",

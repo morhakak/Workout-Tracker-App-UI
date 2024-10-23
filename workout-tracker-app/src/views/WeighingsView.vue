@@ -32,16 +32,15 @@
           <v-card
             class="flex gap-6 items-center p-4 rounded-xl border-[1px] border-white box-border w-[200px]"
           >
-            <div class="text-sm text-wrap">
+            <div class="text-xs text-wrap">
               <span>{{ formattedDate(weighing.date).day }}</span
               ><br />
               <span>{{ formattedDate(weighing.date).weekday }}</span
               ><br />
               <span>{{ formattedDate(weighing.date).time }}</span>
             </div>
-            <span
-              class="text-md font-semibold bg-black text-white py-1 px-2 rounded-lg"
-              >{{ weighing.value }}kg</span
+            <span class="text-md font-semibold py-1 px-2 rounded-lg"
+              >{{ weighing.value }}{{ weightSuffix }}</span
             >
           </v-card>
         </v-timeline-item>
@@ -63,13 +62,14 @@ import UnitSelector from "../components/UnitSelector.vue";
 import { useDateFormatter } from "../composables/useDateFormatter";
 import { useWeighingsStore } from "../stores/weighingsStore";
 import { storeToRefs } from "pinia";
+import { useUnitUtils } from "../stores/unitUtilsStore";
+const { weightSuffix } = storeToRefs(useUnitUtils());
 
 const weighingsStore = useWeighingsStore();
 const { weighings, isFetching } = storeToRefs(weighingsStore);
 
 onMounted(async () => {
   await weighingsStore.fetchWeighings();
-  console.log(weighings.value);
 });
 
 const { toLocalDate } = useDateFormatter();

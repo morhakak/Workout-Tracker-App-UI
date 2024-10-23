@@ -1,11 +1,11 @@
 <template>
   <div class="w-full pb-6 pt-6">
-    <div class="d-flex flex-column align-center ga-5" v-if="user">
-      <h1 class="text-3xl font-semibold">Track Your Progress</h1>
+    <div class="flex flex-col align-center ga-5" v-if="user">
+      <h1 class="text-3xl font-semibold mb-8">Track Your Progress</h1>
       <transition-group name="fade" tag="div" mode="out-in">
         <div
           key="key"
-          class="grid grid-cols-1 gridBpMobile:grid-cols-2 gridBpLaptop:grid-cols-3 items-center gap-4"
+          class="grid grid-cols-1 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4"
         >
           <ExerciseProgressCard
             v-if="!isLoading"
@@ -20,7 +20,7 @@
             :key="'skeleton-' + n"
             class="rounded-xl"
             width="350"
-            height="120"
+            height="150"
           >
           </v-skeleton-loader>
         </div>

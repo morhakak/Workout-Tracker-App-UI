@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mx-auto relative"
+    class="mx-auto relative box-border h-[150px] flex flex-col justify-between pb-4"
     max-width="350"
     min-width="350"
     min-height="120"
@@ -12,10 +12,10 @@
       <div class="flex items-center">
         <v-icon
           size="small"
-          class="bg-black text-white rounded-full p-[16px] justify-self-center mr-4"
+          class="bg-black text-white rounded-full p-[16px] mr-4"
           >mdi-dumbbell</v-icon
         >
-        <h2 class="text-center">{{ exerciseHistory.exerciseId }}</h2>
+        <h2 class="text-wrap">{{ exerciseHistory.exerciseId }}</h2>
       </div>
     </template>
     <template #subtitle>
@@ -23,16 +23,18 @@
         {{ exerciseHistory?.sessions.length }} sessions</span
       >
     </template>
-    <p v-if="diff" class="px-2">
-      <v-icon class="ml-3 mr-1 mb-1">{{ weightIcon }}</v-icon> Volume diff:
-      <span class="font-semibold inline-block mx-1" :class="diffClass">
-        {{ computedDiff }}
-      </span>
-    </p>
-    <p v-else class="px-2">
-      <v-icon class="ml-3 mr-1 mb-1">mdi-information</v-icon>
-      Add more workouts sessions
-    </p>
+    <div>
+      <p v-if="diff" class="px-2">
+        <v-icon class="ml-3 mr-1 mb-1">{{ weightIcon }}</v-icon> Volume diff:
+        <span class="font-semibold inline-block mx-1" :class="diffClass">
+          {{ computedDiff }}
+        </span>
+      </p>
+      <p v-else class="px-2">
+        <v-icon class="ml-3 mr-1 mb-1">mdi-information</v-icon>
+        Add more workouts sessions
+      </p>
+    </div>
   </v-card>
 </template>
 
