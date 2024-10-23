@@ -3,6 +3,8 @@ import { ref } from "vue";
 import { useAuthStore } from "./authStore.js";
 import axios from "axios";
 import { useApiErrorStore } from "./apiErrorStore.js";
+import { useUnitUtils } from "./unitUtilsStore.js";
+import { useAppSettingsStore } from "./appSettingsStore.js";
 
 export const useWeighingsStore = defineStore("weighingsStore", () => {
   const weighings = ref([]);
@@ -11,14 +13,18 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
   const MEASUREMENTS_URL = import.meta.env.VITE_MEASUREMENTS_BASE_URL;
   const isFetching = ref(false);
   const isAdding = ref(false);
+  const { preferredUnit } = storeToRefs(useAppSettingsStore());
 
   const addWeight = async ({ weight }) => {
     apiErrorStore.resetMessages();
     isAdding.value = true;
+    const unit = preferredUnit.value;
+    console.log("pref******", unit);
+
     try {
       const response = await axios.post(
         `${MEASUREMENTS_URL}/weight`,
-        { weight },
+        { weight, unit },
         {
           headers: {
             Authorization: `Bearer ${token.value}`,
@@ -45,7 +51,6 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
         },
       });
       weighings.value = response.data.data;
-      console.log(response.data.data);
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
