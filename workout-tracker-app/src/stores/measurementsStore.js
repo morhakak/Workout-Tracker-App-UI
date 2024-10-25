@@ -24,8 +24,6 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
           Authorization: `Bearer ${token.value}`,
         },
       });
-      console.log("measuremnets:", response.data.data);
-
       measurements.value = response.data.data;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
@@ -85,12 +83,12 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
   const normalizedCircumference = computed(() => {
     if (
       !measurements.value ||
-      !measurements.value.circumference ||
-      measurements.value.circumference.length === 0
+      !measurements.value.sortedCircumference ||
+      measurements.value.sortedCircumference.length === 0
     ) {
       return [];
     }
-    return measurements.value.circumference.map((entry) => {
+    return measurements.value.sortedCircumference.map((entry) => {
       const formattedEntry = {};
 
       Object.keys(entry).forEach((key) => {

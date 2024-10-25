@@ -6,7 +6,7 @@
       </h1>
       <UnitSelector />
       <v-card class="px-6 rounded-xl pt-8 border-[1px] border-white">
-        <CircumferencesForm />
+        <CircumferencesForm @added="onAdded" />
       </v-card>
     </v-card>
     <v-card
@@ -29,12 +29,15 @@
           dot-color="black"
         >
           <template #opposite>
-            <div class="text-xs text-wrap">
-              <span>{{ formattedDate(measurement.date).day }}</span
-              ><br />
-              <span>{{ formattedDate(measurement.date).weekday }}</span
-              ><br />
-              <span>{{ formattedDate(measurement.date).time }}</span>
+            <div class="flex gap-3 text-md">
+              <v-icon>mdi-calendar-clock</v-icon>
+              <div class="text-xs text-wrap">
+                <span>{{ formattedDate(measurement.date).day }}</span
+                ><br />
+                <span>{{ formattedDate(measurement.date).weekday }}</span
+                ><br />
+                <span>{{ formattedDate(measurement.date).time }}</span>
+              </div>
             </div>
           </template>
           <v-card
@@ -50,46 +53,6 @@
                   <span>{{ value }} {{ lengthSuffix }}</span>
                 </p>
               </div>
-              <!-- <p class="flex justify-between">
-                <span>Neck:</span>
-                <span>{{ measurement.neck }} {{ lengthSuffix }}</span>
-              </p>
-              <p class="flex justify-between">
-                <span>Shoulders:</span>
-                <span>{{ measurement.shoulders }} {{ lengthSuffix }}</span>
-              </p>
-              <p class="flex justify-between">
-                <span>Chest:</span>
-                <span>{{ measurement.chest }} {{ lengthSuffix }}</span>
-              </p>
-              <p class="flex justify-between">
-                <span>Right Arm:</span>
-                <span>{{ measurement.rightArm }} {{ lengthSuffix }}</span>
-              </p>
-              <p class="flex justify-between">
-                <span>Left Arm:</span
-                ><span>{{ measurement.leftArm }} {{ lengthSuffix }}</span>
-              </p>
-              <p class="flex justify-between">
-                <span>Waist:</span>
-                <span>{{ measurement.waist }} {{ lengthSuffix }}</span>
-              </p>
-              <p class="flex justify-between">
-                <span>Right Thigh:</span>
-                <span>{{ measurement.rightThigh }} {{ lengthSuffix }}</span>
-              </p>
-              <p class="flex justify-between">
-                <span>Left Thigh:</span>
-                <span>{{ measurement.leftThigh }} {{ lengthSuffix }}</span>
-              </p>
-              <p class="flex justify-between">
-                <span>Right Calf:</span>
-                <span>{{ measurement.rightCalf }} {{ lengthSuffix }}</span>
-              </p>
-              <p class="flex justify-between">
-                <span>Left Calf:</span>
-                <span>{{ measurement.leftCalf }} {{ lengthSuffix }}</span>
-              </p> -->
             </div>
           </v-card>
         </v-timeline-item>
@@ -121,6 +84,10 @@ onMounted(async () => {
   await measurementsStore.fetchMeasurements();
   console.log(normalizedCircumference.value);
 });
+
+const onAdded = async () => {
+  await measurementsStore.fetchMeasurements();
+};
 
 const { toLocalDate } = useDateFormatter();
 

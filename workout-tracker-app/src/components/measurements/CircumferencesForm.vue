@@ -216,6 +216,8 @@ const rules = {
   },
 };
 
+const emits = defineEmits(["added"]);
+
 const v$ = useVuelidate(rules, state);
 
 async function submitForm() {
@@ -223,6 +225,7 @@ async function submitForm() {
 
   if (!v$.value.$invalid) {
     await measurementsStore.addMeasurement(state);
+    emits("added");
   }
 }
 </script>
