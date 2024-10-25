@@ -10,6 +10,7 @@
     :suffix="suffix"
     :hint="hint"
     rounded="lg"
+    type="number"
   />
 </template>
 
