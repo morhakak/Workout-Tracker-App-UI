@@ -17,6 +17,7 @@ import MeasurementsView from "./views/MeasurementsView.vue";
 import SettingsView from "./views/SettingsView.vue";
 import CircumferencesView from "./views/CircumferencesView.vue";
 import WeighingsView from "./views/WeighingsView.vue";
+import UserInfoView from "./views/UserInfoView.vue";
 
 const routes = [
   {
@@ -53,6 +54,12 @@ const routes = [
     path: "/settings",
     name: "settings",
     component: SettingsView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/user-info",
+    name: "user-info",
+    component: UserInfoView,
     meta: { requiresAuth: true },
   },
   {

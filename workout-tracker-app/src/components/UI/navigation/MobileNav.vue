@@ -73,7 +73,7 @@
         </template>
       </v-list-item>
     </v-list>
-    <template #append>
+    <!-- <template #append>
       <UserItem />
       <div class="p-2">
         <v-btn
@@ -85,6 +85,77 @@
           >Log out</v-btn
         >
       </div>
+    </template> -->
+    <template #append>
+      <v-menu
+        v-model="userMenuOpen"
+        :close-on-content-click="false"
+        location="top"
+      >
+        <template v-slot:activator="{ props }">
+          <!-- <v-icon v-bind="props"> mdi-unfold-more-horizontal </v-icon> -->
+          <UserItem v-bind="props" />
+        </template>
+
+        <v-card :min-width="260" class="relative right-[4px] bottom-2">
+          <v-list>
+            <v-list-item
+              prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
+              subtitle="Founder of Vuetify"
+              title="John Leider"
+            >
+              <template v-slot:append>
+                <v-btn icon="mdi-heart" variant="text"></v-btn>
+              </template>
+            </v-list-item>
+          </v-list>
+
+          <v-divider></v-divider>
+
+          <v-list>
+            <v-list-item>
+              <v-switch
+                color="purple"
+                label="Enable messages"
+                hide-details
+              ></v-switch>
+            </v-list-item>
+
+            <v-list-item>
+              <v-switch
+                color="purple"
+                label="Enable hints"
+                hide-details
+              ></v-switch>
+            </v-list-item>
+          </v-list>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <div class="w-full">
+              <v-btn
+                v-if="token"
+                @click="$emit(`logout`)"
+                prepend-icon="mdi-logout"
+                block
+                variant="outlined"
+                >Log out</v-btn
+              >
+            </div>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
+      <!-- <UserItem @open-menu="onOpenMenu" /> -->
+      <!-- <div class="p-2">
+        <v-btn
+          v-if="token"
+          @click="$emit(`logout`)"
+          prepend-icon="mdi-logout"
+          block
+          color="black"
+          >Log out</v-btn
+        >
+      </div> -->
     </template>
   </v-navigation-drawer>
 </template>
@@ -106,12 +177,16 @@ const drawer = ref(false);
 const router = useRouter();
 const mobileNavWidth = ref(300);
 const isScrolled = ref(false);
+const userMenuOpen = ref(false);
 
 defineEmits(["logout"]);
 
 watchEffect(() => {
   if (width.value > 600 && width.value <= 1025) mobileNavWidth.value = 400;
   if (width.value < 600) mobileNavWidth.value = width.value;
+  if (userMenuOpen && width.value > 600) {
+    userMenuOpen.value = false;
+  }
 });
 
 onMounted(() => {
