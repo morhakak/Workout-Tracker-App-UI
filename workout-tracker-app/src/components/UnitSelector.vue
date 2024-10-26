@@ -1,13 +1,13 @@
 <template>
   <div class="flex justify-center items-center gap-3">
-    <p class="text-lg">Metric</p>
+    <p>Metric</p>
     <v-switch
       class="flex"
       v-model="preferredUnit"
       false-value="metric"
       true-value="imperial"
     />
-    <p class="text-lg">Imperial</p>
+    <p>Imperial</p>
   </div>
 </template>
 

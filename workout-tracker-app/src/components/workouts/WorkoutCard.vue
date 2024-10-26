@@ -15,17 +15,17 @@
           class="bg-black text-white rounded-full p-[16px] justify-self-center mr-4"
           >mdi-weight-lifter</v-icon
         >
-        <h2 class="text-center">{{ workout.name }}</h2>
+        <h2 class="text-center">{{ workout?.name }}</h2>
       </div>
     </template>
     <template #subtitle>
-      <span class="ml-12"> {{ workout.exercises.length }} exercises</span>
+      <span class="ml-12"> {{ workout?.exercises.length }} exercises</span>
     </template>
 
     <v-card-actions>
       <div class="flex justify-between items-center w-full px-2">
         <p class="text-sm font-medium">
-          {{ toLocalDate(workout.createdDate) }}
+          {{ toLocalDate(workout?.createdDate) }}
         </p>
         <v-menu transition="slide-x-transition" location="start" offset="8">
           <template v-slot:activator="{ props }">
