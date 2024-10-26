@@ -1,6 +1,9 @@
 <template>
-  <v-container class="flex flex-col items-center">
-    <v-card class="px-12 w-[500px] rounded-xl pb-8 pt-8 mb-8">
+  <v-container
+    fluid
+    class="flex flex-col items-center lg:flex-row lg:gap-5 lg:justify-center lg:items-start"
+  >
+    <v-card class="px-12 w-[450px] rounded-xl pb-8 pt-8 mb-8">
       <h1 class="text-center text-3xl font-bold mb-2">
         Circumference Measurement
       </h1>
@@ -10,7 +13,7 @@
       </v-card>
     </v-card>
     <v-card
-      class="flex flex-col justify-center items-center px-12 w-[500px] rounded-xl pb-8 pt-8"
+      class="flex flex-col justify-center items-center px-12 w-[450px] rounded-xl pb-8 pt-8"
     >
       <h2 class="text-center text-3xl font-semibold mb-2 tracking-wide">
         History

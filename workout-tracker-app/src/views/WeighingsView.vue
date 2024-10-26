@@ -1,6 +1,9 @@
 <template>
-  <v-container class="flex flex-col items-center gap-8">
-    <v-card class="px-12 w-[500px] rounded-xl pb-8 pt-8">
+  <v-container
+    fluid
+    class="flex flex-col items-center gap-8 lg:flex-row lg:gap-5 lg:justify-center lg:items-start"
+  >
+    <v-card class="w-[450px] rounded-xl pb-8 pt-8">
       <div class="flex mt-6 mb-6 justify-center items-center gap-2">
         <v-icon class="text-4xl">mdi-scale</v-icon>
         <h1 class="text-center text-3xl font-semibold tracking-wide">
@@ -11,7 +14,7 @@
       <WeightForm @weightAdded="onWeightAdded" class="mt-8" />
     </v-card>
     <v-card
-      class="flex flex-col justify-center items-center px-12 w-[500px] rounded-xl pb-8 pt-8"
+      class="flex flex-col justify-center items-center w-[450px] rounded-xl pb-8 pt-8"
     >
       <h2 class="text-center text-3xl font-semibold mb-2 tracking-wide">
         History
