@@ -17,7 +17,7 @@
           <p>•</p> -->
           <!-- <p>Yavne, Israel</p> -->
           <div class="flex items-center gap-2 text-sm">
-            <v-icon>mdi-calendar-blank-outline</v-icon>
+            <v-icon size="small">mdi-calendar-blank-outline</v-icon>
             <p>Joined {{ joinedDate }}</p>
           </div>
         </div>
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="mt-8">
-      <v-card class="flex flex-col items-start w-[500px] rounded-xl pb-8 pt-8">
+      <v-card class="flex flex-col items-start w-max pr-6 rounded-xl pb-8 pt-8">
         <h2 class="ml-8 text-center text-xl mb-2 tracking-wide">Activity</h2>
         <v-timeline
           direction="vertical"
@@ -91,13 +91,18 @@
           class="mt-8"
         >
           <v-timeline-item
-            v-for="(measurement, i) in 5"
-            :key="i"
-            icon="mdi-tape-measure"
-            dot-color="black"
+            v-for="activity in activities"
+            :key="activity"
+            :icon="getIcon(activity)"
+            :dot-color="getDotColor(activity)"
             class="place-self-start"
           >
-            <div class="text-md py-1 w-full">Create new workout</div>
+            <p class="text-sm py-1 w-full text-gray-500">
+              {{ activityDate(activity?.date) }}
+            </p>
+            <p class="text-md py-1 w-full">
+              {{ activity?.activityValue }}
+            </p>
           </v-timeline-item>
         </v-timeline>
       </v-card>
@@ -109,10 +114,52 @@
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
 import moment from "moment";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
+import { useUsersStore } from "../stores/usersStore";
+
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
+
+const usersStore = useUsersStore();
+const { activities, isFetching } = storeToRefs(usersStore);
+
 const joinedDate = computed(() =>
   moment(user.createdAt).local().format("MMM YYYY")
 );
+
+onMounted(async () => {
+  await usersStore.getActivities();
+});
+
+const activityDate = () => moment(user.createdAt).local().format("HH:mm, ll");
+
+const getIcon = (activity) => {
+  if (!activity) return;
+
+  switch (activity.activityType) {
+    case "weighing":
+      return "mdi-scale";
+    case "wircumference":
+      return "mdi-tape-measure";
+    case "wser":
+      return "mdi-account";
+    case "workout":
+      return "mdi-weight-lifter";
+  }
+};
+
+const getDotColor = (activity) => {
+  if (!activity) return;
+
+  switch (activity.activityType) {
+    case "weighing":
+      return "green";
+    case "circumference":
+      return "red";
+    case "user":
+      return "blue";
+    case "workout":
+      return "yellow";
+  }
+};
 </script>
