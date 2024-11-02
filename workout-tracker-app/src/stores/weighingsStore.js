@@ -13,6 +13,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
   const MEASUREMENTS_URL = import.meta.env.VITE_MEASUREMENTS_BASE_URL;
   const isFetching = ref(false);
   const isAdding = ref(false);
+  const isLoading = ref(false);
   const { preferredUnit } = storeToRefs(useAppSettingsStore());
 
   const addWeight = async ({ weight }) => {
@@ -59,6 +60,25 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     }
   };
 
+  const deleteWeighing = async (id) => {
+    isLoading.value = true;
+    apiErrorStore.resetMessages();
+    try {
+      await axios.delete(`${MEASUREMENTS_URL}/weight/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      });
+      weighings.value = weighings.value.filter((w) => w._id !== id);
+      return true;
+    } catch (error) {
+      apiErrorStore.handleErrorResponse(error);
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   const normalizedWeighings = computed(() => {
     if (preferredUnit.value === "imperial") {
       return weighings.value.map((w) => ({
@@ -73,7 +93,9 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     fetchWeighings,
     normalizedWeighings,
     addWeight,
+    deleteWeighing,
     isFetching,
+    isLoading,
     isAdding,
   };
 });

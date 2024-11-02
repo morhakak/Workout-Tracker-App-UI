@@ -1,10 +1,4 @@
 <template>
-  <div class="flex justify-center mb-6 gap-2">
-    <v-icon class>mdi-tape-measure</v-icon>
-    <h2 class="text-center text-xl font-semibold col-span-2 mb-6">
-      Circumferences
-    </h2>
-  </div>
   <form
     @submit.prevent="submitForm"
     class="mb-8 grid grid-cols-2 justify-items-center gap-3"
@@ -102,10 +96,10 @@
     />
     <v-btn
       color="black"
-      class="text-lg col-span-2 normal-case"
+      class="text-lg col-span-2 normal-case rounded-xl"
       height="45"
       type="submit"
-      :loading="isLoading"
+      :loading="isAdding"
     >
       Add Measuremnt
     </v-btn>
@@ -123,7 +117,7 @@ import { useMeasurementsStore } from "../../stores/measurementsStore";
 
 const { lengthSuffix } = storeToRefs(useUnitUtils());
 const measurementsStore = useMeasurementsStore();
-const { isLoading } = storeToRefs(measurementsStore);
+const { isAdding } = storeToRefs(measurementsStore);
 const initialState = {
   neck: 0.0,
   shoulders: 0.0,

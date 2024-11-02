@@ -13,6 +13,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
   const MEASUREMENTS_URL = import.meta.env.VITE_MEASUREMENTS_BASE_URL;
   const isLoading = ref(false);
   const isFetching = ref(false);
+  const isAdding = ref(false);
   const { preferredUnit } = storeToRefs(useAppSettingsStore());
 
   const fetchMeasurements = async () => {
@@ -24,7 +25,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
           Authorization: `Bearer ${token.value}`,
         },
       });
-      measurements.value = response.data.data;
+      measurements.value = response.data.data.sortedCircumference;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
@@ -59,7 +60,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
 
   const addMeasurement = async (measurement) => {
     apiErrorStore.resetMessages();
-    isLoading.value = true;
+    isAdding.value = true;
     try {
       const response = await axios.post(
         `${MEASUREMENTS_URL}/circumference`,
@@ -75,20 +76,36 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
       apiErrorStore.handleErrorResponse(error);
     } finally {
       setTimeout(() => {
-        isLoading.value = false;
+        isAdding.value = false;
       }, 1000);
     }
   };
 
+  const deleteCircumference = async (id) => {
+    isLoading.value = true;
+    apiErrorStore.resetMessages();
+    try {
+      await axios.delete(`${MEASUREMENTS_URL}/circumference/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      });
+      measurements.value = measurements.value.filter((m) => m._id !== id);
+      return true;
+    } catch (error) {
+      apiErrorStore.handleErrorResponse(error);
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   const normalizedCircumference = computed(() => {
-    if (
-      !measurements.value ||
-      !measurements.value.sortedCircumference ||
-      measurements.value.sortedCircumference.length === 0
-    ) {
+    if (!measurements.value) {
       return [];
     }
-    return measurements.value.sortedCircumference.map((entry) => {
+
+    return measurements.value?.map((entry) => {
       const formattedEntry = {};
 
       Object.keys(entry).forEach((key) => {
@@ -110,8 +127,10 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     fetchMeasurements,
     addHeight,
     addMeasurement,
+    deleteCircumference,
     normalizedCircumference,
     isLoading,
     isFetching,
+    isAdding,
   };
 });
