@@ -68,7 +68,9 @@ const logoutDialog = ref(false);
 const route = useRoute();
 
 const mainClass = computed(() => {
-  return route.path === "/auth/login" || route.path === "/auth/register"
+  return route.path === "/auth/login" ||
+    route.path === "/auth/register" ||
+    route.path === "/welcome"
     ? "pt-0"
     : "pt-20 xl:pt-6";
 });

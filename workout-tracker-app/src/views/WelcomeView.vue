@@ -1,9 +1,7 @@
 <template>
-  <div
-    class="flex flex-col items-center justify-between h-screen bg-gray-900 w-full"
-  >
+  <div class="flex flex-col items-center justify-between min-h-screen">
     <h1
-      class="text-white text-center font-semibold text-4xl justify-self-center align-self-center mt-28"
+      class="text-white text-center font-semibold text-4xl justify-self-center align-self-center mt-20"
     >
       Welcome to<br />
       Workout Tracker

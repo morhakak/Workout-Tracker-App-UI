@@ -1,6 +1,6 @@
 <template>
   <AuthLayout :isLoginView="false">
-    <h2 class="text-center text-3xl text-black font-bold mt-4">
+    <h2 class="text-center text-3xl font-bold mt-4 uppercase tracking-wider">
       Welcome To Workout Tracker!
     </h2>
     <h2 class="text-center text-xl text-neutral-400 font-semibold mt-4">
@@ -9,10 +9,8 @@
     <form @submit.prevent="submitForm" class="mb-8 mt-8">
       <v-text-field
         prepend-inner-icon="mdi-account"
-        class="text-black font-semibold"
+        class="font-semibold mt-1"
         variant="outlined"
-        color="black"
-        base-color="black"
         v-model="state.name"
         :counter="10"
         :error-messages="v$.name.$errors.map((e) => e.$message)"
@@ -23,26 +21,22 @@
       ></v-text-field>
       <v-text-field
         prepend-inner-icon="mdi-email"
-        class="text-black font-semibold"
+        class="font-semibold mt-1"
         variant="outlined"
-        color="black"
-        base-color="black"
         v-model="state.email"
         :error-messages="v$.email.$errors.map((e) => e.$message)"
         label="E-mail"
         required
         @blur="v$.email.$touch"
         @input="v$.email.$touch"
-        style="font-size: 1.125rem; color: black"
+        style="font-size: 1.125rem"
       >
       </v-text-field>
       <v-text-field
         prepend-inner-icon="mdi-lock"
-        class="text-black font-semibold"
+        class="font-semibold mt-1"
         variant="outlined"
-        color="white"
         type="password"
-        base-color="black"
         v-model="state.password"
         :error-messages="v$.password.$errors.map((e) => e.$message)"
         label="Password"
@@ -51,7 +45,6 @@
         @input="v$.password.$touch"
       ></v-text-field>
       <v-btn
-        color="black"
         class="me-4 w-full text-lg mt-4"
         height="45"
         type="submit"

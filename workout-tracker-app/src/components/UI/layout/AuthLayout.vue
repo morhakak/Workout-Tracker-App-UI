@@ -9,7 +9,7 @@
         </div>
         <p class="text-center text-neutral-400 font-semibold">
          {{isLoginView ?  `Don't have an account yet?` : `Already registered?`}}
-          <v-btn variant="plain" color="black" :to="to"> {{isLoginView ?  `Register` : `Login`}}</v-btn>
+          <RouterLink :to="to"> {{isLoginView ?  `Register` : `Login`}}</RouterLink>
         </p>
       </div>
       <img
@@ -25,7 +25,7 @@
         </div>
       </template>
       <template v-slot:actions>
-        <v-btn color="black" variant="text" @click="snackbarError = false">
+        <v-btn  variant="text" @click="snackbarError = false">
           Close
         </v-btn>
       </template>
@@ -36,6 +36,7 @@
 import { computed, onBeforeMount, ref, watchEffect } from 'vue';
 import { storeToRefs } from "pinia";
 import { useApiErrorStore } from '../../../stores/apiErrorStore';
+import { RouterLink } from 'vue-router';
 const props = defineProps(["isLoginView"]);
 const snackbarError = ref(false);
 const apiErrorStore = useApiErrorStore();

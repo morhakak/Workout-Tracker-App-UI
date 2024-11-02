@@ -1,6 +1,6 @@
 <template>
   <AuthLayout :isLoginView="true">
-    <h1 class="text-center text-3xl text-black font-bold mt-8 uppercase">
+    <h1 class="text-center text-3xl font-bold mt-8 uppercase tracking-wider">
       Welcome Back To Workout Tracker!
     </h1>
     <h2 class="text-center text-xl text-neutral-500 font-semibold mt-2">
@@ -9,10 +9,8 @@
     <form @submit.prevent="submitForm" class="mb-8">
       <v-text-field
         prepend-inner-icon="mdi-email"
-        class="text-black font-semibold mt-8"
+        class="font-semibold mt-8"
         variant="outlined"
-        color="black"
-        base-color="black"
         v-model="state.email"
         :error-messages="v$.email.$errors.map((e) => e.$message)"
         label="E-mail"
@@ -25,10 +23,8 @@
       <v-text-field
         type="password"
         prepend-inner-icon="mdi-lock"
-        class="text-black font-semibold"
+        class="font-semibold mt-1"
         variant="outlined"
-        color="black"
-        base-color="black"
         v-model="state.password"
         :error-messages="v$.password.$errors.map((e) => e.$message)"
         label="Password"
@@ -37,7 +33,6 @@
         @input="v$.password.$touch"
       ></v-text-field>
       <v-btn
-        color="black"
         class="me-4 w-full text-lg mt-4"
         height="45"
         type="submit"

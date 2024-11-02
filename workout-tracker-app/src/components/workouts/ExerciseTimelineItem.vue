@@ -1,12 +1,15 @@
 <template>
   <v-timeline-item dot-color="black" size="large" icon="mdi-weight-lifter">
     <template v-slot:opposite>
-      <div class="text-sm text-wrap">
-        <span>{{ formattedDate.day }}</span
-        ><br />
-        <span>{{ formattedDate.weekday }}</span
-        ><br />
-        <span>{{ formattedDate.time }}</span>
+      <div class="flex gap-3 text-md items-center">
+        <v-icon>mdi-calendar-clock</v-icon>
+        <div class="text-sm text-wrap">
+          <span>{{ formattedDate.day }}</span
+          ><br />
+          <span>{{ formattedDate.weekday }}</span
+          ><br />
+          <span>{{ formattedDate.time }}</span>
+        </div>
       </div>
     </template>
 
