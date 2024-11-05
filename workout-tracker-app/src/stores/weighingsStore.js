@@ -1,5 +1,5 @@
 import { defineStore, storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useAuthStore } from "./authStore.js";
 import axios from "axios";
 import { useApiErrorStore } from "./apiErrorStore.js";
@@ -15,15 +15,16 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
   const isAdding = ref(false);
   const isLoading = ref(false);
   const { preferredUnit } = storeToRefs(useAppSettingsStore());
+  const weighingToUpdate = ref(null);
 
-  const addWeight = async ({ weight }) => {
+  const addWeighing = async ({ weight }) => {
     apiErrorStore.resetMessages();
     isAdding.value = true;
     const unit = preferredUnit.value;
 
     try {
       const response = await axios.post(
-        `${MEASUREMENTS_URL}/weight`,
+        `${MEASUREMENTS_URL}/weighings`,
         { weight, unit },
         {
           headers: {
@@ -31,7 +32,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
           },
         }
       );
-      measurements.value = response.data.data;
+      weighings.value.push(response.data.data);
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
@@ -45,11 +46,12 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     apiErrorStore.resetMessages();
     isFetching.value = true;
     try {
-      const response = await axios.get(`${MEASUREMENTS_URL}/weight`, {
+      const response = await axios.get(`${MEASUREMENTS_URL}/weighings`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
       });
+
       weighings.value = response.data.data;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
@@ -60,11 +62,41 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     }
   };
 
+  const updateWeighing = async (weighing) => {
+    apiErrorStore.resetMessages();
+    isAdding.value = true;
+    const unit = preferredUnit.value;
+
+    if (!weighing || !weighing.weight) {
+      console.log("You sent invalid weighing", weighing);
+    }
+
+    console.log("Weighing to update", weighing);
+
+    try {
+      const response = await axios.put(
+        `${MEASUREMENTS_URL}/weighings/${weighing._id}`,
+        { weight: weighing.weight, unit },
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      );
+    } catch (error) {
+      apiErrorStore.handleErrorResponse(error);
+    } finally {
+      setTimeout(() => {
+        isAdding.value = false;
+      }, 1000);
+    }
+  };
+
   const deleteWeighing = async (id) => {
     isLoading.value = true;
     apiErrorStore.resetMessages();
     try {
-      await axios.delete(`${MEASUREMENTS_URL}/weight/${id}`, {
+      await axios.delete(`${MEASUREMENTS_URL}/weighings/${id}`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
@@ -80,22 +112,27 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
   };
 
   const normalizedWeighings = computed(() => {
-    if (preferredUnit.value === "imperial") {
-      return weighings.value.map((w) => ({
-        ...w,
-        value: convertKgToLbs(w.value).toFixed(1),
-      }));
-    }
-    return weighings.value.map((w) => ({ ...w, value: w.value.toFixed(1) }));
+    if (!Array.isArray(weighings.value) || weighings.value.length == 0)
+      return [];
+
+    return weighings.value.map((w) => {
+      const weight =
+        preferredUnit.value === "imperial"
+          ? convertKgToLbs(w.weight).toFixed(1)
+          : w.weight.toFixed(1);
+      return { ...w, weight };
+    });
   });
 
   return {
     fetchWeighings,
     normalizedWeighings,
-    addWeight,
+    addWeighing,
+    updateWeighing,
     deleteWeighing,
     isFetching,
     isLoading,
     isAdding,
+    weighingToUpdate,
   };
 });

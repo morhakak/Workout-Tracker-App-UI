@@ -3,7 +3,7 @@
     @submit.prevent="submitForm"
     class="relative flex justify-center items-center"
   >
-    <v-tooltip v-model="show" location="left">
+    <!-- <v-tooltip v-model="show" location="left">
       <template v-slot:activator="{ props }">
         <v-icon v-bind="props" color="grey-lighten-1" class="self-start">
           mdi-help-circle-outline</v-icon
@@ -22,8 +22,8 @@
           anxiety or disordered eating
         </p>
       </div>
-    </v-tooltip>
-    <div class="flex flex-col justify-center items-center gap-3">
+    </v-tooltip> -->
+    <div class="flex flex-col justify-center items-center">
       <MeasurementInput
         label="Weight"
         v-model="state.weight"
@@ -33,14 +33,38 @@
         :suffix="weightSuffix"
       />
       <!-- <VDateInput label="Date input"></VDateInput> -->
-      <v-btn
-        class="text-lg normal-case rounded-xl mt-4"
-        type="submit"
-        variant="outlined"
-        :loading="isAdding"
-      >
-        Add Weighing
-      </v-btn>
+      <TransitionGroup name="fade">
+        <div v-if="weighingToUpdate" class="space-x-3">
+          <v-btn
+            class="normal-case rounded-xl transition-all duration-300"
+            variant="outlined"
+            size="default"
+            :loading="isAdding"
+            type="submit"
+            :disabled="isUnchanged"
+          >
+            Update
+          </v-btn>
+          <v-btn
+            @click="cancelUpdate"
+            size="default"
+            class="normal-case bg-red-700 rounded-xl"
+            variant="outlined"
+          >
+            Discard
+          </v-btn>
+        </div>
+        <v-btn
+          v-if="!weighingToUpdate"
+          type="submit"
+          class="normal-case rounded-xl transition-all duration-300"
+          variant="outlined"
+          size="default"
+          :loading="isAdding"
+        >
+          Add Weighing
+        </v-btn>
+      </TransitionGroup>
     </div>
   </form>
 </template>
@@ -48,52 +72,106 @@
 <script setup>
 import MeasurementInput from "./MeasurementInput.vue";
 import { useVuelidate } from "@vuelidate/core";
-import { numeric, helpers } from "@vuelidate/validators";
+import { numeric, between } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
-import { reactive, ref, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { useUnitUtils } from "../../stores/unitUtilsStore";
 import { useWeighingsStore } from "../../stores/weighingsStore";
 
 const weighingsStore = useWeighingsStore();
-const { isAdding } = storeToRefs(weighingsStore);
+const { isAdding, weighingToUpdate } = storeToRefs(weighingsStore);
 const { weightSuffix } = storeToRefs(useUnitUtils());
-const show = ref(false);
-const date = ref(null);
 
-watch(date, () => {
-  const newDate = new Date(date.value);
-  console.log(newDate);
-});
-const initialState = {
+let initialState = {
   weight: 0.0,
 };
 
-const state = reactive({
+let state = reactive({
   ...initialState,
 });
 
-const greaterThanZero = (value) => parseInt(value) > 0;
+watch(
+  weighingToUpdate,
+  () => {
+    if (weighingToUpdate.value) {
+      Object.assign(state, weighingToUpdate.value);
+    }
+  },
+  { immediate: true }
+);
+
+function roundToOneDecimal(value) {
+  if (value && value.toString().includes(".")) {
+    const decimalIndex = value.toString().indexOf(".");
+    const decimalPlaces = value.toString().length - decimalIndex - 1;
+
+    if (decimalPlaces > 1) {
+      return parseFloat(value).toFixed(1);
+    }
+  }
+  return value;
+}
+
+watch(
+  () => state.weight,
+  (newValue) => {
+    state.weight = roundToOneDecimal(newValue);
+  }
+);
+
+const isUnchanged = computed(() => {
+  return (
+    weighingToUpdate.value && weighingToUpdate.value.weight === state.weight
+  );
+});
 
 const rules = {
   weight: {
     numeric,
-    greaterThanZero: helpers.withMessage(
-      "value must be greater than 0",
-      greaterThanZero
-    ),
+    betweenValue: between(1, 999),
   },
 };
 
 const v$ = useVuelidate(rules, state);
 
-const emits = defineEmits(["weightAdded"]);
+const emits = defineEmits(["weight-added", "weight-updated"]);
 
 async function submitForm() {
   v$.value.$validate();
-
+  console.log(weighingToUpdate.value);
   if (!v$.value.$invalid) {
-    await weighingsStore.addWeight(state);
-    emits("weightAdded");
+    if (weighingToUpdate.value == null) {
+      await weighingsStore.addWeighing(state);
+      emits("weight-added");
+      console.log("add");
+      return;
+    }
+
+    console.log("update");
+    await weighingsStore.updateWeighing(state);
+    emits("weight-updated");
   }
 }
+
+const cancelUpdate = () => {
+  weighingToUpdate.value = null;
+  state.weight = 0.0;
+};
 </script>
+
+<style>
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-leave-active {
+  position: absolute;
+}
+</style>
