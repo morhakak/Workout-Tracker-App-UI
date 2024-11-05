@@ -95,10 +95,10 @@
       :onInput="v$.leftCalf.$touch"
     />
     <v-btn
-      color="black"
       class="text-lg col-span-2 normal-case rounded-xl"
       height="45"
       type="submit"
+      variant="outlined"
       :loading="isAdding"
     >
       Add Measuremnt

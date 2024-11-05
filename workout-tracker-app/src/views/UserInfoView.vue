@@ -82,8 +82,13 @@
       </div>
     </div>
     <div class="mt-8">
-      <v-card class="flex flex-col items-start w-max pr-6 rounded-xl pb-8 pt-8">
-        <h2 class="ml-8 text-center text-xl mb-2 tracking-wide">Activity</h2>
+      <v-card
+        class="flex flex-col items-start min-w-max w-max pr-6 rounded-xl pb-8 pt-8"
+      >
+        <div class="flex gap-2 ml-6 items-center">
+          <v-icon size="x-large" icon="mdi-pulse"></v-icon>
+          <h2 class="text-center text-xl tracking-wide">Activity</h2>
+        </div>
         <v-timeline
           direction="vertical"
           side="end"
@@ -95,16 +100,23 @@
             :key="activity"
             :icon="getIcon(activity)"
             :dot-color="getDotColor(activity)"
+            size="x-small"
             class="place-self-start"
           >
-            <p class="text-sm py-1 w-full text-gray-500">
+            <p class="text-sm w-full text-gray-500">
               {{ activityDate(activity?.date) }}
             </p>
-            <p class="text-md py-1 w-full">
+            <p class="text-md w-full">
               {{ activity?.activityValue }}
             </p>
           </v-timeline-item>
         </v-timeline>
+        <v-progress-circular
+          v-if="isFetching"
+          size="50"
+          indeterminate
+          class="mt-8 self-center"
+        ></v-progress-circular>
       </v-card>
     </div>
   </v-container>

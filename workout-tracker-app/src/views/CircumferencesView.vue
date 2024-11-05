@@ -5,9 +5,9 @@
   >
     <v-card class="px-12 w-[450px] rounded-xl pb-8 pt-8 mb-8">
       <div class="flex items-center justify-center mb-4">
-        <v-icon class="text-4xl">mdi-tape-measure</v-icon>
-        <h1 class="text-center text-3xl font-semibold tracking-wider">
-          Circumference
+        <!-- <v-icon class="text-4xl">mdi-tape-measure</v-icon> -->
+        <h1 class="text-center text-3xl font-medium tracking-wider">
+          Measure Your Progress
         </h1>
       </div>
       <UnitSelector />
@@ -17,14 +17,14 @@
       class="flex flex-col justify-center items-center px-12 w-[500px] rounded-xl pb-8 pt-8"
     >
       <div class="flex mb-6 justify-center items-center gap-2">
-        <v-icon class="text-4xl">mdi-clipboard-text-clock-outline</v-icon>
-        <h2 class="text-center text-3xl font-semibold tracking-wider">
-          History
+        <v-icon class="text-4xl">mdi-tape-measure</v-icon>
+        <h2 class="text-center text-3xl font-medium tracking-wider">
+          Circumferences
         </h2>
       </div>
       <div class="max-h-screen overflow-y-auto px-6 custom-scrollbar mt-6">
         <v-timeline
-          v-if="!isFetching"
+          v-if="!isFetching && normalizedCircumference.length"
           direction="vertical"
           side="end"
           truncate-line="both"
@@ -75,10 +75,7 @@
             >
               <div class="text-md py-1 w-full">
                 <div v-for="(value, key) in measurement" :key="key">
-                  <p
-                    class="flex justify-between"
-                    v-if="key !== '_id' && key !== 'date'"
-                  >
+                  <p class="flex justify-between" v-if="filterItemsByKey(key)">
                     <span class="capitalize">{{ transformString(key) }}:</span>
                     <span>{{ value }} {{ lengthSuffix }}</span>
                   </p>
@@ -105,6 +102,9 @@
         indeterminate
         class="mt-8"
       ></v-progress-circular>
+      <p v-if="!isFetching && normalizedCircumference.length == 0">
+        There are no measuremnets yet
+      </p>
     </v-card>
     <DeleteDialog
       v-model:isOpen="deleteDialog"
@@ -123,7 +123,7 @@ import CircumferencesForm from "../components/measurements/CircumferencesForm.vu
 import UnitSelector from "../components/UnitSelector.vue";
 import { useMeasurementsStore } from "../stores/measurementsStore";
 import { useUnitUtils } from "../stores/unitUtilsStore";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useDateFormatter } from "../composables/useDateFormatter";
 import DeleteDialog from "../components/UI/dialogs/DeleteDialog.vue";
 
@@ -140,6 +140,7 @@ onMounted(async () => {
 
 const onAdded = async () => {
   await measurementsStore.fetchMeasurements();
+  console.log("on added ran");
 };
 
 const deleteCircumference = async () => {
@@ -157,6 +158,10 @@ const { toLocalDate } = useDateFormatter();
 const dateWrapper = (date) => {
   const [day, weekday, time] = date.split(`,`);
   return { day, weekday, time };
+};
+
+const filterItemsByKey = (key) => {
+  return key !== "_id" && key !== "date" && key !== "__v" && key !== "userId";
 };
 
 const formattedDate = (date) => dateWrapper(toLocalDate(date));

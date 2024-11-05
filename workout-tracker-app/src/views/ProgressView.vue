@@ -5,7 +5,7 @@
       <transition-group name="fade" tag="div" mode="out-in">
         <div
           key="key"
-          class="grid grid-cols-1 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4"
+          class="grid grid-cols-1 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4 overflow-x-hidden pb-4"
         >
           <ExerciseProgressCard
             v-if="!isLoading"
