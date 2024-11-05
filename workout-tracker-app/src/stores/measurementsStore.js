@@ -20,12 +20,14 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     apiErrorStore.resetMessages();
     isFetching.value = true;
     try {
-      const response = await axios.get(`${MEASUREMENTS_URL}/circumference`, {
+      const response = await axios.get(`${MEASUREMENTS_URL}/circumferences`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
       });
-      measurements.value = response.data.data.sortedCircumference;
+      console.log("c:", response.data.data);
+
+      measurements.value = response.data.data;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
@@ -63,7 +65,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     isAdding.value = true;
     try {
       const response = await axios.post(
-        `${MEASUREMENTS_URL}/circumference`,
+        `${MEASUREMENTS_URL}/circumferences`,
         measurement,
         {
           headers: {
@@ -71,7 +73,6 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
           },
         }
       );
-      measurements.value = response.data.data;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
@@ -101,6 +102,8 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
   };
 
   const normalizedCircumference = computed(() => {
+    if (!Array.isArray(measurements.value)) return;
+
     if (!measurements.value) {
       return [];
     }
