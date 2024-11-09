@@ -14,10 +14,14 @@
         <v-container class="flex justify-center">
           <v-progress-circular
             v-if="isLoading"
-            color="primary"
             indeterminate
           ></v-progress-circular>
-          <v-timeline v-if="!isLoading" side="end" class="pb-4">
+          <v-timeline
+            v-if="!isLoading"
+            side="end"
+            truncate-line="both"
+            class="pb-4"
+          >
             <ExerciseTimelineItem
               v-for="session in existingExercise?.sessions"
               :key="existingExercise?._id"

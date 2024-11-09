@@ -1,55 +1,40 @@
 <template>
   <v-container fluid class="px-8 flex flex-col">
     <div class="flex items-center justify-start gap-2 m-2 rounded w-max mb-4">
-      <div
-        class="w-14 h-14 text-xl mr-4 border-[1px] border-white rounded-full flex justify-center items-center capitalize"
-      >
-        {{ user?.name[0] }}
-      </div>
       <div>
-        <p class="mb-0 font-semibold capitalize text-2xl">
-          {{ user?.name }} Hakak
-        </p>
-        <div class="flex items-center text-sm gap-3">
+        <div class="flex items-center">
+          <div
+            class="flex size-14 text-xl mr-4 border-[1px] border-white rounded-full justify-center items-center capitalize"
+          >
+            {{ user?.name[0] }}
+          </div>
+          <p class="mb-0 font-semibold capitalize text-2xl">
+            {{ user?.name }} Hakak
+          </p>
+        </div>
+        <div class="flex items-center text-sm gap-3 mt-4">
           <p>{{ user?.role == `user` ? "Traniee" : `Admin` }}</p>
           <p>•</p>
-          <!-- <p>Age 33</p>
-          <p>•</p> -->
-          <!-- <p>Yavne, Israel</p> -->
-          <div class="flex items-center gap-2 text-sm">
+          <div class="flex items-center gap-2 text-sm flex-wrap">
             <v-icon size="small">mdi-calendar-blank-outline</v-icon>
-            <p>Joined {{ joinedDate }}</p>
+            <p class="text-wrap">Joined {{ joinedDate }}</p>
           </div>
         </div>
-        <!-- <div class="flex items-center gap-2 mt-2 text-sm">
-          <v-icon>mdi-calendar-blank-outline</v-icon>
-          <p>Joined {{ joinedDate }}</p>
-        </div> -->
       </div>
     </div>
-    <!-- <div class="w-max flex gap-6 p-2">
-      <div class="flex gap-2">
-        <v-icon>mdi-calendar-blank-outline</v-icon>
-        <p>Joined {{ joinedDate }}</p>
-      </div>
-      <div class="flex gap-2">
-        <v-icon>mdi-calendar-blank-outline</v-icon>
-        <p>Joined {{ joinedDate }}</p>
-      </div>
-    </div> -->
     <div>
       <div class="flex gap-3">
         <v-card
           class="w-max flex items-center gap-2 px-6 py-[0.23rem] rounded-lg mt-6"
         >
           <v-icon size="xs">mdi-email-outline</v-icon>
-          <p class="text-sm">{{ user?.email }}</p>
+          <p class="text-sm text-wrap">{{ user?.email }}</p>
         </v-card>
         <v-card
           class="w-max flex items-center gap-2 px-6 py-[0.23rem] rounded-lg mt-6"
         >
           <v-icon size="xs">mdi-phone-outline</v-icon>
-          <p class="text-sm">052-6640794</p>
+          <p class="text-sm text-wrap">052-6640794</p>
         </v-card>
       </div>
     </div>
@@ -65,7 +50,7 @@
           "
         >
           <v-icon size="xs">mdi-pencil</v-icon>
-          <p class="text-sm">Edit Profile</p>
+          <p class="text-sm text-wrap">Edit Profile</p>
         </v-card>
         <v-card
           role="button"
@@ -77,19 +62,20 @@
           "
         >
           <v-icon size="xs">mdi-lock</v-icon>
-          <p class="text-sm">Change Password</p>
+          <p class="text-sm text-wrap">Change Password</p>
         </v-card>
       </div>
     </div>
     <div class="mt-8">
       <v-card
-        class="flex flex-col items-start min-w-max w-max pr-6 rounded-xl pb-8 pt-8"
+        class="flex flex-col items-start max-w-max pr-6 rounded-xl pb-8 pt-8"
       >
         <div class="flex gap-2 ml-6 items-center">
           <v-icon size="x-large" icon="mdi-pulse"></v-icon>
           <h2 class="text-center text-xl tracking-wide">Activity</h2>
         </div>
         <v-timeline
+          v-if="!isFetching && activities?.length > 0"
           direction="vertical"
           side="end"
           truncate-line="both"
@@ -106,7 +92,7 @@
             <p class="text-sm w-full text-gray-500">
               {{ activityDate(activity?.date) }}
             </p>
-            <p class="text-md w-full">
+            <p class="text-md w-full text-wrap">
               {{ activity?.activityValue }}
             </p>
           </v-timeline-item>
@@ -117,6 +103,7 @@
           indeterminate
           class="mt-8 self-center"
         ></v-progress-circular>
+        <p v-if="!isFetching && !activities">No activities</p>
       </v-card>
     </div>
   </v-container>

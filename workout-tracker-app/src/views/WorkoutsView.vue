@@ -25,23 +25,22 @@
         height="120"
       >
       </v-skeleton-loader>
-      <transition-group name="fade" tag="div" mode="out-in">
-        <div
-          key="key"
-          class="grid grid-cols-1 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4"
-        >
+      <div
+        class="grid grid-cols-1 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4"
+      >
+        <div v-for="workout in filteredWorkouts">
           <WorkoutCard
             v-if="!isLoadingWorkouts"
-            v-for="workout in filteredWorkouts"
             :isLoading="isLoadingWorkouts"
             :key="workout._id"
             :workout="workout"
             @deleteRequest="handleDeleteRequest"
             @toggleIsFavorite="handleToggleIsFavorite"
           />
+        </div>
+        <div v-for="n in workouts.length">
           <v-skeleton-loader
             v-if="workouts.length > 0 && isLoadingWorkouts"
-            v-for="n in workouts.length"
             :key="'skeleton-' + n"
             class="rounded-xl"
             width="350"
@@ -49,7 +48,7 @@
           >
           </v-skeleton-loader>
         </div>
-      </transition-group>
+      </div>
     </div>
     <v-snackbar
       :color="snackbarColor"

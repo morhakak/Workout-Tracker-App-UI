@@ -16,8 +16,6 @@ export const useUsersStore = defineStore("usersStore", () => {
     isFetching.value = true;
 
     try {
-      console.log("called with token", token.value);
-
       const response = await axios.get(
         "http://localhost:3000/api/v1/activities",
         {

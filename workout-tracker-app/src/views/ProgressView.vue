@@ -1,30 +1,28 @@
 <template>
   <div class="w-full pb-6 pt-6">
     <div class="flex flex-col align-center ga-5" v-if="user">
-      <h1 class="text-3xl font-semibold mb-8">Track Your Progress</h1>
-      <transition-group name="fade" tag="div" mode="out-in">
-        <div
-          key="key"
-          class="grid grid-cols-1 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4 overflow-x-hidden pb-4"
-        >
+      <h1 class="text-3xl font-semibold text-center">Track Your Progress</h1>
+
+      <div
+        class="grid grid-cols-1 mt-8 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4 overflow-x-hidden pb-4"
+      >
+        <div v-for="exercise in validExeHistory">
           <ExerciseProgressCard
             v-if="!isLoading"
-            v-for="exercise in validExeHistory"
             :isLoading="isLoading"
             :key="exercise._id"
             :exerciseHistory="exercise"
           />
           <v-skeleton-loader
             v-if="validExeHistory.length > 0 && isLoading"
-            v-for="n in validExeHistory.length"
-            :key="'skeleton-' + n"
+            :key="'skeleton-' + exercise._id"
             class="rounded-xl"
             width="350"
             height="150"
           >
           </v-skeleton-loader>
         </div>
-      </transition-group>
+      </div>
     </div>
     <v-snackbar
       :color="snackbarColor"
