@@ -28,7 +28,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     isFetching.value = true;
     try {
       const response = await axios.get(
-        `${MEASUREMENTS_URL}/circumferences?page=${currentPage.value}&limit=3`,
+        `${MEASUREMENTS_URL}/circumferences?page=${currentPage.value}&limit=5`,
         {
           headers: {
             Authorization: `Bearer ${token.value}`,
