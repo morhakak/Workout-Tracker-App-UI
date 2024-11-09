@@ -36,8 +36,8 @@
       <TransitionGroup name="fade">
         <div v-if="weighingToUpdate" class="space-x-3">
           <v-btn
-            class="normal-case rounded-xl transition-all duration-300"
-            variant="outlined"
+            class="normal-case rounded-lg transition-all duration-300"
+            variant="tonal"
             size="default"
             :loading="isAdding"
             type="submit"
@@ -47,9 +47,9 @@
           </v-btn>
           <v-btn
             @click="cancelUpdate"
-            size="default"
-            class="normal-case bg-red-700 rounded-xl"
             variant="outlined"
+            size="default"
+            class="normal-case rounded-lg"
           >
             Discard
           </v-btn>
@@ -57,7 +57,7 @@
         <v-btn
           v-if="!weighingToUpdate"
           type="submit"
-          class="normal-case rounded-xl transition-all duration-300"
+          class="normal-case rounded-lg transition-all duration-300"
           variant="outlined"
           size="default"
           :loading="isAdding"

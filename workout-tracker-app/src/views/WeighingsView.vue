@@ -1,121 +1,119 @@
 <template>
   <v-container
-    class="flex flex-col items-center gap-8 lg:flex-row lg:gap-5 lg:justify-center lg:items-start"
+    class="flex flex-col items-center gap-8 lg:gap-5 lg:justify-center"
   >
-    <v-card class="w-[450px] h-[330px] rounded-xl pb-8 pt-8">
+    <v-card class="w-[450px] h-[230px] rounded-xl pb-8 pt-8">
       <div class="flex mb-6 justify-center items-center gap-2">
-        <v-icon class="text-4xl">mdi-scale</v-icon>
-        <h1 class="text-center text-3xl font-medium tracking-wide">
+        <v-icon class="text-2xl">mdi-scale</v-icon>
+        <h1 class="text-center text-2xl font-medium tracking-wide">
           Track Your Weight
         </h1>
       </div>
-      <UnitSelector />
       <WeightForm
-        @weight-added="() => weighingsStore.fetchWeighings()"
-        @weight-updated="() => weighingsStore.fetchWeighings()"
+        @weight-added="fetchWeighings"
+        @weight-updated="fetchWeighings"
         :weighing="weighingToDelete"
         class="mt-8"
       />
     </v-card>
     <v-card
-      class="flex flex-col justify-center items-center w-[450px] max-h-screen rounded-xl pb-8 pt-8"
+      class="flex flex-col justify-center items-center w-[450px] rounded-xl pb-8 pt-8"
     >
       <div class="flex mb-6 justify-center items-center gap-2">
-        <v-icon class="text-4xl">mdi-clipboard-text-clock-outline</v-icon>
-        <h2 class="text-center text-3xl font-medium tracking-wide">
-          Weighings
-        </h2>
+        <v-icon class="text-2xl">mdi-clipboard-text-clock-outline</v-icon>
+        <h2 class="text-center text-xl font-medium tracking-wide">Weighings</h2>
       </div>
-      <div class="max-h-screen overflow-y-auto px-6 custom-scrollbar mt-6">
-        <v-timeline
-          v-if="!isFetching && normalizedWeighings.length"
-          direction="vertical"
-          side="end"
-          truncate-line="both"
-          class="pt-5"
-        >
-          <v-timeline-item
-            v-for="weighing in normalizedWeighings"
-            :key="weighing._id"
-            icon="mdi-scale"
-            dot-color="black"
-          >
-            <template #opposite>
-              <div class="flex gap-3 text-md items-center">
-                <v-icon>mdi-calendar-clock</v-icon>
-                <div class="text-xs text-wrap">
-                  <span>{{ formattedDate(weighing.date).day }}</span
-                  ><br />
-                  <span>{{ formattedDate(weighing.date).weekday }}</span
-                  ><br />
-                  <span>{{ formattedDate(weighing.date).time }}</span>
-                </div>
-              </div>
-              <!-- <div class="flex justify-center items-center gap-2 mt-4"> -->
-              <!-- <v-btn
-                  size="x-small"
-                  icon="mdi-trash-can-outline"
-                  class="border"
-                  variant="text"
-                  @click="
-                    () => {
-                      weighingToDelete = { ...weighing };
-                      deleteDialog = true;
-                    }
-                  "
-                ></v-btn>
-                <v-btn
-                  size="x-small"
-                  class="border"
-                  variant="text"
-                  icon="mdi-pencil"
-                ></v-btn> -->
-              <!-- </div> -->
-            </template>
-            <div
-              class="relative flex flex-col gap-2 justify-center items-center"
-            >
-              <v-card
-                class="flex gap-6 mr-4 mb-4 items-center justify-center text-center p-4 rounded-xl border-[1px] border-white box-border w-[120px]"
+      <div class="max-h-screen px-6 custom-scrollbar overflow-y-hidden mt-4">
+        <v-table height="250px" hover>
+          <thead>
+            <tr>
+              <th class="text-center text-no-wrap text-[16px]">
+                Weight ({{ weightSuffix }})
+              </th>
+              <th class="text-left text-[16px]">Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <TransitionGroup name="list">
+              <tr v-for="weighing in normalizedWeighings" :key="weighing._id">
+                <td class="text-center tracking-wider text-[16px]">
+                  {{ weighing.weight }}
+                </td>
+                <td>
+                  <div class="text-xs text-wrap">
+                    <span>{{ formattedDate(weighing.date).day }}</span>
+                    <br />
+                    <span>{{ formattedDate(weighing.date).time }}</span>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <div class="flex gap-2">
+                    <v-btn
+                      size="small"
+                      variant="text"
+                      icon="mdi-pencil"
+                      @click="update(weighing)"
+                    ></v-btn>
+                    <v-btn
+                      size="small"
+                      color="red"
+                      variant="text"
+                      icon="mdi-trash-can-outline"
+                      @click="
+                        () => {
+                          weighingToDelete = { ...weighing };
+                          deleteDialog = true;
+                        }
+                      "
+                    ></v-btn>
+                  </div>
+                </td>
+              </tr>
+              <v-btn
+                v-if="hasMoreData"
+                prepend-icon="mdi-reload"
+                :loading="isFetching"
+                @click="fetchWeighings"
+                class="mt-2 text-center"
+                >load More</v-btn
               >
-                <span class="text-md font-semibold py-1 px-2 rounded-lg"
-                  >{{ weighing.weight }}{{ weightSuffix }}</span
-                >
-              </v-card>
-              <div
-                class="absolute -top-4 left-[25px] flex gap-2 justify-center items-center"
-              >
-                <v-btn
-                  size="x-small"
-                  class="border"
-                  icon="mdi-trash-can-outline"
-                  @click="
-                    () => {
-                      weighingToDelete = { ...weighing };
-                      deleteDialog = true;
-                    }
-                  "
-                ></v-btn>
-                <v-btn
-                  size="x-small"
-                  class="border"
-                  icon="mdi-pencil"
-                  @click="update(weighing)"
-                ></v-btn>
-              </div>
-            </div>
-          </v-timeline-item>
-        </v-timeline>
+            </TransitionGroup>
+          </tbody>
+        </v-table>
       </div>
-      <v-progress-circular
-        v-if="isFetching"
-        size="50"
-        indeterminate
-        class="mt-8"
-      ></v-progress-circular>
       <div v-if="!isFetching && normalizedWeighings.length == 0">
         No weighings have been added yet
       </div>
+    </v-card>
+    <v-card class="mx-auto text-center w-[450px] rounded-xl">
+      <v-card-text>
+        <v-sheet color="rgba(0, 0, 0, .12)" class="rounded-xl pb-4">
+          <v-sparkline
+            :labels="normalizedWeighings.map((w) => w.weight)"
+            :model-value="normalizedWeighings.map((w) => w.weight)"
+            color="rgba(255, 255, 255, .7)"
+            height="200"
+            padding="24"
+            stroke-linecap="round"
+            smooth
+          >
+            <template v-slot:label="item">
+              {{ item.value }}{{ weightSuffix }}
+            </template>
+          </v-sparkline>
+        </v-sheet>
+      </v-card-text>
+
+      <v-card-text>
+        <div class="text-h4 font-weight-thin">weighings</div>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <v-card-actions class="justify-center">
+        <v-btn variant="text" block> Go to Report </v-btn>
+      </v-card-actions>
     </v-card>
     <DeleteDialog
       v-model:isOpen="deleteDialog"
@@ -127,9 +125,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import WeightForm from "../components/measurements/WeightForm.vue";
-import UnitSelector from "../components/UnitSelector.vue";
 import { useDateFormatter } from "../composables/useDateFormatter";
 import { useWeighingsStore } from "../stores/weighingsStore";
 import { storeToRefs } from "pinia";
@@ -138,13 +135,18 @@ import DeleteDialog from "../components/UI/dialogs/DeleteDialog.vue";
 
 const { weightSuffix } = storeToRefs(useUnitUtils());
 const weighingsStore = useWeighingsStore();
-const { normalizedWeighings, isFetching, isLoading, weighingToUpdate } =
-  storeToRefs(weighingsStore);
+const {
+  normalizedWeighings,
+  isFetching,
+  isLoading,
+  weighingToUpdate,
+  hasMoreData,
+} = storeToRefs(weighingsStore);
 const deleteDialog = ref(false);
 const weighingToDelete = ref(null);
 
 onMounted(async () => {
-  await weighingsStore.fetchWeighings();
+  await fetchWeighings();
 });
 
 const { toLocalDate } = useDateFormatter();
@@ -162,6 +164,10 @@ const update = (weighing) => {
   weighingToUpdate.value = { ...weighing };
 };
 
+const fetchWeighings = async () => {
+  await weighingsStore.fetchWeighings();
+};
+
 const deleteWeighing = async () => {
   if (weighingToDelete.value && weighingToDelete.value._id) {
     await weighingsStore.deleteWeighing(weighingToDelete.value._id);
@@ -171,3 +177,41 @@ const deleteWeighing = async () => {
   weighingToDelete.value = {};
 };
 </script>
+<style scoped>
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.list-leave-active {
+  position: absolute;
+}
+
+::v-deep .v-table__wrapper {
+  overflow-x: hidden;
+  padding-bottom: 10px;
+  padding-right: 2px;
+  padding-left: 2px;
+}
+
+::v-deep .v-table__wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+::v-deep .v-table__wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+::v-deep .v-table__wrapper::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+</style>

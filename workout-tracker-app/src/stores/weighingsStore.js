@@ -17,6 +17,11 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
   const { preferredUnit } = storeToRefs(useAppSettingsStore());
   const weighingToUpdate = ref(null);
 
+  //Pagination
+  const currentPage = ref(1);
+  const hasMoreData = ref(true);
+  const totalPages = ref(0);
+
   const addWeighing = async ({ weight }) => {
     apiErrorStore.resetMessages();
     isAdding.value = true;
@@ -43,16 +48,25 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
   };
 
   const fetchWeighings = async () => {
+    if (isFetching.value || !hasMoreData.value) return;
+
     apiErrorStore.resetMessages();
     isFetching.value = true;
     try {
-      const response = await axios.get(`${MEASUREMENTS_URL}/weighings`, {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      });
+      const response = await axios.get(
+        `${MEASUREMENTS_URL}/weighings?page=${currentPage.value}&limit=3`,
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      );
 
-      weighings.value = response.data.data;
+      weighings.value.push(...response.data.data);
+      currentPage.value++;
+
+      hasMoreData.value = currentPage.value <= response.data.meta.totalPages;
+      totalPages.value = response.data.meta.totalPages;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
@@ -134,5 +148,6 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     isLoading,
     isAdding,
     weighingToUpdate,
+    hasMoreData,
   };
 });

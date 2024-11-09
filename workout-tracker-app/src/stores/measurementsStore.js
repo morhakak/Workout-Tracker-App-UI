@@ -16,18 +16,31 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
   const isAdding = ref(false);
   const { preferredUnit } = storeToRefs(useAppSettingsStore());
 
+  //Pagination
+  const currentPage = ref(1);
+  const hasMoreData = ref(true);
+  const totalPages = ref(0);
+
   const fetchMeasurements = async () => {
+    if (isFetching.value || !hasMoreData.value) return;
+
     apiErrorStore.resetMessages();
     isFetching.value = true;
     try {
-      const response = await axios.get(`${MEASUREMENTS_URL}/circumferences`, {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      });
-      console.log("c:", response.data.data);
+      const response = await axios.get(
+        `${MEASUREMENTS_URL}/circumferences?page=${currentPage.value}&limit=3`,
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      );
 
-      measurements.value = response.data.data;
+      measurements.value.push(...response.data.data);
+      currentPage.value++;
+
+      hasMoreData.value = currentPage.value <= response.data.meta.totalPages;
+      totalPages.value = response.data.meta.totalPages;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
@@ -86,11 +99,12 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     isLoading.value = true;
     apiErrorStore.resetMessages();
     try {
-      await axios.delete(`${MEASUREMENTS_URL}/circumference/${id}`, {
+      await axios.delete(`${MEASUREMENTS_URL}/circumferences/${id}`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
       });
+
       measurements.value = measurements.value.filter((m) => m._id !== id);
       return true;
     } catch (error) {
@@ -135,5 +149,6 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     isLoading,
     isFetching,
     isAdding,
+    hasMoreData,
   };
 });
