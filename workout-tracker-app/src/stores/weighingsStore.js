@@ -1,5 +1,5 @@
 import { defineStore, storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useAuthStore } from "./authStore.js";
 import axios from "axios";
 import { useApiErrorStore } from "./apiErrorStore.js";
@@ -54,7 +54,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     isFetching.value = true;
     try {
       const response = await axios.get(
-        `${MEASUREMENTS_URL}/weighings?page=${currentPage.value}&limit=3`,
+        `${MEASUREMENTS_URL}/weighings?page=${currentPage.value}&limit=5`,
         {
           headers: {
             Authorization: `Bearer ${token.value}`,
