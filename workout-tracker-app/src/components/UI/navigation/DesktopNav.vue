@@ -136,10 +136,10 @@
 
 <script setup>
 import { computed, ref, watchEffect } from "vue";
-import { useAuthStore } from "../../../stores/authStore";
+import { useAuthStore } from "../../../features/users/stores/authStore";
 import { storeToRefs } from "pinia";
 import { useDisplay } from "vuetify";
-import UserItem from "../../UserItem.vue";
+import UserItem from "../../../features/users/components/UserItem.vue";
 import { useMenuItems } from "../../../composables/useMenuItems";
 import { useAppSettingsStore } from "../../../stores/appSettingsStore";
 import UnitSelector from "../../UnitSelector.vue";

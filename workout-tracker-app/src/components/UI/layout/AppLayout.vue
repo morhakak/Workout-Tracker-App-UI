@@ -55,10 +55,10 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { useAuthStore } from "../../../stores/authStore";
+import { useAuthStore } from "../../../features/users/stores/authStore";
 import { useRouter, useRoute } from "vue-router";
-import MobileNav from "../../UI/navigation/MobileNav.vue";
-import DesktopNav from "../../UI/navigation/DesktopNav.vue";
+import MobileNav from "../navigation/MobileNav.vue";
+import DesktopNav from "../navigation/DesktopNav.vue";
 import { storeToRefs } from "pinia";
 
 const router = useRouter();

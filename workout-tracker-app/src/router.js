@@ -1,23 +1,23 @@
 import { createWebHistory, createRouter } from "vue-router";
 
-import WorkoutsView from "./views/WorkoutsView.vue";
-import ChooseWorkoutView from "./views/ChooseWorkoutView.vue";
-import WorkoutView from "./views/WorkoutView.vue";
+import WorkoutsView from "./features/workouts/views/WorkoutsView.vue";
+import ChooseWorkoutView from "./features/workouts/views/ChooseWorkoutView.vue";
+import WorkoutView from "./features/workouts/views/WorkoutView.vue";
 import NotFoundView from "./views/NotFoundView.vue";
-import RegisterView from "./views/RegisterView.vue";
-import LoginView from "./views/LoginView.vue";
+import RegisterView from "./features/users/views/RegisterView.vue";
+import LoginView from "./features/users/views/LoginView.vue";
 import WelcomeView from "./views/WelcomeView.vue";
-import { useAuthStore } from "./stores/authStore";
+import { useAuthStore } from "./features/users/stores/authStore";
 import AboutView from "./views/AboutView.vue";
 import { storeToRefs } from "pinia";
 import DashboardView from "./views/DashboardView.vue";
-import ProgressView from "./views/ProgressView.vue";
-import ExerciseProgressView from "./views/ExerciseProgressView.vue";
-import MeasurementsView from "./views/MeasurementsView.vue";
+import ProgressView from "./features/exercies/views/ProgressView.vue";
+import ExerciseProgressView from "./features/exercies/views/ExerciseProgressView.vue";
+import MeasurementsView from "./features/circumferences/views/MeasurementsView.vue";
 import SettingsView from "./views/SettingsView.vue";
-import CircumferencesView from "./views/CircumferencesView.vue";
-import WeighingsView from "./views/WeighingsView.vue";
-import UserInfoView from "./views/UserInfoView.vue";
+import CircumferencesView from "./features/circumferences/views/CircumferencesView.vue";
+import WeighingsView from "./features/weighings/views/WeighingsView.vue";
+import UserInfoView from "./features/users/views/UserInfoView.vue";
 
 const routes = [
   {

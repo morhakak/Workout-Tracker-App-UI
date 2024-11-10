@@ -5,7 +5,7 @@
 <script setup>
 import AppLayout from "./components/UI/layout/AppLayout.vue";
 import { useAppSettingsStore } from "./stores/appSettingsStore";
-import { useAuthStore } from "./stores/authStore";
+import { useAuthStore } from "./features/users/stores/authStore";
 import { onMounted } from "vue";
 
 const authStore = useAuthStore();

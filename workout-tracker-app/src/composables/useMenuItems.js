@@ -1,6 +1,6 @@
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
-import { useAuthStore } from "../stores/authStore";
+import { useAuthStore } from "../features/users/stores/authStore";
 
 export function useMenuItems() {
   const authStore = useAuthStore();
