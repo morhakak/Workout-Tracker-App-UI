@@ -94,15 +94,49 @@
       :onBlur="v$.leftCalf.$touch"
       :onInput="v$.leftCalf.$touch"
     />
-    <v-btn
-      class="text-lg col-span-2 normal-case rounded-xl"
+    <!-- <v-btn
+      class="text-lg col-span-2 normal-case rounded-lg"
       height="45"
       type="submit"
       variant="outlined"
       :loading="isAdding"
     >
       Add Measuremnt
-    </v-btn>
+    </v-btn> -->
+    <div class="col-span-2 justify-center">
+      <TransitionGroup name="fade">
+        <div v-if="circumferenceToUpdate" class="space-x-3">
+          <v-btn
+            class="normal-case rounded-lg transition-all duration-300"
+            variant="tonal"
+            size="default"
+            :loading="isAdding"
+            type="submit"
+            :disabled="isUnchanged"
+          >
+            Update
+          </v-btn>
+          <v-btn
+            @click="cancelUpdate"
+            variant="outlined"
+            size="default"
+            class="normal-case rounded-lg"
+          >
+            Discard
+          </v-btn>
+        </div>
+        <v-btn
+          v-if="!circumferenceToUpdate"
+          type="submit"
+          class="normal-case rounded-lg transition-all duration-300"
+          variant="outlined"
+          size="default"
+          :loading="isAdding"
+        >
+          Add Measuremnt
+        </v-btn>
+      </TransitionGroup>
+    </div>
   </form>
 </template>
 
@@ -111,13 +145,13 @@ import MeasurementInput from "../../../components/MeasurementInput.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { numeric, helpers } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
-import { reactive } from "vue";
+import { computed, reactive, watch } from "vue";
 import { useUnitUtils } from "../../../stores/unitUtilsStore";
 import { useMeasurementsStore } from "../stores/measurementsStore";
 
 const { lengthSuffix } = storeToRefs(useUnitUtils());
 const measurementsStore = useMeasurementsStore();
-const { isAdding } = storeToRefs(measurementsStore);
+const { isAdding, circumferenceToUpdate } = storeToRefs(measurementsStore);
 const initialState = {
   neck: 0.0,
   shoulders: 0.0,
@@ -134,6 +168,16 @@ const initialState = {
 const state = reactive({
   ...initialState,
 });
+
+watch(
+  circumferenceToUpdate,
+  () => {
+    if (circumferenceToUpdate.value) {
+      Object.assign(state, circumferenceToUpdate.value);
+    }
+  },
+  { immediate: true }
+);
 
 const greaterThanZero = (value) => parseInt(value) > 0;
 
@@ -210,16 +254,45 @@ const rules = {
   },
 };
 
-const emits = defineEmits(["added"]);
+const emits = defineEmits(["added", "update"]);
 
 const v$ = useVuelidate(rules, state);
 
+// async function submitForm() {
+//   v$.value.$validate();
+
+//   if (!v$.value.$invalid) {
+//     await measurementsStore.addMeasurement(state);
+//     emits("added");
+//   }
+// }
+
 async function submitForm() {
   v$.value.$validate();
-
   if (!v$.value.$invalid) {
-    await measurementsStore.addMeasurement(state);
-    emits("added");
+    if (circumferenceToUpdate.value == null) {
+      await measurementsStore.addMeasurement(state);
+      emits("added");
+      console.log("add");
+      return;
+    }
+
+    console.log("update");
+    await measurementsStore.updateCircumference(state);
+    emits("updated");
   }
 }
+
+const cancelUpdate = () => {
+  circumferenceToUpdate.value = null;
+  Object.assign(state, initialState);
+};
+
+const isUnchanged = computed(() => {
+  if (!circumferenceToUpdate.value) return false;
+
+  return Object.keys(state).every(
+    (key) => state[key] === circumferenceToUpdate.value[key]
+  );
+});
 </script>

@@ -1,5 +1,5 @@
 import { defineStore, storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useAuthStore } from "../../users/stores/authStore.js";
 import axios from "axios";
 import { useApiErrorStore } from "../../../stores/apiErrorStore.js";
@@ -15,6 +15,8 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
   const isFetching = ref(false);
   const isAdding = ref(false);
   const { preferredUnit } = storeToRefs(useAppSettingsStore());
+  const circumferenceToUpdate = ref(null);
+  const hasFetched = ref(false);
 
   //Pagination
   const currentPage = ref(1);
@@ -41,6 +43,8 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
 
       hasMoreData.value = currentPage.value <= response.data.meta.totalPages;
       totalPages.value = response.data.meta.totalPages;
+
+      hasFetched.value = true;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
@@ -95,6 +99,46 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     }
   };
 
+  const updateCircumference = async (circumference) => {
+    apiErrorStore.resetMessages();
+    isAdding.value = true;
+    const unit = preferredUnit.value;
+
+    if (!circumference || !circumference._id) {
+      console.log("Invalid circumference object", circumference);
+      apiErrorStore.addErrorMessage("Invalid circumference data.");
+      isAdding.value = false;
+      return;
+    }
+
+    console.log("Updating circumference with ID", circumference._id);
+
+    try {
+      const response = await axios.put(
+        `${MEASUREMENTS_URL}/circumferences/${circumference._id}`,
+        { circumference, unit },
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      );
+
+      const index = measurements.value.findIndex(
+        (m) => m._id === circumference._id
+      );
+      if (index !== -1) {
+        measurements.value[index] = response.data.data;
+      }
+    } catch (error) {
+      apiErrorStore.handleErrorResponse(error);
+    } finally {
+      setTimeout(() => {
+        isAdding.value = false;
+      }, 1000);
+    }
+  };
+
   const deleteCircumference = async (id) => {
     isLoading.value = true;
     apiErrorStore.resetMessages();
@@ -140,15 +184,26 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     });
   });
 
+  watch(normalizedCircumference, () => {
+    console.log("norm", normalizedCircumference.value);
+  });
+
+  watch(measurements, () => {
+    console.log("measurements", measurements.value);
+  });
+
   return {
     fetchMeasurements,
     addHeight,
     addMeasurement,
+    updateCircumference,
     deleteCircumference,
     normalizedCircumference,
     isLoading,
     isFetching,
     isAdding,
     hasMoreData,
+    circumferenceToUpdate,
+    hasFetched,
   };
 });

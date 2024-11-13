@@ -9,8 +9,8 @@
           Measure Your Progress
         </h1>
       </div>
-      <UnitSelector />
-      <CircumferencesForm @added="onAdded" class="mt-4" />
+
+      <CircumferencesForm @added="onAdded" class="mt-10" />
     </v-card>
     <v-card
       class="flex flex-col justify-center items-center px-12 w-[500px] box-border rounded-xl pb-8 pt-8"
@@ -39,7 +39,7 @@
                 class="border"
                 size="small"
                 icon="mdi-pencil"
-                @click="update(circumference)"
+                @click="circumferenceToUpdate = { ...circumference }"
               ></v-btn>
               <v-btn
                 class="text-red-500 border"
@@ -121,19 +121,25 @@ import CircumferencesForm from "../components/CircumferencesForm.vue";
 import UnitSelector from "../../../components/UnitSelector.vue";
 import { useMeasurementsStore } from "../stores/measurementsStore";
 import { useUnitUtils } from "../../../stores/unitUtilsStore";
-import { onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useDateFormatter } from "../../../composables/useDateFormatter";
 import DeleteDialog from "../../../components/UI/DeleteDialog.vue";
 
 const { lengthSuffix } = storeToRefs(useUnitUtils());
 const measurementsStore = useMeasurementsStore();
-const { normalizedCircumference, isFetching, isLoading, hasMoreData } =
-  storeToRefs(measurementsStore);
+const {
+  normalizedCircumference,
+  isFetching,
+  isLoading,
+  hasMoreData,
+  circumferenceToUpdate,
+  hasFetched,
+} = storeToRefs(measurementsStore);
 const deleteDialog = ref(false);
 const circumferenceToDelete = ref(null);
 
 onMounted(async () => {
-  await measurementsStore.fetchMeasurements();
+  if (!hasFetched.value) await measurementsStore.fetchMeasurements();
 });
 
 const onAdded = async () => {
