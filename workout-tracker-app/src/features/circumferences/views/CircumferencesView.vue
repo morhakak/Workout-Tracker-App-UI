@@ -12,7 +12,8 @@
 
       <CircumferencesForm @added="onAdded" class="mt-10" />
     </v-card>
-    <v-card
+    <CircumferencesListCard />
+    <!-- <v-card
       class="flex flex-col justify-center items-center px-12 w-[500px] box-border rounded-xl pb-8 pt-8"
     >
       <div class="flex mb-6 justify-center items-center gap-2">
@@ -105,13 +106,13 @@
       >
         There are no measuremnets yet
       </p>
-    </v-card>
-    <DeleteDialog
+    </v-card> -->
+    <!-- <DeleteDialog
       v-model:isOpen="deleteDialog"
       :message="`Are you sure you want to delete this circumference?`"
       :isLoading="isLoading"
       @confirm="deleteMeasuremnet"
-    />
+    /> -->
   </v-container>
 </template>
 
@@ -124,6 +125,7 @@ import { useUnitUtils } from "../../../stores/unitUtilsStore";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useDateFormatter } from "../../../composables/useDateFormatter";
 import DeleteDialog from "../../../components/UI/DeleteDialog.vue";
+import CircumferencesListCard from "../components/CircumferencesListCard.vue";
 
 const { lengthSuffix } = storeToRefs(useUnitUtils());
 const measurementsStore = useMeasurementsStore();
