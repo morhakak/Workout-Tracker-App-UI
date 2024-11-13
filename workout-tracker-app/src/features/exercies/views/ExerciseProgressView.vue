@@ -1,6 +1,6 @@
 <template>
   <h1 class="text-center mb-4 text-3xl font-semibold">
-    {{ existingExercise?.exerciseId }}
+    {{ currentExerciseHistory?.exerciseId }}
   </h1>
   <v-container class="flex flex-col-reverse xl:flex-row justify-center gap-10">
     <div class="flex justify-center">
@@ -23,8 +23,8 @@
             class="pb-4"
           >
             <ExerciseTimelineItem
-              v-for="session in existingExercise?.sessions"
-              :key="existingExercise?._id"
+              v-for="session in currentExerciseHistory?.sessions"
+              :key="currentExerciseHistory?._id"
               :session="session"
             />
           </v-timeline>
@@ -53,7 +53,7 @@
             :workoutName="record.workoutName"
             :value="record.value"
             :unit="record.unit"
-            :isLoading="isLoading || !existingExercise"
+            :isLoading="isLoading || !currentExerciseHistory"
           />
         </v-container>
       </v-card>
@@ -73,52 +73,50 @@ const route = useRoute();
 const exerciseId = ref(null);
 exerciseId.value = route.params.id;
 const progressStore = useExercisesProgress();
-const { isLoading } = storeToRefs(progressStore);
-const existingExercise = ref(null);
+const { isLoading, hasFetchedOne, currentExerciseHistory } =
+  storeToRefs(progressStore);
+// const existingExercise = ref(null);
 
 onMounted(async () => {
-  if (exerciseId.value) {
-    existingExercise.value = await progressStore.fetchExerciseHistory(
-      exerciseId.value
-    );
-  }
+  // if (exerciseId.value && !hasFetchedOne.value)
+  await progressStore.fetchExerciseHistory(exerciseId.value);
 });
 
 const records = computed(() => [
   {
     icon: "mdi-weight-kilogram",
     recordType: "Max Weight",
-    workout: existingExercise.value?.maxWeight,
-    workoutId: existingExercise.value?.maxWeight.workout.workoutId,
-    workoutName: existingExercise.value?.maxWeight.workout.workoutName,
-    value: existingExercise.value?.maxWeight.value,
+    workout: currentExerciseHistory.value?.maxWeight,
+    workoutId: currentExerciseHistory.value?.maxWeight.workout.workoutId,
+    workoutName: currentExerciseHistory.value?.maxWeight.workout.workoutName,
+    value: currentExerciseHistory.value?.maxWeight.value,
     unit: true,
   },
   {
     icon: "mdi-counter",
     recordType: "Max Reps",
-    workout: existingExercise.value?.maxReps,
-    workoutId: existingExercise.value?.maxReps.workout.workoutId,
-    workoutName: existingExercise.value?.maxReps.workout.workoutName,
-    value: existingExercise.value?.maxReps.value,
+    workout: currentExerciseHistory.value?.maxReps,
+    workoutId: currentExerciseHistory.value?.maxReps.workout.workoutId,
+    workoutName: currentExerciseHistory.value?.maxReps.workout.workoutName,
+    value: currentExerciseHistory.value?.maxReps.value,
     unit: false,
   },
   {
     icon: "mdi-weight-kilogram",
     recordType: "Max Volume",
-    workout: existingExercise.value?.maxVolume,
-    workoutId: existingExercise.value?.maxVolume.workout.workoutId,
-    workoutName: existingExercise.value?.maxVolume.workout.workoutName,
-    value: existingExercise.value?.maxVolume.value,
+    workout: currentExerciseHistory.value?.maxVolume,
+    workoutId: currentExerciseHistory.value?.maxVolume.workout.workoutId,
+    workoutName: currentExerciseHistory.value?.maxVolume.workout.workoutName,
+    value: currentExerciseHistory.value?.maxVolume.value,
     unit: true,
   },
   {
     icon: "mdi-numeric-1-box-outline",
     recordType: "1RM",
-    workout: existingExercise.value?.oneRepMax,
-    workoutId: existingExercise.value?.oneRepMax.workout.workoutId,
-    workoutName: existingExercise.value?.oneRepMax.workout.workoutName,
-    value: existingExercise.value?.oneRepMax.value,
+    workout: currentExerciseHistory.value?.oneRepMax,
+    workoutId: currentExerciseHistory.value?.oneRepMax.workout.workoutId,
+    workoutName: currentExerciseHistory.value?.oneRepMax.workout.workoutName,
+    value: currentExerciseHistory.value?.oneRepMax.value,
     unit: true,
   },
 ]);

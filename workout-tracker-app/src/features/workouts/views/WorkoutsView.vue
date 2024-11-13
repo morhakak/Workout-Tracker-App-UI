@@ -123,7 +123,8 @@ import { useTheme } from "vuetify";
 
 const { user } = storeToRefs(useAuthStore());
 const workoutStore = useWorkoutStore();
-const { workouts, isLoading, isLoadingWorkouts } = storeToRefs(workoutStore);
+const { workouts, isLoading, isLoadingWorkouts, hasFetched } =
+  storeToRefs(workoutStore);
 const { messages } = storeToRefs(useApiErrorStore());
 const deleteDialog = ref(false);
 const workoutToDelete = ref({
@@ -134,6 +135,7 @@ const workoutToDelete = ref({
 const theme = useTheme();
 
 onMounted(async () => {
+  // if (!hasFetched.value)
   await workoutStore.loadWorkouts();
 });
 

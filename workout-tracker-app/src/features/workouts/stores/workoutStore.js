@@ -15,6 +15,7 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
   const { workoutDraft } = storeToRefs(workoutDraftStore);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const apiErrorStore = useApiErrorStore();
+  const hasFetched = ref(false);
 
   const setIsLoading = (value) => {
     isLoading.value = value;
@@ -100,6 +101,7 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
         },
       });
       workouts.value = response.data.data;
+      hasFetched.value = true;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
@@ -180,5 +182,6 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
     toggleIsFavorite,
     isLoading,
     isLoadingWorkouts,
+    hasFetched,
   };
 });

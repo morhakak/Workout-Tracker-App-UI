@@ -12,6 +12,9 @@ export const useExercisesProgress = defineStore(
     const apiErrorStore = useApiErrorStore();
     const BASE_URL = import.meta.env.VITE_EXERCISE_HISTORY_BASE_URL;
     const isLoading = ref(false);
+    const hasFetchedOne = ref(false);
+    const hasFetchedAll = ref(false);
+    const currentExerciseHistory = ref(null);
 
     const fetchExercisesHistory = async () => {
       apiErrorStore.resetMessages();
@@ -23,6 +26,7 @@ export const useExercisesProgress = defineStore(
           },
         });
         exercisesHistory.value = response.data.data;
+        hasFetchedAll.value = true;
       } catch (error) {
         apiErrorStore.handleErrorResponse(error);
       } finally {
@@ -42,7 +46,8 @@ export const useExercisesProgress = defineStore(
           },
         });
         const existingExercise = response.data.data;
-        return existingExercise;
+        hasFetchedOne.value = true;
+        currentExerciseHistory.value = { ...existingExercise };
       } catch (error) {
         apiErrorStore.handleErrorResponse(error);
       } finally {
@@ -73,6 +78,9 @@ export const useExercisesProgress = defineStore(
       exercisesHistory,
       isLoading,
       volumeDiff,
+      hasFetchedAll,
+      hasFetchedOne,
+      currentExerciseHistory,
     };
   }
 );

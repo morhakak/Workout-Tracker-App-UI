@@ -53,10 +53,12 @@ import ExerciseProgressCard from "../components/ExerciseProgressCard.vue";
 
 const { user } = storeToRefs(useAuthStore());
 const exercisesProgress = useExercisesProgress();
-const { exercisesHistory, isLoading } = storeToRefs(exercisesProgress);
+const { exercisesHistory, isLoading, hasFetchedAll } =
+  storeToRefs(exercisesProgress);
 const { messages } = storeToRefs(useApiErrorStore());
 
 onMounted(async () => {
+  // if (!hasFetchedAll.value)
   await exercisesProgress.fetchExercisesHistory();
 });
 
