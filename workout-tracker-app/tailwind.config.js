@@ -8,8 +8,10 @@ export default {
         px1362: "1362px",
         px708: "708px",
         desktop: "1280px",
+        px750: "750px",
         px760: "760px",
         px880: "880px",
+        px1400: "1400px",
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
