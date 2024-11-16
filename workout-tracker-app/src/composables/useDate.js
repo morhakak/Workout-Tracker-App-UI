@@ -1,7 +1,7 @@
 import moment from "moment";
 import { computed, ref } from "vue";
 
-export function useDate(utcDate) {
+export function useDate(utcDate = null) {
   const date = ref(utcDate);
   const fullDate = computed(() => {
     return moment(date.value).local().format("DD/MM/YYYY, dddd, HH:mm:ss");
@@ -19,10 +19,20 @@ export function useDate(utcDate) {
     return moment(date.value).local().format("dddd");
   });
 
+  function getDayMonthYear(date) {
+    return moment(date.value).local().format("DD/MM/YYYY");
+  }
+
+  function getTime(date) {
+    return moment(date.value).local().format("HH:mm:ss");
+  }
+
   return {
     fullDate,
     dayMonthYear,
     time,
     day,
+    getDayMonthYear,
+    getTime,
   };
 }

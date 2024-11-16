@@ -112,5 +112,3 @@ async function submitForm() {
   }
 }
 </script>
-
-<style scoped></style>

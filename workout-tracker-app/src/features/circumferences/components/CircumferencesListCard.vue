@@ -38,7 +38,7 @@
                   class="flex justify-center items-center gap-8 rounded-t-xl w-full py-2 px-4"
                 >
                   <p class="text-[14px]">
-                    {{ formattedDate(circumference.date).day }}
+                    {{ dateFormatter.getDayMonthYear(circumference.date) }}
                   </p>
                   <div class="flex gap-2">
                     <v-btn
@@ -114,8 +114,8 @@ import { storeToRefs } from "pinia";
 import { useMeasurementsStore } from "../stores/measurementsStore";
 import { useUnitUtils } from "../../../stores/unitUtilsStore";
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import { useDateFormatter } from "../../../composables/useDateFormatter";
 import DeleteDialog from "../../../components/UI/DeleteDialog.vue";
+import { useDate } from "../../../composables/useDate";
 
 const emits = defineEmits(["update-circumference", "add"]);
 
@@ -131,6 +131,8 @@ const {
 } = storeToRefs(measurementsStore);
 const deleteDialog = ref(false);
 const circumferenceToDelete = ref(null);
+
+const dateFormatter = useDate();
 
 onMounted(async () => {
   if (!hasFetched.value) await measurementsStore.fetchMeasurements();
@@ -149,8 +151,6 @@ const deleteMeasuremnet = async () => {
   }
   circumferenceToDelete.value = null;
 };
-
-const { toLocalDate } = useDateFormatter();
 
 const dateWrapper = (date) => {
   const [day, weekday, time] = date.split(`,`);

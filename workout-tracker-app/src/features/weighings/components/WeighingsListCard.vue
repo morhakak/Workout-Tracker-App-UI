@@ -38,8 +38,10 @@
             }"
           >
             <div>
-              <p class="text-xs">{{ formattedDate(weighing.date).day }}</p>
-              <p class="text-xs">{{ formattedDate(weighing.date).time }}</p>
+              <p class="text-xs">
+                {{ dateFormatter.getDayMonthYear(weighing.date) }}
+              </p>
+              <p class="text-xs">{{ dateFormatter.getTime(weighing.date) }}</p>
             </div>
             <p class="text-nowrap ml-8">{{ weighing.weight }}</p>
             <div class="flex gap-2 ml-auto">
@@ -75,13 +77,14 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import WeightForm from "../components/WeightForm.vue";
-import { useDateFormatter } from "../../../composables/useDateFormatter";
 import { useWeighingsStore } from "../stores/weighingsStore";
 import { storeToRefs } from "pinia";
 import { useUnitUtils } from "../../../stores/unitUtilsStore";
 import DeleteDialog from "../../../components/UI/DeleteDialog.vue";
 import { useInfiniteScroll } from "@vueuse/core";
+import { useDate } from "../../../composables/useDate";
+
+const dateFormatter = useDate();
 
 const { weightSuffix } = storeToRefs(useUnitUtils());
 const weighingsStore = useWeighingsStore();
@@ -114,15 +117,6 @@ useInfiniteScroll(
   }
 );
 
-const { toLocalDate } = useDateFormatter();
-
-const dateWrapper = (date) => {
-  const [day, weekday, time] = date.split(`,`);
-  return { day, weekday, time };
-};
-
-const formattedDate = (date) => dateWrapper(toLocalDate(date));
-
 const update = (weighing) => {
   weighingToUpdate.value = { ...weighing };
 };
@@ -130,10 +124,6 @@ const update = (weighing) => {
 const fetchWeighings = async () => {
   await weighingsStore.fetchWeighings();
 };
-
-watch(normalizedWeighings, () => {
-  console.log("weighings:", normalizedWeighings.value);
-});
 
 const deleteWeighing = async () => {
   if (weighingToDelete.value && weighingToDelete.value._id) {
@@ -164,6 +154,7 @@ const prepereAddWeighing = () => {
   weighingToUpdate.value = null;
 };
 </script>
+
 <style scoped>
 .list-move,
 .list-enter-active,

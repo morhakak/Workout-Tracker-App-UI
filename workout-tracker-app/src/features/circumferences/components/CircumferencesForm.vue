@@ -94,15 +94,6 @@
       :onBlur="v$.leftCalf.$touch"
       :onInput="v$.leftCalf.$touch"
     />
-    <!-- <v-btn
-      class="text-lg col-span-2 normal-case rounded-lg"
-      height="45"
-      type="submit"
-      variant="outlined"
-      :loading="isAdding"
-    >
-      Add Measuremnt
-    </v-btn> -->
     <div class="col-span-2 justify-center">
       <TransitionGroup name="fade">
         <div v-if="circumferenceToUpdate" class="space-x-3">

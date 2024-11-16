@@ -3,11 +3,6 @@
     <MobileNav v-if="token" @logout="logoutDialog = true" />
     <DesktopNav v-if="token" @logout="logoutDialog = true" />
     <v-main :class="mainClass">
-      <!-- <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
-      </router-view> -->
       <router-view></router-view>
     </v-main>
   </v-layout>

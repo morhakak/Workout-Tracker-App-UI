@@ -58,8 +58,7 @@ const { exercisesHistory, isLoading, hasFetchedAll } =
 const { messages } = storeToRefs(useApiErrorStore());
 
 onMounted(async () => {
-  // if (!hasFetchedAll.value)
-  await exercisesProgress.fetchExercisesHistory();
+  if (!hasFetchedAll.value) await exercisesProgress.fetchExercisesHistory();
 });
 
 const validExeHistory = computed(() => {

@@ -14,7 +14,6 @@ export const useApiErrorStore = defineStore("apiErrorStore", () => {
 
   const handleErrorResponse = (error) => {
     if (error.response) {
-      // Server responded with a status code out of the range of 2xx
       const status = error.response.status;
       const data = error.response.data;
       let message;
@@ -50,13 +49,11 @@ export const useApiErrorStore = defineStore("apiErrorStore", () => {
         message: `Error: ${message}`,
       });
     } else if (error.request) {
-      // Request was made but no response was received
       addMessage({
         type: "error",
         message: "Network error. Please check your connection.",
       });
     } else {
-      // Something happened in setting up the request that triggered an Error
       addMessage({
         type: "error",
         message: `Request error: ${error.message}`,

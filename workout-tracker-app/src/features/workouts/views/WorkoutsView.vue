@@ -15,45 +15,6 @@
         to="/create-workout"
       >
       </v-btn>
-      <!-- <button
-        class="fixed rounded-full bottom-[5%] right-[5%] z-10 appearance-none py-2 px-4 cursor-pointer shadow-xl"
-        :class="[
-          theme.global.current.value.dark
-            ? `border-white bg-neutral-800`
-            : 'border-black bg-neutral-100',
-          `border-dashed border-2`,
-        ]"
-      >
-        <div class="flex gap-2 justify-center items-center">
-          <p class="hidden sm:block">Add New Workout</p>
-          <span class="text-2xl">+</span>
-        </div>
-      </button> -->
-
-      <!-- <v-btn
-        v-if="!isLoadingWorkouts"
-        width="350"
-        height="120"
-        :class="[
-          theme.global.current.value.dark ? `border-white` : 'border-black',
-          `border-dashed border-2`,
-        ]"
-        rounded="xl"
-        to="/create-workout"
-        flat
-      >
-        <div class="flex flex-col items-center gap-2">
-          <span>Create a workout</span>
-          <v-icon size="x-large">mdi-plus</v-icon>
-        </div>
-      </v-btn> -->
-      <!-- <v-skeleton-loader
-        v-if="isLoadingWorkouts"
-        class="rounded-xl"
-        width="350"
-        height="120"
-      >
-      </v-skeleton-loader> -->
       <div
         class="grid grid-cols-1 px750:grid-cols-2 px1400:grid-cols-3 items-center gap-4"
       >

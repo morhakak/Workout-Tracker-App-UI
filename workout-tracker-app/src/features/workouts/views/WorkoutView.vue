@@ -312,9 +312,7 @@ import ExerciseCard from "../../exercies/components/ExerciseCard.vue";
 import ExerciseCardSkeletonLoader from "../../exercies/components/ExerciseCardSkeletonLoader.vue";
 import { useDisplay } from "vuetify";
 
-const { xs, sm, md, lg, xl } = useDisplay();
-
-console.log(useDisplay());
+const { xs, sm, md } = useDisplay();
 
 const buttonSize = computed(() => {
   if (xs.value) return "small";
@@ -516,15 +514,6 @@ const deleteWorkout = async () => {
 </script>
 
 <style scoped>
-/* .v-text-field input {
-  flex: 1 1 auto;
-  line-height: 30px;
-  padding: 8px 0 8px;
-  max-width: 100%;
-  min-width: 0;
-  width: 100%;
-} */
-
 .fade-enter-active {
   transition: all 0.4s ease;
 }

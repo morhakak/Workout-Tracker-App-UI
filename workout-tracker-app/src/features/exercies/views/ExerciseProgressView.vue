@@ -75,11 +75,10 @@ exerciseId.value = route.params.id;
 const progressStore = useExercisesProgress();
 const { isLoading, hasFetchedOne, currentExerciseHistory } =
   storeToRefs(progressStore);
-// const existingExercise = ref(null);
 
 onMounted(async () => {
-  // if (exerciseId.value && !hasFetchedOne.value)
-  await progressStore.fetchExerciseHistory(exerciseId.value);
+  if (exerciseId.value && !hasFetchedOne.value)
+    await progressStore.fetchExerciseHistory(exerciseId.value);
 });
 
 const records = computed(() => [

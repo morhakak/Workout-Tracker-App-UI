@@ -18,14 +18,7 @@
 </template>
 
 <script setup>
-import { storeToRefs } from "pinia";
-import { useWorkoutDraftStore } from "../stores/workoutDraftStore";
-import { useRouter } from "vue-router";
-import { computed, onMounted, ref } from "vue";
-
-// const workoutDraftStore = useWorkoutDraftStore();
-// const { workoutDraft } = storeToRefs(workoutDraftStore);
-// const router = useRouter();
+import { ref } from "vue";
 
 const selectedType = ref(null);
 
@@ -36,17 +29,8 @@ const props = defineProps({
 
 const emits = defineEmits(["chooseWorkout"]);
 
-const isSplitSelected = computed((type, index) => {
-  return type == section.types[index];
-});
-
 const chooseWorkout = (type) => {
-  selectedType.value = type; // Set the selected type
-  emits("chooseWorkout", type); // Emit the event
+  selectedType.value = type;
+  emits("chooseWorkout", type);
 };
-
-// const createWorkoutNameAndNavigate = (type) => {
-//   workoutDraftStore.createDraft(type);
-//   router.push(`/workout/${workoutDraft.value._id}`);
-// };
 </script>

@@ -4,11 +4,11 @@
       <div class="flex gap-3 text-md items-center">
         <v-icon>mdi-calendar-clock</v-icon>
         <div class="text-sm text-wrap">
-          <span>{{ formattedDate.day }}</span
+          <span>{{ dayMonthYear }}</span
           ><br />
-          <span>{{ formattedDate.weekday }}</span
+          <span>{{ day }}</span
           ><br />
-          <span>{{ formattedDate.time }}</span>
+          <span>{{ time }}</span>
         </div>
       </div>
     </template>
@@ -55,27 +55,17 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import { useDateFormatter } from "../../../composables/useDateFormatter";
 import { useUnitUtils } from "../../../stores/unitUtilsStore";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { useDate } from "../../../composables/useDate";
 const { weightIcon, weightSuffix } = storeToRefs(useUnitUtils());
 
 const props = defineProps(["session"]);
+
+const { day, time, dayMonthYear } = useDate(props.session.createdDate);
 
 const router = useRouter();
 const navigateToWorkout = (id) => {
   router.push({ name: "workout", params: { id } });
 };
-
-const dateWrapper = (date) => {
-  const [day, weekday, time] = date.split(`,`);
-  return { day, weekday, time };
-};
-
-const formattedDate = computed(() =>
-  dateWrapper(toLocalDate(props.session?.createdDate))
-);
-
-const { toLocalDate } = useDateFormatter();
 </script>

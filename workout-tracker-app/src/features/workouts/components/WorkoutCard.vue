@@ -66,17 +66,13 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import { useDateFormatter } from "../../../composables/useDateFormatter";
 import { useDate } from "../../../composables/useDate";
 
-const { toLocalDate } = useDateFormatter();
 const router = useRouter();
 const props = defineProps(["workout"]);
 const emits = defineEmits(["deleteRequest", "toggleIsFavorite"]);
 
-const { fullDate, day, time, dayMonthYear } = useDate(
-  props.workout.createdDate
-);
+const { day, time, dayMonthYear } = useDate(props.workout.createdDate);
 
 const openWorkout = () => {
   if (props.workout) {

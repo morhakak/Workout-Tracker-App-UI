@@ -105,13 +105,10 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     const unit = preferredUnit.value;
 
     if (!circumference || !circumference._id) {
-      console.log("Invalid circumference object", circumference);
       apiErrorStore.addErrorMessage("Invalid circumference data.");
       isAdding.value = false;
       return;
     }
-
-    console.log("Updating circumference with ID", circumference._id);
 
     try {
       const response = await axios.put(
@@ -182,14 +179,6 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
 
       return formattedEntry;
     });
-  });
-
-  watch(normalizedCircumference, () => {
-    console.log("norm", normalizedCircumference.value);
-  });
-
-  watch(measurements, () => {
-    console.log("measurements", measurements.value);
   });
 
   return {

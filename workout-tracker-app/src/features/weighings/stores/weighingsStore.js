@@ -81,12 +81,6 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     isAdding.value = true;
     const unit = preferredUnit.value;
 
-    if (!weighing || !weighing.weight) {
-      console.log("You sent invalid weighing", weighing);
-    }
-
-    console.log("Weighing to update", weighing);
-
     try {
       const response = await axios.put(
         `${MEASUREMENTS_URL}/weighings/${weighing._id}`,

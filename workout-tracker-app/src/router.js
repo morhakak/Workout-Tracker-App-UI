@@ -13,11 +13,7 @@ import { storeToRefs } from "pinia";
 import DashboardView from "./views/DashboardView.vue";
 import ProgressView from "./features/exercies/views/ProgressView.vue";
 import ExerciseProgressView from "./features/exercies/views/ExerciseProgressView.vue";
-// import MeasurementsView from "./features/circumferences/views/MeasurementsView.vue";
 import MeasurementsView from "./features/measurements/views/MeasurementsView.vue";
-import SettingsView from "./views/SettingsView.vue";
-import CircumferencesView from "./features/circumferences/views/CircumferencesView.vue";
-import WeighingsView from "./features/weighings/views/WeighingsView.vue";
 import UserInfoView from "./features/users/views/UserInfoView.vue";
 
 const routes = [
@@ -52,12 +48,6 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/settings",
-    name: "settings",
-    component: SettingsView,
-    meta: { requiresAuth: true },
-  },
-  {
     path: "/user-info",
     name: "user-info",
     component: UserInfoView,
@@ -67,18 +57,6 @@ const routes = [
     path: "/measurements",
     name: "measurements",
     component: MeasurementsView,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/measurements/circumferences",
-    name: "circumferences",
-    component: CircumferencesView,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/measurements/weighings",
-    name: "weighings",
-    component: WeighingsView,
     meta: { requiresAuth: true },
   },
   {
