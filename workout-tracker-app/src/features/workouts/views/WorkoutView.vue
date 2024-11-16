@@ -1,28 +1,44 @@
 <template>
   <div class="w-full flex flex-col items-center">
-    <div class="mb-6 flex justify-center gap-4 w-full">
-      <v-btn @click="handleDeleteRequest" icon="mdi-trash-can"> </v-btn>
-      <v-btn
-        @click="isEditMode = !isEditMode"
-        icon="mdi-pencil"
-        :class="{
-          'border-2 border-white': isEditMode,
-        }"
-      >
-      </v-btn>
-      <v-btn rounded="xl" icon="mdi-plus" @click="isAddDialogOpen = true">
-      </v-btn>
-    </div>
-    <div class="w-full flex flex-col justify-center">
-      <input
-        :disabled="!isEditMode"
-        type="text"
-        v-model="workoutDraft.name"
-        class="text-2xl sm:text-3xl lg:text-4xl w-[75%] sm:w-[600px] mx-auto text-clip py-2 text-center rounded-lg font-semibold leading-normal"
-        :class="{ 'outline-1 outline-gray-950': isEditMode }"
-      />
-      <v-divider :thickness="1" class="border-opacity-50 mt-4"></v-divider>
-    </div>
+    <v-card
+      :elevation="5"
+      class="rounded-xl px-4 py-4 w-[350px] sm:min-w-[450px] lg:min-w-[550px]"
+    >
+      <div class="mb-6 flex justify-center gap-4 w-full">
+        <v-btn
+          :size="buttonSize"
+          @click="handleDeleteRequest"
+          icon="mdi-trash-can"
+        >
+        </v-btn>
+        <v-btn
+          :size="buttonSize"
+          @click="isEditMode = !isEditMode"
+          icon="mdi-pencil"
+          :class="{
+            'border-2 border-white': isEditMode,
+          }"
+        >
+        </v-btn>
+        <v-btn
+          :size="buttonSize"
+          rounded="xl"
+          icon="mdi-plus"
+          @click="isAddDialogOpen = true"
+        >
+        </v-btn>
+      </div>
+      <div class="w-full flex flex-col justify-center items-center">
+        <input
+          :disabled="!isEditMode"
+          required
+          type="text"
+          v-model.trim="workoutDraft.name"
+          class="text-2xl sm:text-3xl lg:text-4xl w-[330px] sm:min-w-[530px] lg:min-w-[530px] text-clip py-2 text-center rounded-lg font-semibold leading-normal tracking-wider"
+          :class="{ 'outline-1 outline-gray-950': isEditMode }"
+        />
+      </div>
+    </v-card>
 
     <div class="relative w-full flex flex-col justify-center items-center mb-8">
       <div v-if="workoutDraft.exercises.length > 0">
@@ -39,7 +55,7 @@
             :key="exercise._id"
             :exercise="exercise"
             :isEditMode="isEditMode"
-            @add-set="addSet"
+            @add-set="() => addSet(exercise)"
             @delete-set="deleteSet"
             @delete-exercise="() => handleDeleteExercise(exercise._id)"
           />
@@ -240,38 +256,36 @@
         class="absolute right-4 top-2"
         @click="saveBeforeExitDialog = false"
       ></v-btn>
-      <template #title> Save your workout?</template>
+      <template #title> Are you sure?</template>
       <template #text>
         <p class="text-lg">Changes you made may not be saved</p>
       </template>
       <template v-slot:actions>
-        <div class="flex gap-2">
+        <div class="flex gap-4">
           <v-btn
             rounded="lg"
             variant="outlined"
             class="ms-auto"
-            text="Discard"
+            text="Stay"
             width="120"
-            @click="discardChanges"
+            @click="cancelLeave"
           ></v-btn>
           <v-btn
-            color="red"
             rounded="lg"
             variant="outlined"
             class="ms-auto"
-            text="Save Workout"
+            text="Leave"
             width="120"
-            :loading="isLoading"
-            @click="saveChanges"
+            @click="confirmLeave"
           ></v-btn>
         </div>
       </template>
     </v-card>
   </v-dialog>
   <v-snackbar
-    v-model="hasChanged"
+    v-model="saveChangesSnackbar"
     :height="snackbarHeight"
-    color="white"
+    color="black"
     rounded="xl"
   >
     <template #text>
@@ -279,17 +293,8 @@
     </template>
     <template #actions>
       <div class="flex gap-2 pr-4">
-        <v-btn
-          color="green"
-          variant="flat"
-          :loading="isLoading"
-          @click="saveChanges"
-        >
-          Yes
-        </v-btn>
-        <v-btn color="red" variant="outlined" @click="cancelChanges">
-          Discard
-        </v-btn>
+        <v-btn :loading="isLoading" @click="saveChanges"> Yes </v-btn>
+        <v-btn color="red" @click="cancelChanges"> Discard </v-btn>
       </div>
     </template>
   </v-snackbar>
@@ -299,12 +304,23 @@
 import { ref, computed, onMounted, watch } from "vue";
 import { useWorkoutStore } from "../stores/workoutStore";
 import { storeToRefs } from "pinia";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter, useRoute, onBeforeRouteLeave } from "vue-router";
 import { useWorkoutDraftStore } from "../stores/workoutDraftStore";
 import { v4 } from "uuid";
 import { cloneDeep, isEqual } from "lodash";
 import ExerciseCard from "../../exercies/components/ExerciseCard.vue";
 import ExerciseCardSkeletonLoader from "../../exercies/components/ExerciseCardSkeletonLoader.vue";
+import { useDisplay } from "vuetify";
+
+const { xs, sm, md, lg, xl } = useDisplay();
+
+console.log(useDisplay());
+
+const buttonSize = computed(() => {
+  if (xs.value) return "small";
+  if (sm.value) return "default";
+  if (md.value) return "default";
+});
 
 const router = useRouter();
 const route = useRoute();
@@ -338,6 +354,31 @@ onMounted(async () => {
 
   isWorkoutLoading.value = false;
 });
+
+const leavePage = ref(null);
+
+onBeforeRouteLeave((to, from, next) => {
+  if (hasChanged.value) {
+    saveBeforeExitDialog.value = true;
+    leavePage.value = next;
+  } else {
+    next();
+  }
+});
+
+const saveChangesSnackbar = computed(() => {
+  return hasChanged.value && route.matched[0].path === "/workout/:id";
+});
+
+const confirmLeave = () => {
+  saveBeforeExitDialog.value = false;
+  if (leavePage.value) leavePage.value();
+};
+
+const cancelLeave = () => {
+  saveBeforeExitDialog.value = false;
+  if (leavePage) leavePage.value(false);
+};
 
 const tab = ref(null);
 
@@ -444,7 +485,6 @@ async function saveChanges() {
       await workoutStore.updateWorkout(workoutId.value);
     }
     resetInitialWorkoutDraft();
-    // router.push("/");
   } catch (error) {
     console.error("Error saving workout changes:", error);
   }
@@ -476,14 +516,14 @@ const deleteWorkout = async () => {
 </script>
 
 <style scoped>
-.v-text-field input {
+/* .v-text-field input {
   flex: 1 1 auto;
   line-height: 30px;
   padding: 8px 0 8px;
   max-width: 100%;
   min-width: 0;
   width: 100%;
-}
+} */
 
 .fade-enter-active {
   transition: all 0.4s ease;
