@@ -16,11 +16,11 @@
       >
       </v-btn>
       <div
+        v-if="!isLoadingWorkouts && workouts.length"
         class="grid grid-cols-1 px750:grid-cols-2 px1400:grid-cols-3 items-center gap-4"
       >
         <div v-for="workout in filteredWorkouts">
           <WorkoutCard
-            v-if="!isLoadingWorkouts"
             :isLoading="isLoadingWorkouts"
             :key="workout._id"
             :workout="workout"
@@ -28,17 +28,51 @@
             @toggleIsFavorite="handleToggleIsFavorite"
           />
         </div>
-        <div v-for="n in workouts.length">
-          <v-skeleton-loader
-            v-if="workouts.length > 0 && isLoadingWorkouts"
-            :key="'skeleton-' + n"
-            class="rounded-xl"
-            width="350"
-            height="120"
-          >
-          </v-skeleton-loader>
-        </div>
       </div>
+      <div
+        v-if="workouts.length > 0 && isLoadingWorkouts"
+        class="grid grid-cols-1 px750:grid-cols-2 px1400:grid-cols-3 items-center gap-4"
+      >
+        <v-skeleton-loader
+          v-for="n in workouts.length || 3"
+          :key="'card-skeleton-' + n"
+          class="rounded-xl box-border"
+          width="350"
+          height="140"
+        >
+        </v-skeleton-loader>
+      </div>
+      <v-card
+        v-if="workouts.length == 0 && !isLoadingWorkouts"
+        elevation="5"
+        class="py-6 px-12 mx-4 sm:mx-auto rounded-xl text-xl text-center text-wrap tracking-wider font-medium"
+      >
+        <template #title>
+          <div class="text-xl mt-4 text-wrap">
+            There are no workouts to display 🧐
+          </div>
+        </template>
+        <template #text>
+          <div class="text-lg mt-4 font-light">
+            Add new workout by clicking on
+            <v-btn
+              v-if="!isLoadingWorkouts"
+              readonly
+              icon="mdi-plus"
+              size="xs"
+              variant="elevated"
+              class="ml-2 rounded-full z-10 shadow-xl"
+              :class="[
+                theme.global.current.value.dark
+                  ? `border-white`
+                  : 'border-black',
+                `border-dashed border-2`,
+              ]"
+            >
+            </v-btn>
+          </div>
+        </template>
+      </v-card>
     </div>
     <v-snackbar
       :color="snackbarColor"

@@ -1,9 +1,9 @@
 <template>
   <v-card
-    class="mx-auto relative"
+    class="mx-auto relative box-border"
     max-width="350"
     min-width="350"
-    min-height="120"
+    height="140"
     rounded="xl"
     hover
     @click="openWorkout"
