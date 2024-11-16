@@ -1,7 +1,36 @@
 <template>
-  <div class="w-full pb-6 pt-6">
+  <div class="relative pt-6 min-h-screen">
     <div class="flex flex-col align-center gap-5" v-if="user">
       <v-btn
+        v-if="!isLoadingWorkouts"
+        icon="mdi-plus"
+        size="x-large"
+        ripple
+        variant="elevated"
+        class="fixed rounded-full bottom-[5%] right-[5%] z-10 shadow-xl"
+        :class="[
+          theme.global.current.value.dark ? `border-white` : 'border-black',
+          `border-dashed border-2`,
+        ]"
+        to="/create-workout"
+      >
+      </v-btn>
+      <!-- <button
+        class="fixed rounded-full bottom-[5%] right-[5%] z-10 appearance-none py-2 px-4 cursor-pointer shadow-xl"
+        :class="[
+          theme.global.current.value.dark
+            ? `border-white bg-neutral-800`
+            : 'border-black bg-neutral-100',
+          `border-dashed border-2`,
+        ]"
+      >
+        <div class="flex gap-2 justify-center items-center">
+          <p class="hidden sm:block">Add New Workout</p>
+          <span class="text-2xl">+</span>
+        </div>
+      </button> -->
+
+      <!-- <v-btn
         v-if="!isLoadingWorkouts"
         width="350"
         height="120"
@@ -17,16 +46,16 @@
           <span>Create a workout</span>
           <v-icon size="x-large">mdi-plus</v-icon>
         </div>
-      </v-btn>
-      <v-skeleton-loader
+      </v-btn> -->
+      <!-- <v-skeleton-loader
         v-if="isLoadingWorkouts"
         class="rounded-xl"
         width="350"
         height="120"
       >
-      </v-skeleton-loader>
+      </v-skeleton-loader> -->
       <div
-        class="grid grid-cols-1 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4"
+        class="grid grid-cols-1 px750:grid-cols-2 px1400:grid-cols-3 items-center gap-4"
       >
         <div v-for="workout in filteredWorkouts">
           <WorkoutCard
@@ -133,10 +162,8 @@ const workoutToDelete = ref({
 });
 
 const theme = useTheme();
-
 onMounted(async () => {
-  // if (!hasFetched.value)
-  await workoutStore.loadWorkouts();
+  if (!hasFetched.value) await workoutStore.loadWorkouts();
 });
 
 const filteredWorkouts = computed(() => {
