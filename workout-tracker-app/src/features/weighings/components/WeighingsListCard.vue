@@ -1,10 +1,22 @@
 <template>
   <v-card
-    class="flex flex-col justify-center items-center w-[450px] rounded-xl pb-8 pt-8"
+    :elevation="5"
+    class="flex flex-col justify-center items-center min-w-[400px] max-w-[500px] box-border grow rounded-xl pb-8 pt-8"
   >
+    <v-btn
+      variant="text"
+      class="absolute right-6 top-6 rounded-full w-12 h-12"
+      @click="prepereAddWeighing"
+      icon="mdi-plus"
+      density="compact"
+      size="x-large"
+    >
+    </v-btn>
     <div class="flex mb-6 justify-center items-center gap-2">
-      <v-icon class="text-2xl">mdi-clipboard-text-clock-outline</v-icon>
-      <h2 class="text-center text-xl font-medium tracking-wide">Weighings</h2>
+      <v-icon class="text-2xl">mdi-scale</v-icon>
+      <h2 class="text-center text-xl sm:text-2xl font-medium tracking-wide">
+        Weighings
+      </h2>
     </div>
     <div class="max-h-screen px-6 overflow-y-hidden">
       <div
@@ -35,19 +47,14 @@
                 size="small"
                 variant="text"
                 icon="mdi-pencil"
-                @click="update(weighing)"
+                @click="() => prepareUpdateWeighing(weighing)"
               ></v-btn>
               <v-btn
                 size="small"
                 color="red"
                 variant="text"
                 icon="mdi-trash-can-outline"
-                @click="
-                  () => {
-                    weighingToDelete = { ...weighing };
-                    deleteDialog = true;
-                  }
-                "
+                @click="() => prepareDeleteWeighing(weighing)"
               ></v-btn>
             </div>
           </div>
@@ -58,6 +65,12 @@
       No weighings have been added yet
     </div>
   </v-card>
+  <DeleteDialog
+    v-model:isOpen="deleteDialog"
+    :message="`Are you sure you want to delete ${weighingToDelete?.weight}${weightSuffix} weighing?`"
+    :isLoading="isLoading"
+    @confirm="deleteWeighing"
+  />
 </template>
 
 <script setup>
@@ -111,8 +124,6 @@ const dateWrapper = (date) => {
 const formattedDate = (date) => dateWrapper(toLocalDate(date));
 
 const update = (weighing) => {
-  console.log("something is going on");
-
   weighingToUpdate.value = { ...weighing };
 };
 
@@ -135,6 +146,22 @@ const deleteWeighing = async () => {
 
 const isLastItem = (index) => {
   return index === normalizedWeighings.value.length - 1;
+};
+
+const prepareDeleteWeighing = (weighing) => {
+  weighingToDelete.value = { ...weighing };
+  deleteDialog.value = true;
+};
+
+const emits = defineEmits(["update-weighing", "add"]);
+const prepareUpdateWeighing = (weighing) => {
+  weighingToUpdate.value = { ...weighing };
+  emits("update-weighing");
+};
+
+const prepereAddWeighing = () => {
+  emits(`add`);
+  weighingToUpdate.value = null;
 };
 </script>
 <style scoped>

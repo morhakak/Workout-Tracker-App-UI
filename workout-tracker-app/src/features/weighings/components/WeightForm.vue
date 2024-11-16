@@ -134,7 +134,7 @@ const rules = {
 
 const v$ = useVuelidate(rules, state);
 
-const emits = defineEmits(["weight-added", "weight-updated"]);
+const emits = defineEmits(["added", "updated", "cancel-update"]);
 
 async function submitForm() {
   v$.value.$validate();
@@ -142,20 +142,19 @@ async function submitForm() {
   if (!v$.value.$invalid) {
     if (weighingToUpdate.value == null) {
       await weighingsStore.addWeighing(state);
-      emits("weight-added");
-      console.log("add");
+      emits("added");
       return;
     }
 
-    console.log("update");
     await weighingsStore.updateWeighing(state);
-    emits("weight-updated");
+    emits("updated");
   }
 }
 
 const cancelUpdate = () => {
-  weighingToUpdate.value = null;
   state.weight = 0.0;
+  emits("cancel-update");
+  weighingToUpdate.value = null;
 };
 </script>
 

@@ -1,10 +1,21 @@
 <template>
   <v-card
-    class="flex flex-col justify-center items-center px-12 w-[500px] box-border rounded-xl pb-8 pt-8"
+    :elevation="5"
+    class="relative flex flex-col justify-center items-center pb-8 pt-8 box-border h-screen min-w-[400px] max-w-[500px] grow rounded-xl"
   >
+    <v-btn
+      variant="text"
+      class="absolute right-6 top-6 rounded-full w-12 h-12"
+      @click="$emit(`add`)"
+      density="compact"
+      icon="mdi-plus"
+      size="x-large"
+    >
+    </v-btn>
+
     <div class="flex mb-6 justify-center items-center gap-2">
-      <v-icon class="text-4xl">mdi-tape-measure</v-icon>
-      <h2 class="text-center text-3xl font-medium tracking-wider">
+      <v-icon class="text-3xl">mdi-tape-measure</v-icon>
+      <h2 class="text-center text-xl sm:text-2xl font-medium tracking-wider">
         Circumferences
       </h2>
     </div>
@@ -15,41 +26,40 @@
         v-for="circumference in normalizedCircumference"
         :key="circumference._id"
       >
-        <div
-          class="flex justify-center items-center gap-8 border rounded-xl w-[80%] mx-auto p-2"
-        >
-          <p class="text-[14px]">
-            {{ formattedDate(circumference.date).day }}
-          </p>
-          <div class="flex gap-2">
-            <v-btn
-              class="border"
-              size="small"
-              icon="mdi-pencil"
-              @click="circumferenceToUpdate = { ...circumference }"
-            ></v-btn>
-            <v-btn
-              class="text-red-500 border"
-              size="small"
-              icon="mdi-trash-can-outline"
-              @click="
-                () => {
-                  circumferenceToDelete = { ...circumference };
-                  deleteDialog = true;
-                }
-              "
-            ></v-btn>
-          </div>
-        </div>
         <v-table
-          class="relative border box-border w-[320px] rounded-xl overflow-y-visible mt-4"
-          height="580px"
+          class="relative border box-border w-[340px] rounded-xl overflow-y-visible mt-4"
+          height="640px"
           hover
         >
           <thead>
             <tr>
-              <th class="text-left text-[14px]">Body Part</th>
-              <th class="text-left text-no-wrap text-[14px]">
+              <th colspan="2" class="p-0">
+                <div
+                  class="flex justify-center items-center gap-8 rounded-t-xl w-full py-2 px-4"
+                >
+                  <p class="text-[14px]">
+                    {{ formattedDate(circumference.date).day }}
+                  </p>
+                  <div class="flex gap-2">
+                    <v-btn
+                      class="border"
+                      size="x-small"
+                      icon="mdi-pencil"
+                      @click="() => prepareUpdateCircumference(circumference)"
+                    ></v-btn>
+                    <v-btn
+                      class="text-red-500 border"
+                      size="x-small"
+                      icon="mdi-trash-can-outline"
+                      @click="() => prepareDeleteCircumference(circumference)"
+                    ></v-btn>
+                  </div>
+                </div>
+              </th>
+            </tr>
+            <tr>
+              <th class="text-left text-base">Body Part</th>
+              <th class="text-left text-no-wrap text-base">
                 Circumference ({{ lengthSuffix }})
               </th>
             </tr>
@@ -101,13 +111,13 @@
 
 <script setup>
 import { storeToRefs } from "pinia";
-import CircumferencesForm from "../components/CircumferencesForm.vue";
-import UnitSelector from "../../../components/UnitSelector.vue";
 import { useMeasurementsStore } from "../stores/measurementsStore";
 import { useUnitUtils } from "../../../stores/unitUtilsStore";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useDateFormatter } from "../../../composables/useDateFormatter";
 import DeleteDialog from "../../../components/UI/DeleteDialog.vue";
+
+const emits = defineEmits(["update-circumference", "add"]);
 
 const { lengthSuffix } = storeToRefs(useUnitUtils());
 const measurementsStore = useMeasurementsStore();
@@ -154,4 +164,14 @@ function transformString(str) {
     .replace(/([A-Z])/g, " $1")
     .replace(/^./, (char) => char.toUpperCase());
 }
+
+const prepareDeleteCircumference = (circumference) => {
+  circumferenceToDelete.value = { ...circumference };
+  deleteDialog.value = true;
+};
+
+const prepareUpdateCircumference = (circumference) => {
+  circumferenceToUpdate.value = { ...circumference };
+  emits("update-circumference");
+};
 </script>

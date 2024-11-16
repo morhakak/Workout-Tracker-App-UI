@@ -19,13 +19,14 @@
       </div>
     </template>
     <template #subtitle>
-      <span class="ml-12"> {{ workout?.exercises.length }} exercises</span>
+      <span class="ml-12"> {{ workout?.exercises?.length }} exercises</span>
     </template>
 
     <v-card-actions>
       <div class="flex justify-between items-center w-full px-2">
-        <p class="text-sm font-medium">
-          {{ toLocalDate(workout?.createdDate) }}
+        <p class="text-sm">
+          {{ dayMonthYear }}, {{ day }},
+          <span class="text-xs text-gray-600">{{ time }}</span>
         </p>
         <v-menu transition="slide-x-transition" location="start" offset="8">
           <template v-slot:activator="{ props }">
@@ -66,11 +67,16 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { useDateFormatter } from "../../../composables/useDateFormatter";
+import { useDate } from "../../../composables/useDate";
 
 const { toLocalDate } = useDateFormatter();
 const router = useRouter();
 const props = defineProps(["workout"]);
 const emits = defineEmits(["deleteRequest", "toggleIsFavorite"]);
+
+const { fullDate, day, time, dayMonthYear } = useDate(
+  props.workout.createdDate
+);
 
 const openWorkout = () => {
   if (props.workout) {

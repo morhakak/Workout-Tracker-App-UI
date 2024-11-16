@@ -152,6 +152,7 @@ import { useMeasurementsStore } from "../stores/measurementsStore";
 const { lengthSuffix } = storeToRefs(useUnitUtils());
 const measurementsStore = useMeasurementsStore();
 const { isAdding, circumferenceToUpdate } = storeToRefs(measurementsStore);
+
 const initialState = {
   neck: 0.0,
   shoulders: 0.0,
@@ -254,18 +255,9 @@ const rules = {
   },
 };
 
-const emits = defineEmits(["added", "update"]);
+const emits = defineEmits(["added", "updated", "cancel-update"]);
 
 const v$ = useVuelidate(rules, state);
-
-// async function submitForm() {
-//   v$.value.$validate();
-
-//   if (!v$.value.$invalid) {
-//     await measurementsStore.addMeasurement(state);
-//     emits("added");
-//   }
-// }
 
 async function submitForm() {
   v$.value.$validate();
@@ -273,11 +265,9 @@ async function submitForm() {
     if (circumferenceToUpdate.value == null) {
       await measurementsStore.addMeasurement(state);
       emits("added");
-      console.log("add");
       return;
     }
 
-    console.log("update");
     await measurementsStore.updateCircumference(state);
     emits("updated");
   }
@@ -286,6 +276,7 @@ async function submitForm() {
 const cancelUpdate = () => {
   circumferenceToUpdate.value = null;
   Object.assign(state, initialState);
+  emits("cancel-update");
 };
 
 const isUnchanged = computed(() => {

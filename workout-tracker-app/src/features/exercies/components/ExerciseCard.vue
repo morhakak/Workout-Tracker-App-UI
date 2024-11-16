@@ -1,7 +1,7 @@
 <template>
   <v-card
     rounded="xl"
-    class="flex flex-col overflow-visible w-[350px] sm:min-w-[550px] lg:min-w-[550px] items-center pb-8 pt-4 mt-6 relative"
+    class="flex flex-col overflow-visible w-[350px] sm:min-w-[450px] lg:min-w-[550px] items-center pb-8 pt-4 mt-6 relative"
   >
     <transition name="fade">
       <v-btn
@@ -9,6 +9,7 @@
         @click="$emit(`deleteExercise`)"
         icon="mdi-trash-can"
         class="absolute -top-6"
+        :elevation="5"
       ></v-btn>
     </transition>
     <v-card-title
@@ -19,44 +20,49 @@
       <v-card
         v-for="(set, setIndex) in exercise.sets"
         :key="set._id"
-        class="flex items-center px-4 mt-2 w-[320px] h-[60px] sm:w-[400px] lg:[550px]"
+        class="flex items-center justify-between px-4 p-2 mt-2 w-[320px] sm:w-[400px] lg:[550px] box-border"
         rounded="lg"
-        @click="() => toggleEdit(exercise._id, set._id)"
+        :elevation="16"
       >
-        <div class="flex items-center justify-evenly w-full">
-          <span
-            class="font-bold border text-xs p-[2px] border-black rounded-full flex items-center justify-center bg-white h-6 w-6"
-          >
-            {{ setIndex + 1 }}
-          </span>
-          <v-text-field
-            variant="solo"
-            type="number"
-            class="font-bold text-center w-[80px] mt-5 ml-2"
-            v-model.number="set.weight"
-            @click.stop
-            density="compact"
-            suffix="Kg"
-            flat
-          ></v-text-field>
-          <v-text-field
-            variant="solo"
-            type="number"
-            class="font-bold text-center w-[80px] mt-5 ml-2 mr-2"
-            v-model.number="set.reps"
-            @click.stop
-            density="compact"
-            suffix="reps"
-            flat
-          ></v-text-field>
-          <v-btn
-            icon="mdi-delete"
-            size="small"
-            @click.stop="() => $emit('deleteSet', exercise._id, set._id)"
-            :disabled="exercise.sets.length == 1"
-          >
-          </v-btn>
-        </div>
+        <span
+          class="font-semibold border-solid border-[1px] border-gray-500 text-xs p-[2px] rounded-full flex items-center justify-center h-6 w-6"
+        >
+          {{ setIndex + 1 }}
+        </span>
+        <v-text-field
+          variant="solo"
+          type="number"
+          :max-width="100"
+          hide-details
+          hide-spin-buttons
+          class="font-bold text-center ml-2"
+          v-model.number="set.weight"
+          @click.stop
+          density="compact"
+          :suffix="weightSuffix"
+          flat
+        ></v-text-field>
+        <v-text-field
+          variant="solo"
+          hide-details
+          :max-width="100"
+          hide-spin-buttons
+          type="number"
+          class="font-bold text-center w-[20px] ml-2 mr-2"
+          v-model.number="set.reps"
+          @click.stop
+          density="compact"
+          suffix="reps"
+          flat
+        ></v-text-field>
+        <v-btn
+          icon="mdi-delete"
+          variant="plain"
+          size="small"
+          @click.stop="() => $emit('deleteSet', exercise._id, set._id)"
+          :disabled="exercise.sets.length == 1"
+        >
+        </v-btn>
       </v-card>
       <v-btn
         :key="`button-${Date.now.toString}`"
@@ -65,8 +71,7 @@
         height="45"
         rounded="lg"
         variant="elevated"
-        prepend-icon="mdi-plus"
-        @click="() => $emit('addSet', exercise)"
+        @click="() => $emit('addSet')"
       >
         Add a set</v-btn
       >
@@ -75,15 +80,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useUnitUtils } from "../../../stores/unitUtilsStore";
+import { storeToRefs } from "pinia";
 
+const { weightSuffix } = storeToRefs(useUnitUtils());
 defineProps(["exercise", "isEditMode"]);
 defineEmits(["addSet", "deleteSet", "deleteExercise"]);
-const editId = ref(null);
-const toggleEdit = (exerciseId, setId) => {
-  const id = `${exerciseId}-${setId}`;
-  editId.value = editId.value === id ? null : id;
-};
 </script>
 
 <style scoped>
