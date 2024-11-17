@@ -25,7 +25,7 @@
         :elevation="16"
       >
         <span
-          class="font-semibold border-solid border-[1px] border-gray-500 text-xs p-[2px] rounded-full flex items-center justify-center h-6 w-6"
+          class="font-semibold border-solid text-base p-[2px] rounded-full flex items-center justify-center h-6 w-6"
         >
           {{ setIndex + 1 }}
         </span>
@@ -66,14 +66,14 @@
       </v-card>
       <v-btn
         :key="`button-${Date.now.toString}`"
-        class="mt-4 w-full"
+        class="mt-4 w-full normal-case"
         color="black"
         height="45"
         rounded="lg"
         variant="elevated"
         @click="() => $emit('addSet')"
       >
-        Add a set</v-btn
+        Add Set</v-btn
       >
     </transition-group>
   </v-card>

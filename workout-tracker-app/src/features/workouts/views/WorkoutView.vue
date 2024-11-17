@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col items-center">
     <v-card
-      :elevation="5"
+      :elevation="2"
       class="rounded-xl px-4 py-4 w-[350px] sm:min-w-[450px] lg:min-w-[550px]"
     >
       <div class="mb-6 flex justify-center gap-4 w-full">
@@ -68,7 +68,9 @@
           :numberOfSets="exercise.sets.length"
         />
       </div>
-      <div v-else class="mt-20">Add exercies... :)</div>
+      <v-card v-else class="mt-20 py-6 px-12 rounded-xl text-xl"
+        >No exercises to display</v-card
+      >
     </div>
   </div>
 
