@@ -1,10 +1,10 @@
 <template>
-  <div class="w-full pb-6 pt-6">
+  <div class="w-full py-6">
     <div class="flex flex-col align-center ga-5" v-if="user">
       <h1 class="text-3xl font-semibold text-center">Track Your Progress</h1>
 
       <div
-        class="grid grid-cols-1 mt-8 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4 overflow-x-hidden pb-4"
+        class="grid grid-cols-1 mt-8 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4 overflow-x-hidden pb-4 px-3"
       >
         <div v-for="exercise in validExeHistory">
           <ExerciseProgressCard
