@@ -4,30 +4,79 @@
   </h1>
   <v-container class="flex flex-col-reverse xl:flex-row justify-center gap-10">
     <div class="flex justify-center">
-      <v-card class="rounded-xl px-2 w-[600px]">
+      <v-card class="rounded-xl px-2 pb-4 w-[450px]">
         <v-card-title class="flex justify-center items-center">
           <h2 class="text-center font-semibold text-2xl pt-6 pb-2">
             <v-icon>mdi-clipboard-text-clock-outline</v-icon>
             Exercise History
           </h2>
         </v-card-title>
-        <v-container class="flex justify-center">
+        <v-container class="flex flex-col items-center gap-4 justify-center">
           <v-progress-circular
             v-if="isLoading"
             indeterminate
           ></v-progress-circular>
-          <v-timeline
-            v-if="!isLoading"
-            side="end"
-            truncate-line="both"
-            class="pb-4"
+          <div
+            v-for="session in currentExerciseHistory?.sessions"
+            :key="session?._id"
+            class="mt-4"
           >
-            <ExerciseTimelineItem
-              v-for="session in currentExerciseHistory?.sessions"
-              :key="currentExerciseHistory?._id"
-              :session="session"
-            />
-          </v-timeline>
+            <v-table
+              v-if="!isLoading && currentExerciseHistory.sessions.length"
+              class="relative border box-border shadow-lg rounded-xl overflow-y-visible"
+              hover
+            >
+              <thead>
+                <tr>
+                  <th colspan="3" class="p-0">
+                    <div
+                      class="flex justify-center items-center gap-2 rounded-t-xl w-full py-2 px-4"
+                      @click="
+                        () => navigateToWorkout(session?.workout.workoutId)
+                      "
+                    >
+                      <v-icon>mdi-calendar-clock-outline</v-icon>
+                      <p
+                        class="text-[14px] justify-self-start pr-2 border-r-2 border-gray-800"
+                      >
+                        {{ dateFormatter.getDayMonthYear(session.createdDate) }}
+                      </p>
+                      <v-icon>mdi-weight-lifter</v-icon>
+                      <p
+                        v-if="session.workout.workoutName"
+                        class="text-[16px] font-semibold hover:cursor-pointer"
+                      >
+                        {{ session.workout.workoutName }}
+                      </p>
+                    </div>
+                  </th>
+                </tr>
+                <tr>
+                  <th class="text-left text-base">#</th>
+                  <th
+                    class="flex items-center justify-center text-center text-base"
+                  >
+                    <p>Weight ({{ weightSuffix }})</p>
+                  </th>
+                  <th class="text-center text-base">Reps</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(set, i) in session.sets"
+                  :key="set._id || session._id + '-' + i"
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td class="text-center tracking-wider text-[16px]">
+                    {{ set.weight }}
+                  </td>
+                  <td class="text-center tracking-wider text-[16px]">
+                    {{ set.reps }}
+                  </td>
+                </tr>
+              </tbody>
+            </v-table>
+          </div>
         </v-container>
       </v-card>
     </div>
@@ -38,7 +87,7 @@
       >
         <v-card-title class="flex items-center justify-center">
           <h2 class="font-semibold text-2xl pt-6 pb-2">
-            <v-icon>mdi-medal-outline</v-icon>Records
+            <v-icon>mdi-medal-outline</v-icon>Personal Records
           </h2>
         </v-card-title>
         <v-container
@@ -62,12 +111,14 @@
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
-import { computed, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { computed, onMounted, ref, watch } from "vue";
 import { useExercisesProgress } from "../stores/ExerciseProgressStore";
 import { storeToRefs } from "pinia";
 import RecordCard from "../components/RecordCard.vue";
 import ExerciseTimelineItem from "../components/ExerciseTimelineItem.vue";
+import { useUnitUtils } from "../../../stores/unitUtilsStore";
+import { useDate } from "../../../composables/useDate";
 
 const route = useRoute();
 const exerciseId = ref(null);
@@ -75,6 +126,9 @@ exerciseId.value = route.params.id;
 const progressStore = useExercisesProgress();
 const { isLoading, hasFetchedOne, currentExerciseHistory } =
   storeToRefs(progressStore);
+const { weightSuffix, weightIcon } = storeToRefs(useUnitUtils());
+const dateFormatter = useDate();
+const router = useRouter();
 
 onMounted(async () => {
   if (exerciseId.value && !hasFetchedOne.value)
@@ -119,4 +173,8 @@ const records = computed(() => [
     unit: true,
   },
 ]);
+
+const navigateToWorkout = (id) => {
+  router.push({ name: "workout", params: { id } });
+};
 </script>
