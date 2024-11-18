@@ -3,11 +3,6 @@
     <div class="flex items-center justify-start gap-2 m-2 rounded w-max mb-4">
       <div>
         <div class="flex items-center">
-          <div
-            class="flex size-14 text-xl mr-4 border-[1px] border-white rounded-full justify-center items-center capitalize"
-          >
-            {{ user?.name[0] }}
-          </div>
           <p class="mb-0 font-semibold capitalize text-2xl">
             {{ user?.name }} Hakak
           </p>
@@ -31,10 +26,11 @@
           <p class="text-sm text-wrap">{{ user?.email }}</p>
         </v-card>
         <v-card
+          v-if="user?.phone"
           class="w-max flex items-center gap-2 px-6 py-[0.23rem] rounded-lg mt-6"
         >
           <v-icon size="xs">mdi-phone-outline</v-icon>
-          <p class="text-sm text-wrap">052-6640794</p>
+          <p class="text-sm text-wrap">{{ user?.phone }}</p>
         </v-card>
       </div>
     </div>
@@ -68,42 +64,45 @@
     </div>
     <div class="mt-8">
       <v-card
-        class="flex flex-col items-start max-w-max pr-6 rounded-xl pb-8 pt-8"
+        style="height: calc(100vh - 200px)"
+        class="flex flex-col items-start max-w-max pr-4 rounded-xl pb-8 pt-8"
       >
-        <div class="flex gap-2 ml-6 items-center">
-          <v-icon size="x-large" icon="mdi-pulse"></v-icon>
-          <h2 class="text-center text-xl tracking-wide">Activity</h2>
-        </div>
-        <v-timeline
-          v-if="!isFetching && activities?.length > 0"
-          direction="vertical"
-          side="end"
-          truncate-line="both"
-          class="mt-8"
-        >
-          <v-timeline-item
-            v-for="activity in activities"
-            :key="activity"
-            :icon="getIcon(activity)"
-            :dot-color="getDotColor(activity)"
-            size="x-small"
-            class="place-self-start"
+        <div class="overflow-auto custom-scrollbar pr-4">
+          <div class="flex gap-2 ml-6 items-center">
+            <v-icon size="x-large" icon="mdi-pulse"></v-icon>
+            <h2 class="text-center text-xl tracking-wide">Activity</h2>
+          </div>
+          <v-timeline
+            v-if="!isFetching && activities?.length > 0"
+            direction="vertical"
+            side="end"
+            truncate-line="both"
+            class="mt-8"
           >
-            <p class="text-sm w-full text-gray-500">
-              {{ activityDate(activity?.date) }}
-            </p>
-            <p class="text-md w-full text-wrap">
-              {{ activity?.activityValue }}
-            </p>
-          </v-timeline-item>
-        </v-timeline>
-        <v-progress-circular
-          v-if="isFetching"
-          size="50"
-          indeterminate
-          class="mt-8 self-center"
-        ></v-progress-circular>
-        <p v-if="!isFetching && !activities">No activities</p>
+            <v-timeline-item
+              v-for="activity in activities"
+              :key="activity"
+              :icon="getIcon(activity)"
+              :dot-color="getDotColor(activity)"
+              size="x-small"
+              class="place-self-start"
+            >
+              <p class="text-sm w-full text-gray-500">
+                {{ activityDate(activity?.date) }}
+              </p>
+              <p class="text-md w-full text-wrap">
+                {{ activity?.activityValue }}
+              </p>
+            </v-timeline-item>
+          </v-timeline>
+          <v-progress-circular
+            v-if="isFetching"
+            size="50"
+            indeterminate
+            class="mt-8 self-center"
+          ></v-progress-circular>
+          <p v-if="!isFetching && !activities">No activities</p>
+        </div>
       </v-card>
     </div>
   </v-container>
