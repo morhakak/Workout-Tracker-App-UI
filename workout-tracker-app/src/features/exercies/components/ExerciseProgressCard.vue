@@ -27,7 +27,7 @@
       <p v-if="diff" class="px-2">
         <v-icon class="ml-3 mr-1 mb-1">{{ weightIcon }}</v-icon> Volume diff:
         <span class="font-semibold inline-block mx-1" :class="diffClass">
-          {{ computedDiff }}
+          {{ computedDiff }}{{ weightSuffix }}
         </span>
       </p>
       <p v-else class="px-2">
@@ -48,7 +48,7 @@ import { useUnitUtils } from "../../../stores/unitUtilsStore";
 const router = useRouter();
 const props = defineProps(["exerciseHistory"]);
 const { volumeDiff } = useExercisesProgress();
-const { weightIcon } = storeToRefs(useUnitUtils());
+const { weightSuffix, weightIcon } = storeToRefs(useUnitUtils());
 
 const openWorkout = () => {
   if (props.exerciseHistory) {

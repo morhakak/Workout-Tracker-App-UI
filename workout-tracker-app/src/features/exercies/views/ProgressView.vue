@@ -4,7 +4,7 @@
       <h1 class="text-3xl font-semibold text-center">Track Your Progress</h1>
 
       <div
-        class="grid grid-cols-1 mt-8 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4 overflow-x-hidden pb-4 px-3"
+        class="grid grid-cols-1 mt-8 px708:grid-cols-2 px1362:grid-cols-3 items-center gap-4 overflow-x-hidden pb-4 px-3 pt-3"
       >
         <div v-for="exercise in validExeHistory">
           <ExerciseProgressCard
