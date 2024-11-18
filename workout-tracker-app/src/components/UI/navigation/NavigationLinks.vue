@@ -1,5 +1,5 @@
 <template>
-  <v-list class="px-2">
+  <v-list class="px-2 space-y-1">
     <v-list-item
       class="text-lg rounded-lg"
       prepend-icon="mdi-weight-lifter"
