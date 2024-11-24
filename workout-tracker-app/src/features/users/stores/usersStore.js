@@ -5,10 +5,16 @@ import { useAuthStore } from "./authStore";
 import axios from "axios";
 
 export const useUsersStore = defineStore("usersStore", () => {
-  const activities = ref(null);
+  const activities = ref([]);
   const apiErrorStore = useApiErrorStore();
   const isFetching = ref(false);
   const { token } = storeToRefs(useAuthStore());
+  const hasFetched = ref(false);
+
+  //Pagination
+  const currentPage = ref(1);
+  const hasMoreData = ref(true);
+  const totalPages = ref(0);
 
   const getActivities = async () => {
     if (!token.value) return;
@@ -17,7 +23,7 @@ export const useUsersStore = defineStore("usersStore", () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/v1/activities",
+        `http://localhost:3000/api/v1/activities?page=${currentPage.value}&limit=10`,
         {
           headers: {
             Authorization: `Bearer ${token.value}`,
@@ -25,12 +31,20 @@ export const useUsersStore = defineStore("usersStore", () => {
         }
       );
 
-      activities.value = response.data.data;
+      console.log(response);
+
+      activities.value.push(...response.data.data);
+      hasFetched.value = true;
+
+      currentPage.value++;
+
+      hasMoreData.value = currentPage.value <= response.data.meta.totalPages;
+      totalPages.value = response.data.meta.totalPages;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
       isFetching.value = false;
     }
   };
-  return { getActivities, activities, isFetching };
+  return { getActivities, activities, isFetching, hasFetched, hasMoreData };
 });

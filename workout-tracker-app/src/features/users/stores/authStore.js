@@ -80,6 +80,30 @@ export const useAuthStore = defineStore("authStore", () => {
     user.value = null;
   };
 
+  const updatePassword = async (currentPassword, newPassword) => {
+    apiErrorStore.resetMessages();
+    isLoading.value = true;
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/updatepassword`,
+        { currentPassword, newPassword },
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      );
+      const result = response.data.success;
+      if (result) token.value = response.data.token;
+      return result;
+    } catch (error) {
+      apiErrorStore.handleErrorResponse(error);
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   return {
     token,
     user,
@@ -88,6 +112,7 @@ export const useAuthStore = defineStore("authStore", () => {
     setTokenFromLocalStorage,
     getLoggedUser,
     logout,
+    updatePassword,
     isLoading,
   };
 });
