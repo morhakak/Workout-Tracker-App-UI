@@ -183,7 +183,7 @@ const prepereAddWeighing = () => {
   position: absolute;
 }
 
-::v-deep .v-table__wrapper {
+:deep(.v-table__wrapper) {
   overflow-x: hidden;
 }
 </style>
