@@ -5,7 +5,7 @@ import { useAuthStore } from "./authStore";
 import axios from "axios";
 
 export const useUsersStore = defineStore("usersStore", () => {
-  const BASE_URL = `${import.meta.env.VITE_BASE_URL}}/activities`;
+  const BASE_URL = `${import.meta.env.VITE_BASE_URL}/activities`;
   const activities = ref([]);
   const apiErrorStore = useApiErrorStore();
   const isFetching = ref(false);
