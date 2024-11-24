@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pt-6 min-h-screen">
+  <div class="relative min-h-screen py-6">
     <div class="flex flex-col align-center gap-5" v-if="user">
       <v-btn
         v-if="!isLoadingWorkouts"
@@ -15,32 +15,44 @@
         to="/create-workout"
       >
       </v-btn>
-      <div
-        v-if="!isLoadingWorkouts && workouts.length"
-        class="grid grid-cols-1 px750:grid-cols-2 px1400:grid-cols-3 items-center gap-4"
-      >
-        <div v-for="workout in filteredWorkouts">
-          <WorkoutCard
-            :isLoading="isLoadingWorkouts"
-            :key="workout._id"
-            :workout="workout"
-            @deleteRequest="handleDeleteRequest"
-            @toggleIsFavorite="handleToggleIsFavorite"
-          />
-        </div>
-      </div>
-      <div
-        v-if="workouts.length > 0 && isLoadingWorkouts"
-        class="grid grid-cols-1 px750:grid-cols-2 px1400:grid-cols-3 items-center gap-4"
-      >
-        <v-skeleton-loader
-          v-for="n in workouts.length || 3"
-          :key="'card-skeleton-' + n"
-          class="rounded-xl box-border"
-          width="350"
-          height="140"
+      <TransitionGroup name="list">
+        <div
+          v-if="!isLoadingWorkouts && workouts.length"
+          class="grid grid-cols-1 px750:grid-cols-2 px1400:grid-cols-3 items-center gap-4"
         >
-        </v-skeleton-loader>
+          <div v-for="workout in filteredWorkouts">
+            <WorkoutCard
+              :isLoading="isLoadingWorkouts"
+              :key="workout._id"
+              :workout="workout"
+              @deleteRequest="handleDeleteRequest"
+              @toggleIsFavorite="handleToggleIsFavorite"
+            />
+          </div>
+        </div>
+
+        <div
+          v-if="workouts.length > 0 && isLoadingWorkouts"
+          class="grid grid-cols-1 px750:grid-cols-2 px1400:grid-cols-3 items-center gap-4"
+        >
+          <v-skeleton-loader
+            v-for="n in workouts.length || 3"
+            :key="'card-skeleton-' + n"
+            class="rounded-xl box-border"
+            width="350"
+            height="140"
+          >
+          </v-skeleton-loader>
+        </div>
+      </TransitionGroup>
+      <div v-if="workouts.length">
+        <v-btn
+          v-if="hasMoreData"
+          :loading="isLoadingWorkouts"
+          @click="workoutStore.loadWorkouts()"
+          class="align-self-center"
+          >Show More</v-btn
+        >
       </div>
       <v-card
         v-if="workouts.length == 0 && !isLoadingWorkouts"
@@ -81,15 +93,6 @@
     >
       <p>{{ messages[0]?.message }}</p>
     </v-snackbar>
-    <v-alert
-      v-if="messages.length > 0"
-      icon="mdi-alert-circle"
-      rounded="lg"
-      type="error"
-      variant="elevated"
-    >
-      <p class="text-center">{{ messages[0].message }}</p>
-    </v-alert>
   </div>
   <v-dialog v-model="deleteDialog" width="auto">
     <v-card
@@ -144,10 +147,11 @@ import { storeToRefs } from "pinia";
 import { useWorkoutStore } from "../stores/workoutStore";
 import { useApiErrorStore } from "../../../stores/apiErrorStore";
 import { useTheme } from "vuetify";
+import { useInfiniteScroll } from "@vueuse/core";
 
 const { user } = storeToRefs(useAuthStore());
 const workoutStore = useWorkoutStore();
-const { workouts, isLoading, isLoadingWorkouts, hasFetched } =
+const { workouts, isLoading, isLoadingWorkouts, hasFetched, hasMoreData } =
   storeToRefs(workoutStore);
 const { messages } = storeToRefs(useApiErrorStore());
 const deleteDialog = ref(false);
@@ -155,6 +159,23 @@ const workoutToDelete = ref({
   name: "",
   _id: "",
 });
+
+const elForScroll = ref(null);
+useInfiniteScroll(
+  elForScroll,
+  async () => {
+    if (!isLoadingWorkouts.value && hasMoreData.value) {
+      await workoutStore.loadWorkouts();
+    }
+  },
+  {
+    distance: 50,
+    interval: 2000,
+    canLoadMore: () => {
+      return hasMoreData.value;
+    },
+  }
+);
 
 const theme = useTheme();
 onMounted(async () => {
@@ -194,3 +215,21 @@ const handleToggleIsFavorite = async (id) => {
   await workoutStore.toggleIsFavorite(id);
 };
 </script>
+
+<style scoped>
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: opacity;
+}
+
+.list-leave-active {
+  position: absolute;
+}
+</style>

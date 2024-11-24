@@ -17,6 +17,11 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
   const apiErrorStore = useApiErrorStore();
   const hasFetched = ref(false);
 
+  //Pagination
+  const currentPage = ref(1);
+  const hasMoreData = ref(true);
+  const totalPages = ref(0);
+
   const setIsLoading = (value) => {
     isLoading.value = value;
   };
@@ -91,23 +96,35 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
     }
   };
 
-  const loadWorkouts = async () => {
+  const loadWorkouts = async (limit = 5) => {
     apiErrorStore.resetMessages();
     isLoadingWorkouts.value = true;
     try {
-      const response = await axios.get(BASE_URL, {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      });
-      workouts.value = response.data.data;
+      const response = await axios.get(
+        `${BASE_URL}/?page=${currentPage.value}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      );
+
+      console.log(response);
+
+      workouts.value.push(...response.data.data);
+
+      currentPage.value++;
+
+      hasMoreData.value = currentPage.value <= response.data.meta.totalPages;
+      totalPages.value = response.data.meta.totalPages;
       hasFetched.value = true;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
-      setTimeout(() => {
-        isLoadingWorkouts.value = false;
-      }, 1000);
+      // setTimeout(() => {
+      //   isLoadingWorkouts.value = false;
+      // }, 1000);
+      isLoadingWorkouts.value = false;
     }
   };
 
@@ -183,5 +200,6 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
     isLoading,
     isLoadingWorkouts,
     hasFetched,
+    hasMoreData,
   };
 });

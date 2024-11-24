@@ -34,7 +34,7 @@
           required
           type="text"
           v-model.trim="workoutDraft.name"
-          class="text-2xl sm:text-3xl lg:text-4xl w-[330px] sm:min-w-[530px] lg:min-w-[530px] text-clip py-2 text-center rounded-lg font-semibold leading-normal tracking-wider"
+          class="text-2xl sm:text-3xl lg:text-3xl w-[330px] sm:min-w-[530px] lg:min-w-[530px] text-clip py-2 text-center rounded-lg font-semibold leading-normal tracking-wider"
           :class="{ 'outline-1 outline-gray-950': isEditMode }"
         />
       </div>
