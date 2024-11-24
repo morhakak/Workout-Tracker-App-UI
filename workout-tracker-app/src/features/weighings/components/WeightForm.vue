@@ -117,23 +117,21 @@ const emits = defineEmits(["added", "updated", "cancel-update"]);
 
 async function submitForm() {
   v$.value.$validate();
-  console.log(weighingToUpdate.value);
   if (!v$.value.$invalid) {
     if (weighingToUpdate.value == null) {
-      await weighingsStore.addWeighing(state);
-      emits("added");
+      emits("added", state);
       return;
     }
-
-    await weighingsStore.updateWeighing(state);
-    emits("updated");
+    emits("updated", state);
   }
 }
 
 const cancelUpdate = () => {
-  state.weight = 0.0;
   emits("cancel-update");
-  weighingToUpdate.value = null;
+  setTimeout(() => {
+    state.weight = 0.0;
+    weighingToUpdate.value = null;
+  }, 1000);
 };
 </script>
 

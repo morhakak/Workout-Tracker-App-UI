@@ -254,20 +254,19 @@ async function submitForm() {
   v$.value.$validate();
   if (!v$.value.$invalid) {
     if (circumferenceToUpdate.value == null) {
-      await measurementsStore.addMeasurement(state);
-      emits("added");
+      emits("added", state);
       return;
     }
-
-    await measurementsStore.updateCircumference(state);
-    emits("updated");
+    emits("updated", state);
   }
 }
 
 const cancelUpdate = () => {
-  circumferenceToUpdate.value = null;
-  Object.assign(state, initialState);
   emits("cancel-update");
+  setTimeout(() => {
+    circumferenceToUpdate.value = null;
+    Object.assign(state, initialState);
+  }, 1000);
 };
 
 const isUnchanged = computed(() => {

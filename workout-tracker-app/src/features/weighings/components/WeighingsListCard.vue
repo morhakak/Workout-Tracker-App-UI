@@ -1,7 +1,8 @@
 <template>
   <v-card
+    height="650"
     :elevation="5"
-    class="flex flex-col justify-center items-center min-w-[400px] max-w-[500px] box-border grow rounded-xl pb-8 pt-8"
+    class="flex flex-col items-center w-[400px] max-w-[500px] overflow-hidden max-h-[700px] box-border grow rounded-xl pb-8 pt-8"
   >
     <v-btn
       variant="text"
@@ -10,57 +11,67 @@
       icon="mdi-plus"
       density="compact"
       size="x-large"
+      :disabled="isLoading || isFetching"
     >
     </v-btn>
-    <div class="flex mb-6 justify-center items-center gap-2">
+    <div class="flex justify-center items-center gap-2">
       <v-icon class="text-2xl">mdi-scale</v-icon>
       <h2 class="text-center text-xl sm:text-2xl font-medium tracking-wide">
         Weighings
       </h2>
     </div>
-    <div class="max-h-screen px-6 overflow-y-hidden">
-      <div
-        ref="elForScroll"
-        class="h-[300px] custom-scrollbar overflow-y-auto px-5 w-[350px]"
+    <div
+      ref="elementForScroll"
+      class="custom-scrollbar px-5 w-[400px] mt-6 flex justify-center"
+    >
+      <v-table
+        class="border-[1px] border-white box-border w-[340px] rounded-xl mt-4"
+        hover
       >
-        <div class="flex justify-start items-center gap-8 border-b py-4">
-          <div class="flex items-center">
-            <v-icon size="x-small">mdi-calendar-clock</v-icon>
-            <p class="ml-2">Date</p>
-          </div>
-          <p>Weight ({{ weightSuffix }})</p>
-        </div>
-        <div v-for="(weighing, index) in normalizedWeighings">
-          <div
-            class="flex justify-center items-center gap-8 border-b py-2"
-            :class="{
-              'border-none': isLastItem(index),
-            }"
-          >
-            <div>
+        <thead>
+          <tr>
+            <th class="text-left text-base">Date</th>
+            <th class="text-center text-no-wrap text-base">
+              Weight ({{ weightSuffix }})
+            </th>
+            <th class="text-left text-no-wrap text-base"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="weighing in normalizedWeighings" :key="weighing._id">
+            <td class="text-left tracking-wider text-no-wrap text-[16px]">
               <p class="text-xs">
                 {{ dateFormatter.getDayMonthYear(weighing.date) }}
               </p>
-              <p class="text-xs">{{ dateFormatter.getTime(weighing.date) }}</p>
-            </div>
-            <p class="text-nowrap ml-8">{{ weighing.weight }}</p>
-            <div class="flex gap-2 ml-auto">
-              <v-btn
-                size="small"
-                variant="text"
-                icon="mdi-pencil"
-                @click="() => prepareUpdateWeighing(weighing)"
-              ></v-btn>
-              <v-btn
-                size="small"
-                color="red"
-                variant="text"
-                icon="mdi-trash-can-outline"
-                @click="() => prepareDeleteWeighing(weighing)"
-              ></v-btn>
-            </div>
-          </div>
-        </div>
+              <p class="text-xs">
+                {{ dateFormatter.getTime(weighing.date) }}
+              </p>
+            </td>
+            <td class="text-center tracking-wider text-[16px]">
+              <span>{{ weighing.weight }}</span>
+            </td>
+            <td>
+              <div class="flex gap-2 ml-auto">
+                <v-btn
+                  size="small"
+                  variant="text"
+                  icon="mdi-pencil"
+                  @click="() => prepareUpdateWeighing(weighing)"
+                ></v-btn>
+                <v-btn
+                  size="small"
+                  color="red"
+                  variant="text"
+                  icon="mdi-trash-can-outline"
+                  @click="() => prepareDeleteWeighing(weighing)"
+                ></v-btn>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+      <div v-if="isFetching" class="flex justify-center mt-4">
+        <v-progress-circular indeterminate></v-progress-circular>
       </div>
     </div>
     <div v-if="!isFetching && normalizedWeighings.length == 0">
@@ -97,14 +108,14 @@ const {
 } = storeToRefs(weighingsStore);
 const deleteDialog = ref(false);
 const weighingToDelete = ref(null);
-const elForScroll = ref(null);
+const elementForScroll = ref(null);
 
 onMounted(async () => {
   await fetchWeighings();
 });
 
 useInfiniteScroll(
-  elForScroll,
+  elementForScroll,
   async () => {
     await fetchWeighings();
   },
@@ -172,24 +183,7 @@ const prepereAddWeighing = () => {
   position: absolute;
 }
 
-/* ::v-deep .v-table__wrapper {
+::v-deep .v-table__wrapper {
   overflow-x: hidden;
-  padding-bottom: 10px;
-  padding-right: 2px;
-  padding-left: 2px;
 }
-
-::v-deep .v-table__wrapper::-webkit-scrollbar {
-  width: 8px;
-}
-
-::v-deep .v-table__wrapper::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 5px;
-}
-
-::v-deep .v-table__wrapper::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 10px;
-} */
 </style>

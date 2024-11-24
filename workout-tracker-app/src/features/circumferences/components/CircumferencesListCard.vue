@@ -1,7 +1,7 @@
 <template>
   <v-card
     :elevation="5"
-    class="relative flex flex-col justify-center items-center pb-8 pt-8 box-border h-screen min-w-[400px] max-w-[500px] grow rounded-xl"
+    class="relative flex flex-col items-center card-height pb-8 pt-8 box-border min-w-[400px] max-w-[500px] grow rounded-xl"
   >
     <v-btn
       variant="text"
@@ -12,14 +12,14 @@
       size="x-large"
     >
     </v-btn>
-
-    <div class="flex mb-6 justify-center items-center gap-2">
+    <div class="flex justify-center gap-2">
       <v-icon class="text-3xl">mdi-tape-measure</v-icon>
       <h2 class="text-center text-xl sm:text-2xl font-medium tracking-wider">
         Circumferences
       </h2>
     </div>
     <div
+      ref="elementToScroll"
       class="max-h-screen overflow-y-auto px-6 space-y-10 custom-scrollbar mt-6"
     >
       <div
@@ -83,16 +83,13 @@
           </tbody>
         </v-table>
       </div>
-      <div class="flex justify-center">
-        <v-btn
-          v-if="hasMoreData"
-          prepend-icon="mdi-reload"
-          :loading="isFetching"
-          @click="() => measurementsStore.fetchMeasurements()"
-          class="mt-2 mx-auto border rounded-lg"
-        >
-          Load More
-        </v-btn>
+      <div v-if="isFetching" class="flex justify-center">
+        <div class="overflow-hidden">
+          <v-progress-circular
+            indeterminate
+            model-value="20"
+          ></v-progress-circular>
+        </div>
       </div>
     </div>
     <p
@@ -116,6 +113,7 @@ import { useUnitUtils } from "../../../stores/unitUtilsStore";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import DeleteDialog from "../../../components/UI/DeleteDialog.vue";
 import { useDate } from "../../../composables/useDate";
+import { useInfiniteScroll } from "@vueuse/core";
 
 const emits = defineEmits(["update-circumference", "add"]);
 
@@ -133,6 +131,22 @@ const deleteDialog = ref(false);
 const circumferenceToDelete = ref(null);
 
 const dateFormatter = useDate();
+
+const elementToScroll = ref(null);
+
+useInfiniteScroll(
+  elementToScroll,
+  async () => {
+    await measurementsStore.fetchMeasurements();
+  },
+  {
+    distance: 10,
+    interval: 1000,
+    canLoadMore: () => {
+      return hasMoreData;
+    },
+  }
+);
 
 onMounted(async () => {
   if (!hasFetched.value) await measurementsStore.fetchMeasurements();
@@ -175,3 +189,9 @@ const prepareUpdateCircumference = (circumference) => {
   emits("update-circumference");
 };
 </script>
+
+<style scoped>
+.card-height {
+  height: calc(100lvh - 4rem);
+}
+</style>

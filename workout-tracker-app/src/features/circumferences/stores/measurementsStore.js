@@ -22,6 +22,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
   const currentPage = ref(1);
   const hasMoreData = ref(true);
   const totalPages = ref(0);
+  const limit = 2;
 
   const fetchMeasurements = async () => {
     if (isFetching.value || !hasMoreData.value) return;
@@ -30,7 +31,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     isFetching.value = true;
     try {
       const response = await axios.get(
-        `${MEASUREMENTS_URL}/circumferences?page=${currentPage.value}&limit=5`,
+        `${MEASUREMENTS_URL}/circumferences?page=${currentPage.value}&limit=${limit}`,
         {
           headers: {
             Authorization: `Bearer ${token.value}`,
@@ -90,8 +91,11 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
           },
         }
       );
+
+      return response.data.success;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
+      return false;
     } finally {
       setTimeout(() => {
         isAdding.value = false;
@@ -127,8 +131,11 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
       if (index !== -1) {
         measurements.value[index] = response.data.data;
       }
+
+      return response.data.success;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
+      return false;
     } finally {
       setTimeout(() => {
         isAdding.value = false;

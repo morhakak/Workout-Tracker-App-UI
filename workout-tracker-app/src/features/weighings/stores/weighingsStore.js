@@ -38,8 +38,10 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
         }
       );
       weighings.value.push(response.data.data);
+      return response.data.success;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
+      return false;
     } finally {
       setTimeout(() => {
         isAdding.value = false;
@@ -54,7 +56,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     isFetching.value = true;
     try {
       const response = await axios.get(
-        `${MEASUREMENTS_URL}/weighings?page=${currentPage.value}&limit=5`,
+        `${MEASUREMENTS_URL}/weighings?page=${currentPage.value}&limit=10`,
         {
           headers: {
             Authorization: `Bearer ${token.value}`,
@@ -91,8 +93,15 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
           },
         }
       );
+      const index = weighings.value.findIndex((w) => w._id === weighing._id);
+      if (index !== -1) {
+        weighings.value[index] = response.data.data;
+      }
+
+      return response.data.success;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
+      return false;
     } finally {
       setTimeout(() => {
         isAdding.value = false;
