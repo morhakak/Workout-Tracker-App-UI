@@ -5,6 +5,7 @@ import { useAuthStore } from "./authStore";
 import axios from "axios";
 
 export const useUsersStore = defineStore("usersStore", () => {
+  const BASE_URL = `${import.meta.env.VITE_BASE_URL}}/activities`;
   const activities = ref([]);
   const apiErrorStore = useApiErrorStore();
   const isFetching = ref(false);
@@ -23,7 +24,7 @@ export const useUsersStore = defineStore("usersStore", () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/v1/activities?page=${currentPage.value}&limit=10`,
+        `${BASE_URL}?page=${currentPage.value}&limit=10`,
         {
           headers: {
             Authorization: `Bearer ${token.value}`,

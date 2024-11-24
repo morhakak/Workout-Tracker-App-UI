@@ -10,7 +10,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
   const measurements = ref([]);
   const { token } = storeToRefs(useAuthStore());
   const apiErrorStore = useApiErrorStore();
-  const MEASUREMENTS_URL = import.meta.env.VITE_MEASUREMENTS_BASE_URL;
+  const BASE_URL = `${import.meta.env.VITE_BASE_URL}/measurements`;
   const isLoading = ref(false);
   const isFetching = ref(false);
   const isAdding = ref(false);
@@ -31,7 +31,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     isFetching.value = true;
     try {
       const response = await axios.get(
-        `${MEASUREMENTS_URL}/circumferences?page=${currentPage.value}&limit=${limit}`,
+        `${BASE_URL}/circumferences?page=${currentPage.value}&limit=${limit}`,
         {
           headers: {
             Authorization: `Bearer ${token.value}`,
@@ -83,7 +83,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     isAdding.value = true;
     try {
       const response = await axios.post(
-        `${MEASUREMENTS_URL}/circumferences`,
+        `${BASE_URL}/circumferences`,
         measurement,
         {
           headers: {
@@ -116,7 +116,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
 
     try {
       const response = await axios.put(
-        `${MEASUREMENTS_URL}/circumferences/${circumference._id}`,
+        `${BASE_URL}/circumferences/${circumference._id}`,
         { circumference, unit },
         {
           headers: {
@@ -147,7 +147,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     isLoading.value = true;
     apiErrorStore.resetMessages();
     try {
-      await axios.delete(`${MEASUREMENTS_URL}/circumferences/${id}`, {
+      await axios.delete(`${BASE_URL}/circumferences/${id}`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },

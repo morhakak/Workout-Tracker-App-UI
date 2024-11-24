@@ -13,7 +13,7 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
   const isLoadingWorkouts = ref(false);
   const workoutDraftStore = useWorkoutDraftStore();
   const { workoutDraft } = storeToRefs(workoutDraftStore);
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = `${import.meta.env.VITE_BASE_URL}/workouts`;
   const apiErrorStore = useApiErrorStore();
   const hasFetched = ref(false);
 

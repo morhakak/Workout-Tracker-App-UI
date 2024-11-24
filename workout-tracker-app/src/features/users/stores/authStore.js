@@ -3,9 +3,10 @@ import axios from "axios";
 import { ref } from "vue";
 import { useApiErrorStore } from "../../../stores/apiErrorStore";
 
-const BASE_URL = "http://localhost:3000/api/v1/auth";
-
 export const useAuthStore = defineStore("authStore", () => {
+  const BASE_URL = `${import.meta.env.VITE_BASE_URL}/auth`;
+  console.log(BASE_URL);
+
   const apiErrorStore = useApiErrorStore();
   const user = ref(null);
   const token = ref(localStorage.getItem("authToken") || null);

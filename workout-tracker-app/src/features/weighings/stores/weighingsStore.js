@@ -10,7 +10,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
   const weighings = ref([]);
   const { token } = storeToRefs(useAuthStore());
   const apiErrorStore = useApiErrorStore();
-  const MEASUREMENTS_URL = import.meta.env.VITE_MEASUREMENTS_BASE_URL;
+  const BASE_URL = `${import.meta.env.VITE_BASE_URL}/measurements`;
   const isFetching = ref(false);
   const isAdding = ref(false);
   const isLoading = ref(false);
@@ -29,7 +29,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
 
     try {
       const response = await axios.post(
-        `${MEASUREMENTS_URL}/weighings`,
+        `${BASE_URL}/weighings`,
         { weight, unit },
         {
           headers: {
@@ -56,7 +56,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     isFetching.value = true;
     try {
       const response = await axios.get(
-        `${MEASUREMENTS_URL}/weighings?page=${currentPage.value}&limit=10`,
+        `${BASE_URL}/weighings?page=${currentPage.value}&limit=10`,
         {
           headers: {
             Authorization: `Bearer ${token.value}`,
@@ -85,7 +85,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
 
     try {
       const response = await axios.put(
-        `${MEASUREMENTS_URL}/weighings/${weighing._id}`,
+        `${BASE_URL}/weighings/${weighing._id}`,
         { weight: weighing.weight, unit },
         {
           headers: {
@@ -113,7 +113,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     isLoading.value = true;
     apiErrorStore.resetMessages();
     try {
-      await axios.delete(`${MEASUREMENTS_URL}/weighings/${id}`, {
+      await axios.delete(`${BASE_URL}/weighings/${id}`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
