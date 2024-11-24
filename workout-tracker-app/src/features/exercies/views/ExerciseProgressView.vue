@@ -4,80 +4,89 @@
   </h1>
   <v-container class="flex flex-col-reverse xl:flex-row justify-center gap-10">
     <div class="flex justify-center">
-      <v-card class="rounded-xl px-2 pb-4 w-[450px]">
-        <v-card-title class="flex justify-center items-center">
-          <h2 class="text-center font-semibold text-2xl pt-6 pb-2">
-            <v-icon>mdi-clipboard-text-clock-outline</v-icon>
+      <v-card
+        :elevation="5"
+        class="flex flex-col items-center min-w-[400px] max-w-[500px] box-border grow rounded-xl pb-8 pt-8"
+      >
+        <div class="flex mb-6 justify-center items-center gap-2">
+          <v-icon class="text-2xl">mdi-clipboard-text-clock-outline</v-icon>
+          <h2 class="text-center text-xl sm:text-2xl font-medium tracking-wide">
             Exercise History
           </h2>
-        </v-card-title>
-        <v-container class="flex flex-col items-center gap-4 justify-center">
-          <v-progress-circular
-            v-if="isLoading"
-            indeterminate
-          ></v-progress-circular>
+        </div>
+        <div class="max-h-screen px-6 overflow-y-hidden">
           <div
-            v-for="session in currentExerciseHistory?.sessions"
-            :key="session?._id"
-            class="mt-4"
+            ref="elementForScroll"
+            class="h-[500px] custom-scrollbar overflow-y-auto px-5 w-[350px] overflow-x-hidden"
           >
-            <v-table
-              v-if="!isLoading && currentExerciseHistory.sessions.length"
-              class="relative border box-border shadow-lg rounded-xl overflow-y-visible"
-              hover
+            <div
+              v-for="session in currentExerciseHistory?.sessions"
+              :key="session?._id"
+              class="mt-4"
             >
-              <thead>
-                <tr>
-                  <th colspan="3" class="p-0">
-                    <div
-                      class="flex justify-center items-center gap-2 rounded-t-xl w-full py-2 px-4"
-                      @click="
-                        () => navigateToWorkout(session?.workout.workoutId)
-                      "
+              <v-table
+                v-if="!isLoading && currentExerciseHistory.sessions.length"
+                class="relative border box-border shadow-lg rounded-xl overflow-x-hidden"
+                hover
+              >
+                <thead>
+                  <tr>
+                    <th colspan="3" class="p-0">
+                      <div
+                        class="flex justify-center items-center gap-2 rounded-t-xl w-full py-2 px-4"
+                        @click="
+                          () => navigateToWorkout(session?.workout.workoutId)
+                        "
+                      >
+                        <v-icon>mdi-calendar-clock-outline</v-icon>
+                        <p
+                          class="text-[14px] justify-self-start pr-2 border-r-2"
+                        >
+                          {{
+                            dateFormatter.getDayMonthYear(session.createdDate)
+                          }}
+                        </p>
+                        <v-icon>mdi-weight-lifter</v-icon>
+                        <p
+                          v-if="session.workout.workoutName"
+                          class="text-[16px] font-semibold hover:cursor-pointer text-nowrap"
+                        >
+                          {{ session.workout.workoutName }}
+                        </p>
+                      </div>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="text-left text-base">#</th>
+                    <th
+                      class="flex items-center justify-center text-center text-base"
                     >
-                      <v-icon>mdi-calendar-clock-outline</v-icon>
-                      <p
-                        class="text-[14px] justify-self-start pr-2 border-r-2 border-gray-800"
-                      >
-                        {{ dateFormatter.getDayMonthYear(session.createdDate) }}
-                      </p>
-                      <v-icon>mdi-weight-lifter</v-icon>
-                      <p
-                        v-if="session.workout.workoutName"
-                        class="text-[16px] font-semibold hover:cursor-pointer"
-                      >
-                        {{ session.workout.workoutName }}
-                      </p>
-                    </div>
-                  </th>
-                </tr>
-                <tr>
-                  <th class="text-left text-base">#</th>
-                  <th
-                    class="flex items-center justify-center text-center text-base"
+                      <p>Weight ({{ weightSuffix }})</p>
+                    </th>
+                    <th class="text-center text-base">Reps</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="(set, i) in session.sets"
+                    :key="set._id || session._id + '-' + i"
                   >
-                    <p>Weight ({{ weightSuffix }})</p>
-                  </th>
-                  <th class="text-center text-base">Reps</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(set, i) in session.sets"
-                  :key="set._id || session._id + '-' + i"
-                >
-                  <td>{{ i + 1 }}</td>
-                  <td class="text-center tracking-wider text-[16px]">
-                    {{ set.weight }}
-                  </td>
-                  <td class="text-center tracking-wider text-[16px]">
-                    {{ set.reps }}
-                  </td>
-                </tr>
-              </tbody>
-            </v-table>
+                    <td>{{ i + 1 }}</td>
+                    <td class="text-center tracking-wider text-[16px]">
+                      {{ set.weight }}
+                    </td>
+                    <td class="text-center tracking-wider text-[16px]">
+                      {{ set.reps }}
+                    </td>
+                  </tr>
+                </tbody>
+              </v-table>
+            </div>
           </div>
-        </v-container>
+        </div>
+        <!-- <div v-if="!isFetching && normalizedWeighings.length == 0">
+          No weighings have been added yet
+        </div> -->
       </v-card>
     </div>
     <div class="flex justify-center">
@@ -178,3 +187,9 @@ const navigateToWorkout = (id) => {
   router.push({ name: "workout", params: { id } });
 };
 </script>
+
+<style scoped>
+::v-deep .v-table__wrapper {
+  overflow-x: hidden;
+}
+</style>
