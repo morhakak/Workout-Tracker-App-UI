@@ -25,7 +25,6 @@ export const useWorkoutDraftStore = defineStore("workoutDraftStore", () => {
   };
 
   const setName = (name) => {
-    console.log(name);
     if (name !== null && workoutDraft.value) workoutDraft.value.name = name;
   };
 

@@ -49,9 +49,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
-      setTimeout(() => {
-        isFetching.value = false;
-      }, 1000);
+      isFetching.value = false;
     }
   };
 
@@ -72,9 +70,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
-      setTimeout(() => {
-        isLoading.value = false;
-      }, 1000);
+      isLoading.value = false;
     }
   };
 
@@ -97,9 +93,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
       apiErrorStore.handleErrorResponse(error);
       return false;
     } finally {
-      setTimeout(() => {
-        isAdding.value = false;
-      }, 1000);
+      isLoading.value = false;
     }
   };
 
@@ -137,9 +131,7 @@ export const useMeasurementsStore = defineStore("measurementsStore", () => {
       apiErrorStore.handleErrorResponse(error);
       return false;
     } finally {
-      setTimeout(() => {
-        isAdding.value = false;
-      }, 1000);
+      isAdding.value = false;
     }
   };
 

@@ -109,21 +109,14 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
         }
       );
 
-      console.log(response);
-
       workouts.value.push(...response.data.data);
-
       currentPage.value++;
-
       hasMoreData.value = currentPage.value <= response.data.meta.totalPages;
       totalPages.value = response.data.meta.totalPages;
       hasFetched.value = true;
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
-      // setTimeout(() => {
-      //   isLoadingWorkouts.value = false;
-      // }, 1000);
       isLoadingWorkouts.value = false;
     }
   };
@@ -138,9 +131,7 @@ export const useWorkoutStore = defineStore("workoutStore", () => {
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
+      setIsLoading(false);
     }
   };
 

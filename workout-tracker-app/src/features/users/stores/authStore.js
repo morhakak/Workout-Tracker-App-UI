@@ -5,8 +5,6 @@ import { useApiErrorStore } from "../../../stores/apiErrorStore";
 
 export const useAuthStore = defineStore("authStore", () => {
   const BASE_URL = `${import.meta.env.VITE_BASE_URL}/auth`;
-  console.log(BASE_URL);
-
   const apiErrorStore = useApiErrorStore();
   const user = ref(null);
   const token = ref(localStorage.getItem("authToken") || null);
@@ -63,7 +61,6 @@ export const useAuthStore = defineStore("authStore", () => {
 
       user.value = response.data.data;
     } catch (error) {
-      console.log("Error fetching user:", error.message);
       localStorage.removeItem("authToken");
       token.value = null;
     } finally {

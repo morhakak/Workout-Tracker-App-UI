@@ -42,11 +42,6 @@
         <v-card
           role="button"
           class="w-max flex items-center gap-2 px-6 py-[0.23rem] rounded-lg mt-6"
-          @click="
-            () => {
-              console.log(`edit`);
-            }
-          "
         >
           <v-icon size="xs">mdi-pencil</v-icon>
           <p class="text-sm text-wrap">Edit Profile</p>

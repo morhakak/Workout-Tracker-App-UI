@@ -30,9 +30,7 @@ export const useExercisesProgress = defineStore(
       } catch (error) {
         apiErrorStore.handleErrorResponse(error);
       } finally {
-        setTimeout(() => {
-          isLoading.value = false;
-        }, 1000);
+        isLoading.value = false;
       }
     };
 
@@ -51,9 +49,7 @@ export const useExercisesProgress = defineStore(
       } catch (error) {
         apiErrorStore.handleErrorResponse(error);
       } finally {
-        setTimeout(() => {
-          isLoading.value = false;
-        }, 1000);
+        isLoading.value = false;
       }
     };
 

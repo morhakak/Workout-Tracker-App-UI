@@ -43,9 +43,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
       apiErrorStore.handleErrorResponse(error);
       return false;
     } finally {
-      setTimeout(() => {
-        isAdding.value = false;
-      }, 1000);
+      isAdding.value = false;
     }
   };
 
@@ -72,9 +70,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
     } catch (error) {
       apiErrorStore.handleErrorResponse(error);
     } finally {
-      setTimeout(() => {
-        isFetching.value = false;
-      }, 1000);
+      isFetching.value = false;
     }
   };
 
@@ -103,9 +99,7 @@ export const useWeighingsStore = defineStore("weighingsStore", () => {
       apiErrorStore.handleErrorResponse(error);
       return false;
     } finally {
-      setTimeout(() => {
-        isAdding.value = false;
-      }, 1000);
+      isAdding.value = false;
     }
   };
 

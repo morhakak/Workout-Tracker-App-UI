@@ -32,8 +32,6 @@ export const useUsersStore = defineStore("usersStore", () => {
         }
       );
 
-      console.log(response);
-
       activities.value.push(...response.data.data);
       hasFetched.value = true;
 

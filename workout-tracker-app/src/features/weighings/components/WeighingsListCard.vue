@@ -22,7 +22,7 @@
     </div>
     <div
       ref="elementForScroll"
-      class="custom-scrollbar px-5 w-[400px] mt-6 flex justify-center"
+      class="custom-scrollbar px-5 w-[400px] mt-6 flex flex-col items-center"
     >
       <v-table
         class="border-[1px] border-white box-border w-[340px] rounded-xl mt-4"
